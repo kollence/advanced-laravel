@@ -25,8 +25,9 @@ class ThreadsTest extends TestCase
         $this->thread = \App\Models\Thread::factory()->create();
     }
 
-    public function test_user_can_browse_threads()
+    public function test_guest_can_browse_threads()
     {
+        // go to route & see if created thred can be seen on page /threads
         $this->get('/threads')
             ->assertSee($this->thread->title);
     }

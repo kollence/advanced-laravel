@@ -22,7 +22,7 @@ class ThreadsTest extends TestCase
         //initialize one $thread as ready & created with factory
         parent::setUp();    
 
-        $this->thread = \App\Models\Thread::factory()->create();
+        $this->thread = factoryCreate(\App\Models\Thread::class);
     }
 
     public function test_guest_can_browse_threads()
@@ -41,8 +41,9 @@ class ThreadsTest extends TestCase
 
     public function test_guest_can_read_replies_that_are_associated_with_a_thread()
     {
+        $formData = ['thread_id' => $this->thread->id];
         //create reply
-        $reply = \App\Models\Reply::factory()->create(['thread_id' => $this->thread->id]);
+        $reply = factoryCreate(\App\Models\Reply::class, $formData);
         // go to route & see if created reply can be seen on page /threads/{id}
         $response = $this->get('/threads/' . $this->thread->id);
         $response->assertSee($reply->body);

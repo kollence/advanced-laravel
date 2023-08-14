@@ -38,11 +38,12 @@ class ThreadTest extends TestCase
 
     public function test_thread_can_add_reply()
     {
+        // addReplay method created in Thread model to create thred by passing array
         $this->thread->addReply([
             'body' => 'Foobar',
             'user_id' => 1
         ]);
-
+        // check if thread have 1 reply created
         $this->assertCount(1, $this->thread->replies);
     }
 }

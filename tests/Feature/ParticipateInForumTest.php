@@ -21,8 +21,9 @@ class ParticipateInForumTest extends TestCase
         $this->be($user = \App\Models\User::factory()->create());
         // And an existing thread
         $thread = \App\Models\Thread::factory()->create();
-        // When the user adds a reply to the thread
+        // User make a reply for the thread that will be passed as POST
         $reply = \App\Models\Reply::factory()->make();
+        // POST url, array: data
         $this->post('/threads/' . $thread->id . '/replies', $reply->toArray());
         // Then their reply should be visible on the page
         $this->get('/threads/' . $thread->id)

@@ -19,6 +19,7 @@ class ThreadsTest extends TestCase
 
     public function setUp() : void
     {
+        //initialize one $thread as ready & created with factory
         parent::setUp();    
 
         $this->thread = \App\Models\Thread::factory()->create();

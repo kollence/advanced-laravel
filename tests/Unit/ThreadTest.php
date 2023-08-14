@@ -36,7 +36,7 @@ class ThreadTest extends TestCase
         $this->assertInstanceOf('App\Models\User', $this->thread->user);
     }
 
-    public function test_thread_can_add_reply()
+    public function test_thread_can_have_added_reply()
     {
         // addReplay method created in Thread model to create thred by passing array
         $this->thread->addReply([

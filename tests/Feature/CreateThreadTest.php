@@ -10,7 +10,7 @@ class CreateThreadTest extends TestCase
     use DatabaseMigrations;
 
     function test_guest_cant_create_thread()
-    {   // this 2 lines are needed for successful passing the test for Unauthenticated can't create
+    {   // this 2 lines are needed for successful passing the test for Unauthenticated can't create thread
         $this->withoutExceptionHandling();
         $this->expectException('Illuminate\Auth\AuthenticationException');
         $thread = \App\Models\Thread::factory()->make();
@@ -25,13 +25,11 @@ class CreateThreadTest extends TestCase
      */
     function test_auth_user_can_create_thread()
     {
-        //sign in user
+        //authenticate user
         $this->actingAs(\App\Models\User::factory()->create());
-
         //create thread
         $thread = \App\Models\Thread::factory()->make();
         $this->post('/threads', $thread->toArray());
-
         //redirect to thread page
         $this->get('/threads')
             ->assertSee($thread->title)

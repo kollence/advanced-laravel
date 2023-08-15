@@ -34,4 +34,20 @@ class CreateThreadTest extends TestCase
             ->assertSee($thread->title)
             ->assertSee($thread->body);
     }
+
+    function test_a_thread_requires_a_title()
+    {
+
+        $this->publishThread(['title' => null])->assertSessionHasErrors('title');
+    }
+
+    public function publishThread($overrides = [])
+    {
+        $this->signIn();
+
+        $thread = factoryMake(\App\Models\Thread::class, $overrides);
+
+        return $this->post('/threads', $thread->toArray());
+            
+    }
 }

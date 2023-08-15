@@ -23,6 +23,11 @@ class ThreadTest extends TestCase
         //initialize one $thread as ready & created with factory
         $this->thread = factoryCreate(\App\Models\Thread::class);
     }
+    
+    public function test_thread_can_make_string_path()
+    {
+       $this->assertEquals("/threads/{$this->thread->channel->slug}/{$this->thread->id}", $this->thread->path());
+    }
 
     public function test_thread_has_reply()
     {
@@ -45,5 +50,10 @@ class ThreadTest extends TestCase
         ]);
         // check if thread have 1 reply created
         $this->assertCount(1, $this->thread->replies);
+    }
+
+    function test_thread_belongs_to_channel()
+    {
+        $this->assertInstanceOf('App\Models\Channel', $this->thread->channel);
     }
 }

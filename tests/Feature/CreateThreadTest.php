@@ -18,11 +18,13 @@ class CreateThreadTest extends TestCase
         // This won’t be called, as the exception above will halt execution
         $this->post(route('threads.store'), $thread->toArray());  
     }
-    /**
-     * A basic feature test example.
-     *
-     * @return void
-     */
+    
+    function test_guest_cant_visit_page_create_thread()
+    {
+        $this->get('/threads/create')
+            ->assertRedirect('/login');
+    }
+
     function test_auth_user_can_create_thread()
     {
         //authenticate user

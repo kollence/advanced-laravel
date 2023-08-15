@@ -16,7 +16,7 @@
                         <hr>
                         <hr>
                         <h3 style="font-size: 20px; color: orange;">
-                            <a href="{{route('threads.show', $thread->id)}}">{{ $thread->title }}</a>
+                            <a href="{{$thread->path()}}">{{ $thread->title }}</a>
                         </h3>
                             <div class="body bg-gray-500 rounded-md p-3" >{{ $thread->body }}</div>
                             <div>

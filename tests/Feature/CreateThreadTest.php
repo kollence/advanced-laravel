@@ -10,19 +10,18 @@ class CreateThreadTest extends TestCase
     use DatabaseMigrations;
 
     function test_guest_cant_create_thread()
-    {   // this 2 lines are needed for successful passing the test for Unauthenticated can't create thread
-        $this->withoutExceptionHandling();
-        $this->expectException('Illuminate\Auth\AuthenticationException');
+    {   // with Exception Handling
+        $this->withExceptionHandling();
+        // can't go to page
+        $this->get('/threads/create')
+        ->assertRedirect('/login');
+
         $thread = factoryMake(\App\Models\Thread::class);
-        // If this throws a 500 error, it’ll now display in the console instead
-        // This won’t be called, as the exception above will halt execution
-        $this->post(route('threads.store'), $thread->toArray());  
+        // can't create
+        $this->post(route('threads.store'), $thread->toArray())
+        ->assertRedirect('/login');  
     }
-    /**
-     * A basic feature test example.
-     *
-     * @return void
-     */
+
     function test_auth_user_can_create_thread()
     {
         //authenticate user

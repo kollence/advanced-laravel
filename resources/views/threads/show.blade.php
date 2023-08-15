@@ -22,7 +22,7 @@
                     @include('threads.reply-form')
                 </div>
                 @if($thread->replies->count())
-                <div class="p-6 text-orange-500 dark:text-gray-100 bg-slate-50">
+                <div class="p-6 text-orange-500 dark:text-gray-100 bg-slate-600">
                     <h4 style="font-size: 20px;">Replies</h4>
                     @foreach($thread->replies as $reply)
                     @include('threads.reply')

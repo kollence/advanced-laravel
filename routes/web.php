@@ -17,9 +17,12 @@ use Illuminate\Support\Facades\Route;
 Route::get('/', function () {
     return view('welcome');
 });
-Route::get('/threads', [App\Http\Controllers\ThreadController::class, 'index'])->name('threads.index');
-Route::get('/threads/{thread}', [App\Http\Controllers\ThreadController::class, 'show'])->name('threads.show');
-Route::post('/threads', [App\Http\Controllers\ThreadController::class, 'store'])->name('threads.store');
+// Route::get('/threads', [App\Http\Controllers\ThreadController::class, 'index'])->name('threads.index');
+// Route::get('/threads/{thread}', [App\Http\Controllers\ThreadController::class, 'show'])->name('threads.show');
+// Route::post('/threads', [App\Http\Controllers\ThreadController::class, 'store'])->name('threads.store');
+// Route::resource('threads', [App\Http\Controllers\ThreadController::class]);
+
+Route::resource('threads', App\Http\Controllers\ThreadController::class);
 Route::post('/threads/{thread}/replies', [App\Http\Controllers\ReplyController::class, 'store'])->name('threads-reply.store');
 
 Route::get('/profile/{user}', [App\Http\Controllers\ProfileController::class, 'show'])->name('profile.show');

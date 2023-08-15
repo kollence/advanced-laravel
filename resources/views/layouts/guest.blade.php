@@ -23,9 +23,9 @@
             </div>
             @if (Route::has('login'))
                 <div class="hidden fixed top-0 right-0 px-6 py-4 sm:block">
+                        <a href="{{ url('/threads') }}" class="text-sm text-gray-700 dark:text-gray-500 underline">Threads</a>
                     @auth
                         <a href="{{ url('/dashboard') }}" class="text-sm text-gray-700 dark:text-gray-500 underline">Dashboard</a>
-                        <a href="{{ url('/threads') }}" class="text-sm text-gray-700 dark:text-gray-500 underline">threads</a>
                     @else
                         <a href="{{ route('login') }}" class="text-sm text-gray-700 dark:text-gray-500 underline">Log in</a>
 
@@ -36,7 +36,7 @@
                 </div>
             @endif
 
-            <div class="w-full  mt-6 px-6 py-4 bg-white dark:bg-gray-800 shadow-md overflow-hidden sm:rounded-lg">
+            <div class="max-w-5xl mx-auto sm:px-6 lg:px-8  mt-6 px-6 py-4 bg-white dark:bg-gray-800 shadow-md overflow-hidden sm:rounded-lg">
                 {{ $slot }}
             </div>
         </div>

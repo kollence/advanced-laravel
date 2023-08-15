@@ -37,8 +37,13 @@ class CreateThreadTest extends TestCase
 
     function test_a_thread_requires_a_title()
     {
-
         $this->publishThread(['title' => null])->assertSessionHasErrors('title');
+    }
+
+    function test_a_thread_requires_a_body()
+    {
+
+        $this->publishThread(['body' => null])->assertSessionHasErrors('body');
     }
 
     public function publishThread($overrides = [])

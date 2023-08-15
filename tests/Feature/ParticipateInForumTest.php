@@ -23,10 +23,10 @@ class ParticipateInForumTest extends TestCase
         // And an existing thread
         $thread = factoryCreate(\App\Models\Thread::class);
         // When the user adds a reply to the thread
-        $reply = factoryMake(\App\Models\Reply::class);
-        $this->post('/threads/' . $thread->id . '/replies', $reply->toArray());
+        $reply = factoryCreate(\App\Models\Reply::class);
+        $this->post('/threads/'.$thread->channel->slug.'/'. $thread->id . '/replies', $reply->toArray());
         // Then their reply should be visible on the page
-        $this->get('/threads/' . $thread->id)
+        $this->get($thread->path())
             ->assertSee($reply->body);
     }
 }

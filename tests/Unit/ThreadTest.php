@@ -21,7 +21,7 @@ class ThreadTest extends TestCase
     {
         parent::setUp();    
         //initialize one $thread as ready & created with factory
-        $this->thread = \App\Models\Thread::factory()->create();
+        $this->thread = factoryCreate(\App\Models\Thread::class);
     }
 
     public function test_thread_has_reply()

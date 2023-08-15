@@ -13,7 +13,7 @@ class CreateThreadTest extends TestCase
     {   // this 2 lines are needed for successful passing the test for Unauthenticated can't create thread
         $this->withoutExceptionHandling();
         $this->expectException('Illuminate\Auth\AuthenticationException');
-        $thread = \App\Models\Thread::factory()->make();
+        $thread = factoryMake(\App\Models\Thread::class);
         // If this throws a 500 error, it’ll now display in the console instead
         // This won’t be called, as the exception above will halt execution
         $this->post(route('threads.store'), $thread->toArray());  
@@ -26,9 +26,9 @@ class CreateThreadTest extends TestCase
     function test_auth_user_can_create_thread()
     {
         //authenticate user
-        $this->actingAs(\App\Models\User::factory()->create());
+        $this->signIn();
         //create thread
-        $thread = \App\Models\Thread::factory()->make();
+        $thread = factoryMake(\App\Models\Thread::class);
         $this->post('/threads', $thread->toArray());
         //redirect to thread page
         $this->get('/threads')

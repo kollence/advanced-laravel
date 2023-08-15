@@ -21,9 +21,9 @@ class Thread extends Model
     {
         return $this->belongsTo(User::class);
     }
-
+    // addReply method to be called on thread instance to create reply
     public function addReply(array $reply)
-    {
+    {   // reply will be created for this relationship
         $this->replies()->create($reply);
     }
 }

@@ -29,9 +29,6 @@
                     @endforeach
                 </div>
                 @endif
-                <div class="p-6 text-gray-900 dark:text-gray-100">
-                    @include('threads.reply-form')
-                </div>
             </div>
         </div>
     </div>

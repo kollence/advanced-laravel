@@ -9,6 +9,10 @@ use Illuminate\Http\Request;
 
 class ReplyController extends Controller
 {
+    public function __construct()
+    {
+        $this->middleware('auth')->except(['index', 'show']);
+    }
     /**
      * Display a listing of the resource.
      *
@@ -35,14 +39,15 @@ class ReplyController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Channel $channel, Thread $thread, Request $request)
+    public function store(Channel $channel, Thread $thread)
     {
+        $this->validate(request(), ['body' => 'required']);
         $thread->addReply([
-            'body' => $request->body,
+            'body' => request('body'),
             'user_id' => auth()->id(),
         ]);
 
-        return back();
+        return redirect($thread->path());
     }
 
     /**

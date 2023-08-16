@@ -43,6 +43,12 @@ class ThreadController extends Controller
     public function store(Request $request)
     {
         // dd(request()->all());
+        $this->validate($request,[
+            'title' => 'required',
+            'body' => 'required',
+            'channel_id' => 'required|exists:channels,id'
+        ]);
+
         $thread = Thread::create([
             'user_id' => auth()->user()->id,
             'channel_id' => $request->channel_id,
@@ -50,7 +56,7 @@ class ThreadController extends Controller
             'body' => $request->body
         ]);
 
-        return redirect('/threads');
+        return redirect($thread->path());
     }
 
     /**
@@ -62,7 +68,7 @@ class ThreadController extends Controller
     public function show($channel, Thread $thread)
     {
             // return $thread;
-            return view('threads.show', compact('thread'));
+            return view('threads.show', compact(['thread','channel']));
     }
 
     /**

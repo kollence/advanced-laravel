@@ -35,7 +35,7 @@ class ThreadsTest extends TestCase
     public function test_guest_can_read_a_single_thread()
     {
         // go to route & see if created single thread can be seen on page /threads/{id}
-        $this->get('/threads/' . $this->thread->id)
+        $this->get($this->thread->path())
             ->assertSee($this->thread->title);
     }
 
@@ -45,7 +45,7 @@ class ThreadsTest extends TestCase
         //create reply
         $reply = factoryCreate(\App\Models\Reply::class, $formData);
         // go to route & see if created reply can be seen on page /threads/{id}
-        $response = $this->get('/threads/' . $this->thread->id);
+        $response = $this->get($this->thread->path());
         $response->assertSee($reply->body);
     }
 }

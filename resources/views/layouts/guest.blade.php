@@ -15,12 +15,9 @@
         @vite(['resources/css/app.css', 'resources/js/app.js'])
     </head>
     <body class="font-sans text-gray-900 antialiased">
-        <div class="min-h-screen flex flex-col sm:justify-center items-center pt-6 sm:pt-0 bg-gray-100 dark:bg-gray-900">
-            <div>
-                <a href="/">
-                    <x-application-logo class="w-20 h-20 fill-current text-gray-500" />
-                </a>
-            </div>
+        <div class="min-h-screen bg-gray-100 dark:bg-gray-900">
+        <div class="hidden space-x-8 sm:-my-px sm:ml-10 sm:flex">
+                </div>
             @if (Route::has('login'))
                 <div class="hidden fixed top-0 right-0 px-6 py-4 sm:block">
                         <a href="{{ url('/threads') }}" class="text-sm text-gray-700 dark:text-gray-500 underline">Threads</a>

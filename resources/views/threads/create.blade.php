@@ -1,3 +1,8 @@
+<style>
+    .error{
+        color: red;
+    }
+</style>
 <x-guest-layout>
     <x-slot name="header">
         <h2 class="font-semibold text-xl text-gray-800 dark:text-gray-200 leading-tight">
@@ -7,44 +12,39 @@
 
 <form method="POST" action="{{ route('threads.store') }}">
         @csrf
-
+        <select name="channel_id" id="channels"  class="bg-gray-500 my-3 w-full">
+            <option value="">Select a channel</option>
+            @foreach (App\Models\Channel::all() as $channel)
+                <option value="{{ $channel->id }}" {{old('channel_id') == $channel->id ? 'selected' : ''}} >{{ $channel->name }}</option>
+            @endforeach 
+        </select>
+        @if ($errors->has('channel_id'))
+            <span class="error">{{ $errors->first('channel_id') }}</span>
+        @endif
         <!-- Email Address -->
         <div>
             <label for="title">
-                <input type="text" name="title" id="title">
+                <input type="text" name="title" id="title" class="bg-gray-500 w-full">
             </label>
             <x-input-error :messages="$errors->get('email')" class="mt-2" />
         </div>
+        @if ($errors->has('title'))
+            <span class="error">{{ $errors->first('title') }}</span>
+        @endif
 
         <!-- Password -->
         <div class="mt-4">
             <label for="body">
-                <textarea name="body" id="body" cols="30" rows="10"></textarea>
+                <textarea name="body" id="body" cols="30" rows="10" class="bg-gray-500 w-full"></textarea>
             </label>
 
             <x-input-error :messages="$errors->get('password')" class="mt-2" />
         </div>
+        @if ($errors->has('body'))
+            <span class="error">{{ $errors->first('body') }}</span>
+        @endif
 
         <button class="border rounded-md border-2 border-gray-500/100 text-white p-2"  type="submit">Submit</button>
 
-        <!-- Remember Me -->
-        <div class="block mt-4">
-            <label for="remember_me" class="inline-flex items-center">
-                <input id="remember_me" type="checkbox" class="rounded dark:bg-gray-900 border-gray-300 dark:border-gray-700 text-indigo-600 shadow-sm focus:ring-indigo-500 dark:focus:ring-indigo-600 dark:focus:ring-offset-gray-800" name="remember">
-                <span class="ml-2 text-sm text-gray-600 dark:text-gray-400">{{ __('Remember me') }}</span>
-            </label>
-        </div>
-
-        <div class="flex items-center justify-end mt-4">
-            @if (Route::has('password.request'))
-                <a class="underline text-sm text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-100 rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 dark:focus:ring-offset-gray-800" href="{{ route('password.request') }}">
-                    {{ __('Forgot your password?') }}
-                </a>
-            @endif
-
-            <x-primary-button class="ml-3">
-                {{ __('Log in') }}
-            </x-primary-button>
-        </div>
     </form>
 </x-guest-layout>

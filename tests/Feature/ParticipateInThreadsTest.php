@@ -29,19 +29,17 @@ class ParticipateInThreadsTest extends TestCase
         $thread = factoryCreate(Thread::class);
         $reply = factoryMake(Reply::class);
         $this->post($thread->path().'/replies', $reply->toArray());
-        // $this->get($thread->path())->assertSee($reply->body); // CANT SEE BODY FOR SOME REASON
-        // $this->get($thread->path())->assertSee('Replies'); // CANT SEE TEXT ON PAGE FOR SOME REASON
-        $this->get($thread->path())->assertSee('Created by:');
+        $this->get($thread->path())->assertSee($reply->body);
     }
 
-    // public function test_a_reply_requiers_a_body()
-    // {
-    //     // WONT WORK ERROR ON assertSessionHasErrors
-    //     $this->signIn();
-    //     $thread = factoryCreate(Thread::class);
-    //     $reply = factoryMake(Reply::class, ['body' => null]);
-    //     $this->post($thread->path().'/replies', $reply->toArray())
-    //     ->assertSessionHasErrors('body');
+    public function test_a_reply_requiers_a_body()
+    {
+        // WONT WORK ERROR ON assertSessionHasErrors
+        $this->signIn();
+        $thread = factoryCreate(Thread::class);
+        $reply = factoryMake(Reply::class, ['body' => null]);
+        $this->post($thread->path().'/replies', $reply->toArray())
+        ->assertSessionHasErrors('body');
         
-    // }
+    }
 }

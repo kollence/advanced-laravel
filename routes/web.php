@@ -18,15 +18,15 @@ use Illuminate\Support\Facades\Route;
 Route::get('/', function () {
     return view('welcome');
 });
-Route::get('threads', [ThreadController::class, 'index'])->name('threads.index');
+//write route for threads with optional channel param
 Route::get('threads/create', [ThreadController::class, 'create'])->name('threads.create');
 Route::get('threads/{channel}/{thread}', [ThreadController::class, 'show'])->name('threads.show');
 Route::post('threads', [ThreadController::class, 'store'])->name('threads.store');
+Route::get('threads/{channel?}', [ThreadController::class, 'index'])->name('threads.index');
 
-// Route::resource('threads', ThreadController::class);
-//find add controller to route resurce.
+
+
 Route::post('/threads/{channel}/{thread}/replies', [App\Http\Controllers\ReplyController::class, 'store'])->name('threads-reply.store');
-
 Route::get('/profile/{user}', [App\Http\Controllers\ProfileController::class, 'show'])->name('profile.show');
 
 Route::get('/dashboard', function () {

@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Channel;
 use App\Models\Thread;
+use App\Models\User;
 use Illuminate\Http\Request;
 
 class ThreadController extends Controller
@@ -18,15 +19,21 @@ class ThreadController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    // write me the index method that can accept route model bind Channel and if its passed pass me $channels if not pass me $threads
     public function index(Channel $channel)
     {
+        // if channel model exists in optional parameter
         if ($channel->exists) {
-            $threads = $channel->threads()->latest()->get();
-            return view('threads.index', compact('threads'));
+            $threads = $channel->threads()->latest();
+        }else{
+            $threads = Thread::latest();
         }
-
-        $threads = Thread::latest()->get();
+        // if username is passed to query strin ?by=user name
+        // then filter the threads by that user
+        if ($username = request()->query('by')) {
+            $user = User::where('name', $username)->firstOrFail();
+            $threads = $threads->where('user_id', $user->id);
+        }
+        $threads = $threads->get();
         return view('threads.index', compact('threads'));
     }
 

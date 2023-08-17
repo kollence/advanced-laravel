@@ -14,7 +14,7 @@
         </x-slot>
 
         <x-slot name="content">  
-            @foreach(App\Models\Channel::all() as $channel)                     
+            @foreach($channels as $channel)                     
             <x-dropdown-link :href="route('threads.index', $channel->slug)">
                 {{$channel->slug}}
             </x-dropdown-link>

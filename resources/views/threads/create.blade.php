@@ -14,7 +14,7 @@
         @csrf
         <select name="channel_id" id="channels"  class="bg-gray-500 my-3 w-full" required>
             <option value="">Select a channel</option>
-            @foreach (App\Models\Channel::all() as $channel)
+            @foreach ($channels as $channel)
                 <option value="{{ $channel->id }}" {{old('channel_id') == $channel->id ? 'selected' : ''}} >{{ $channel->name }}</option>
             @endforeach 
         </select>

@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Channel;
 use App\Models\Thread;
 use Illuminate\Http\Request;
 
@@ -17,10 +18,14 @@ class ThreadController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    // write me the index method that can accept route model bind Channel and if its passed pass me $channels if not pass me $threads
+    public function index(Channel $channel)
     {
-        $threads = Thread::latest()->get();
-
+        if ($channel->exists) {
+            $threads = $channel->threads()->latest()->get();
+        } else {
+            $threads = Thread::latest()->get();
+        }
         return view('threads.index', compact('threads'));
     }
 
@@ -31,7 +36,8 @@ class ThreadController extends Controller
      */
     public function create()
     {
-        return view('threads.create');
+        $channels = Channel::all();
+        return view('threads.create', compact('channels') );
     }
 
     /**
@@ -44,6 +50,7 @@ class ThreadController extends Controller
     {
         // dd(request()->all());
         $this->validate($request,[
+            'channel_id' => 'required',
             'title' => 'required',
             'body' => 'required',
             'channel_id' => 'required|exists:channels,id'
@@ -56,7 +63,7 @@ class ThreadController extends Controller
             'body' => $request->body
         ]);
 
-        return redirect($thread->path());
+        return redirect('/threads/'.$thread->channel->slug);
     }
 
     /**

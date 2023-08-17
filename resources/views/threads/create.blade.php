@@ -12,7 +12,7 @@
 
 <form method="POST" action="{{ route('threads.store') }}">
         @csrf
-        <select name="channel_id" id="channels"  class="bg-gray-500 my-3 w-full">
+        <select name="channel_id" id="channels"  class="bg-gray-500 my-3 w-full" required>
             <option value="">Select a channel</option>
             @foreach (App\Models\Channel::all() as $channel)
                 <option value="{{ $channel->id }}" {{old('channel_id') == $channel->id ? 'selected' : ''}} >{{ $channel->name }}</option>
@@ -24,7 +24,7 @@
         <!-- Email Address -->
         <div>
             <label for="title">
-                <input type="text" name="title" id="title" class="bg-gray-500 w-full">
+                <input value="{{old('title')}}" type="text" name="title" id="title" class="bg-gray-500 w-full" required>
             </label>
             <x-input-error :messages="$errors->get('email')" class="mt-2" />
         </div>
@@ -35,7 +35,7 @@
         <!-- Password -->
         <div class="mt-4">
             <label for="body">
-                <textarea name="body" id="body" cols="30" rows="10" class="bg-gray-500 w-full"></textarea>
+                <textarea name="body" id="body" cols="30" rows="10" class="bg-gray-500 w-full" required>{{old('body')}}</textarea>
             </label>
 
             <x-input-error :messages="$errors->get('password')" class="mt-2" />

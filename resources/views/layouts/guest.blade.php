@@ -33,7 +33,7 @@
                 </div>
             @endif
 
-            <div class="max-w-5xl mx-auto sm:px-6 lg:px-8  mt-6 px-6 py-4 bg-white dark:bg-gray-800 shadow-md overflow-hidden sm:rounded-lg">
+            <div class=" mx-auto sm:px-6 lg:px-8  mt-6 px-6 py-4 bg-white dark:bg-gray-800 shadow-md sm:rounded-lg ">
                 {{ $slot }}
             </div>
         </div>

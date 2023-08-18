@@ -78,8 +78,7 @@ class ThreadController extends Controller
      */
     public function show($channel, Thread $thread)
     {
-            // return $thread;
-            return view('threads.show', compact(['thread','channel']));
+        return view('threads.show', compact(['thread','channel']));
     }
 
     /**

@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Models\Scopes\CountScope;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
@@ -9,14 +10,20 @@ class Thread extends Model
 {
     use HasFactory;
 
-    // protected $guarded = ['id'];
+    protected $guarded = ['id'];
     protected $fillable = ['user_id', 'channel_id', 'title', 'body'];
 
-    // cistom getter to return count of replies
-    public function getRepliesCountAttribute()
-    {
-        return $this->replies()->count();
+    protected static function booted()
+    {                               
+        // global scope for counting replies that happens before model is booted
+                                // using my custom scope class that accepts a relationship to count
+        static::addGlobalScope(new CountScope('replies'));
     }
+    // // cistom getter to return count of replies
+    // public function getRepliesCountAttribute()
+    // {
+    //     return $this->replies()->count();
+    // }
  
     public function replies()
     {

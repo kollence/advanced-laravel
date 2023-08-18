@@ -12,6 +12,12 @@ class Thread extends Model
     // protected $guarded = ['id'];
     protected $fillable = ['user_id', 'channel_id', 'title', 'body'];
 
+    // cistom getter to return count of replies
+    public function getRepliesCountAttribute()
+    {
+        return $this->replies()->count();
+    }
+ 
     public function replies()
     {
         return $this->hasMany(Reply::class);

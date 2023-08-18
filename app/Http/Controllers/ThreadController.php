@@ -2,10 +2,11 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Channel;
-use App\Models\Thread;
 use App\Models\User;
+use App\Models\Thread;
+use App\Models\Channel;
 use Illuminate\Http\Request;
+use App\Filters\ThreadFilters;
 
 class ThreadController extends Controller
 {
@@ -19,21 +20,16 @@ class ThreadController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index(Channel $channel)
-    {
-        // if channel model exists in optional parameter
+    public function index(Channel $channel, ThreadFilters $filters)
+    {   // filter model with filters that i got
+        $threads = Thread::latest()->filter($filters);
+        // if channel model exists in optional parameter then return channels threads
         if ($channel->exists) {
-            $threads = $channel->threads()->latest();
-        }else{
-            $threads = Thread::latest();
+            $threads->where('channel_id', $channel->id);
         }
-        // if username is passed to query strin ?by=user name
-        // then filter the threads by that user
-        if ($username = request()->query('by')) {
-            $user = User::where('name', $username)->firstOrFail();
-            $threads = $threads->where('user_id', $user->id);
-        }
+
         $threads = $threads->get();
+
         return view('threads.index', compact('threads'));
     }
 

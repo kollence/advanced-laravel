@@ -63,7 +63,8 @@
                         </h3>
                             <div class="body bg-gray-500 rounded-md p-3" >{{ $thread->body }}</div>
                             <div>
-                                <small>Created by: {{$thread->user->name}}</small>
+                                <small>Created by: {{$thread->user->name}}</small> <br>
+                                <small>commented: {{$thread->replies_count}} {{Str::plural('time', $thread->replies_count)}}</small>
                             </div>
                         <br>
 

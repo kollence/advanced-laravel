@@ -65,4 +65,19 @@ class ReadThreadsTest extends TestCase
         ->assertDontSee($threadNotInChannel->title); // Check if the other thread is not visible
 
     }
+
+    public function test_user_can_filter_threads_by_popularity()
+    {
+        // Create three threads with different number of replies
+        $threadWithThreeReplies = factoryCreate(\App\Models\Thread::class);
+        factoryCreate(\App\Models\Reply::class, ['thread_id' => $threadWithThreeReplies->id], 3);
+        $threadWithNoReplies = $this->thread;
+        $threadWithFiveReplies = factoryCreate(\App\Models\Thread::class);
+        factoryCreate(\App\Models\Reply::class, ['thread_id' => $threadWithFiveReplies->id], 5);
+        // return json from route
+        $response = $this->getJson(route('threads.index', ['popular' => 1]))->json();
+
+        $this->assertEquals([5,3,0], array_column($response['data'], 'replies_count'));
+    }
+
 }

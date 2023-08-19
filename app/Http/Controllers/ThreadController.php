@@ -21,14 +21,12 @@ class ThreadController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function index(Channel $channel, ThreadFilters $filters)
-    {   // filter model with filters that i got
-        $threads = Thread::latest()->filter($filters);
-        // if channel model exists in optional parameter then return channels threads
-        if ($channel->exists) {
-            $threads->where('channel_id', $channel->id);
+    {   // logic moved to method that will be later moved to service
+        $threads = $this->getThreads($channel, $filters);
+        // FOR TESTING PURPOSES
+        if(request()->wantsJson()){
+            return $threads;
         }
-
-        $threads = $threads->paginate(6);
 
         return view('threads.index', compact('threads'));
     }
@@ -116,5 +114,17 @@ class ThreadController extends Controller
     public function destroy(Thread $thread)
     {
         //
+    }
+
+    protected function getThreads($channel, $filters)
+    {
+        // filter model with filters that i got
+        $threads = Thread::latest()->filter($filters);
+        // if channel model exists in optional parameter then return channels threads
+        if ($channel->exists) {
+            $threads->where('channel_id', $channel->id);
+        }
+
+        return $threads->paginate(100);
     }
 }

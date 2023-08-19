@@ -68,14 +68,15 @@
                 <div class="text-gray-900 dark:text-gray-100">
                     @include('threads.reply-form')
                 </div>
-                @if($thread->replies->count())
                 <div class="p-6 text-orange-500 dark:text-gray-100 bg-slate-600">
                     <h4 style="font-size: 20px;">Replies</h4>
-                    @foreach($thread->replies as $reply)
+                    @forelse($replies as $reply)
                     @include('threads.reply')
-                    @endforeach
+                    @empty
+                    <p>No comments</p>
+                    @endforelse
                 </div>
-                @endif
+                {{$replies->links()}}
             </div>
             </div>
         </div>

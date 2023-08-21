@@ -22,6 +22,10 @@ class Thread extends Model
         static::addGlobalScope(new CountScope('replies'));
         // // 2. here you CAN call withoutGlobalScopes() and detached
         // static::addGlobalScope(new UserScope('user'));
+        // model events DELETING on delete thread delete his replies
+        static::deleting(function ($thread) {
+            $thread->replies->each->delete();
+        });
     }
     // // cistom getter to return count of replies
     // public function getRepliesCountAttribute()

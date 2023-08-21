@@ -13,7 +13,7 @@
                         @method('DELETE')
                         <button 
                         type="submit" 
-                        class="flex bg-transparent hover:bg-blue-600 border border-red-700 border-2 font-bold py-2 px-4 rounded-full shadow-md" 
+                        class="flex bg-transparent hover:bg-red-600 border border-red-700 border-2 font-bold py-2 px-4 rounded-full shadow-md" 
                                 onclick="event.preventDefault();
                                             this.closest('form').submit();">
                             {{ __('Delete') }}

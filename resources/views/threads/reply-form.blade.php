@@ -1,4 +1,4 @@
-@if(auth()->check())
+@auth
 <div class="border p-6 text-gray-900 dark:text-gray-100">
     <form action="{{ route('threads-reply.store', [$thread->channel, $thread]) }}" method="POST">
         @csrf
@@ -14,4 +14,4 @@
 </div>
 @else
     <p class="text-center">Please <a class="text-orange-200" href="{{ route('login') }}">sign in</a> to participate in this discussion.</p>
-@endif
+@endauth

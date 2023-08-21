@@ -5,15 +5,15 @@
     <div class="px-5 py-12 col-span-2">
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
             <div class="bg-white dark:bg-gray-800 overflow-hidden shadow-sm sm:rounded-lg">
-                <div class="p-6 text-gray-900 dark:text-gray-300">
-                    <a href="{{url('threads/create')}}">+ Thread</a>
+                <div class="p-6 text-gray-900 dark:text-gray-300 flex justify-between">
+                    <a href="{{url('threads/create')}}" class="flex bg-transparent hover:bg-blue-600 border border-blue-700 border-2 font-bold py-2 px-4 rounded-full shadow-md">+ Thread</a>
                     @auth
                     <form method="POST" action="{{ url($thread->path()) }}">
                         @csrf
                         @method('DELETE')
                         <button 
                         type="submit" 
-                        class="flex bg-transparent hover:bg-blue-600  font-bold py-2 px-4 rounded-full shadow-md" 
+                        class="flex bg-transparent hover:bg-blue-600 border border-red-700 border-2 font-bold py-2 px-4 rounded-full shadow-md" 
                                 onclick="event.preventDefault();
                                             this.closest('form').submit();">
                             {{ __('Delete') }}

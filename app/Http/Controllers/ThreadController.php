@@ -116,6 +116,10 @@ class ThreadController extends Controller
         // delete thread
         // $thread->replies()->delete();
         $thread->delete();
+        if(request()->expectsJson()){
+            return response([], 200);
+        }
+        return redirect('/profile/'.auth()->user()->name);
 
     }
 

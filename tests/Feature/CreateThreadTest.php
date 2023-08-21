@@ -50,8 +50,8 @@ class CreateThreadTest extends TestCase
         $this->signIn();
         $thread = factoryCreate(\App\Models\Thread::class);
         $reply = factoryCreate(\App\Models\Reply::class, ['thread_id' => $thread->id]);
-        // Attempt to delete the thread
-        $response = $this->delete($thread->path());
+        // Attempt to delete the thread with json so it could be handled by controller easy
+        $response = $this->json('DELETE', $thread->path());
         // Assert that the response has a successful status code
         $response->assertStatus(200);
         // Assert that the thread is deleted from the database

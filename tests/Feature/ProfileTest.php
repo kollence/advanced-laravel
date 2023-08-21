@@ -2,6 +2,7 @@
 
 namespace Tests\Feature;
 
+use App\Models\Thread;
 use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
@@ -18,6 +19,19 @@ class ProfileTest extends TestCase
             ->get('/profile');
 
         $response->assertOk();
+    }
+
+    public function test_profile_information_can_be_viewed(): void
+    {
+        $user = User::factory()->create();
+        $threads = factoryCreate(Thread::class, ['user_id'=> $user->id]);
+        $this->signIn($user);
+        $response = $this
+            ->get(route('profile.show', $user->name));
+
+        $response->assertOk();
+        $response->assertSee($threads->title);
+        $response->assertSee($threads->body);
     }
 
     public function test_profile_information_can_be_updated(): void

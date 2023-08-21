@@ -9,7 +9,7 @@
                     <a href="{{url('threads/create')}}">+ Thread</a>
                 </div>
                 <div class="p-6 text-gray-900 dark:text-gray-100">
-                    @foreach($threads as $thread)
+                    @forelse($threads as $thread)
                         <hr>
                         <hr>
                         <div class="flex  justify-between">
@@ -27,8 +27,9 @@
                             <small>Created by: <a class="text-orange-400" href="{{route('profile.show', $thread->user->name)}}">{{ $thread->user->name }}</a></small> <br>        
                         </div>
                         <br>
-
-                    @endforeach
+                    @empty
+                        <h1 class="text-center">No threads found</h1>
+                    @endforelse
 
                 </div>
                 {{$threads->links()}}

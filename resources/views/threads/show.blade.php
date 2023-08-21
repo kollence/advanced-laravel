@@ -1,7 +1,5 @@
 <x-guest-layout>
-@php
-    $canIfitsYours = ($thread->user_id == auth()->user()->id);
-@endphp
+
     <div class="max-w-7xl mx-auto grid grid-cols-3 gap-4">
 
     <div class="px-5 py-12 col-span-2">
@@ -9,12 +7,11 @@
             <div class="bg-white dark:bg-gray-800 overflow-hidden shadow-sm sm:rounded-lg">
                 <div class="p-6 text-gray-900 dark:text-gray-300">
                     <a href="{{url('threads/create')}}">+ Thread</a>
-                    @if($canIfitsYours)
+                    @auth
                     <form method="POST" action="{{ url($thread->path()) }}">
                         @csrf
                         @method('DELETE')
                         <button 
-                        {{ $canIfitsYours ? '' : 'disabled' }}
                         type="submit" 
                         class="flex bg-transparent hover:bg-blue-600  font-bold py-2 px-4 rounded-full shadow-md" 
                                 onclick="event.preventDefault();
@@ -22,7 +19,7 @@
                             {{ __('Delete') }}
                         </button>
                     </form>
-                    @endif
+                    @endauth
                 </div>
                 <div class="bg-white dark:bg-gray-800 overflow-hidden shadow-sm sm:rounded-lg">
                 <div class="p-6 text-gray-900 dark:text-gray-100">

@@ -19,6 +19,9 @@ return new class extends Migration
             $table->integer('user_id')->unsigned()->index();
             $table->text('body');
             $table->timestamps();
+
+            // constrain on thread_id
+            // $table->foreign('thread_id')->references('id')->on('threads')->onDelete('cascade');
         });
     }
 

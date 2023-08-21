@@ -37,6 +37,18 @@ class CreateThreadTest extends TestCase
             ->assertSee($thread->body);
     }
 
+    function test_auth_user_can_delete_thread()
+    {
+        $this->signIn();
+        $thread = factoryCreate(\App\Models\Thread::class);
+        // Attempt to delete the thread
+        $response = $this->delete($thread->path());
+        // Assert that the response has a successful status code
+        $response->assertStatus(200);
+        // Assert that the thread is deleted from the database
+        $this->assertDatabaseMissing('threads', ['id' => $thread->id]);
+    }
+
     function test_a_thread_requires_a_title()
     {
         $this->publishThread(['title' => null])->assertSessionHasErrors('title');

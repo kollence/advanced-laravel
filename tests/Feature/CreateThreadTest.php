@@ -10,7 +10,7 @@ class CreateThreadTest extends TestCase
 {
     use DatabaseMigrations;
 
-    function test_guest_cant_create_thread()
+    public function test_guest_cant_create_thread()
     {   // with Exception Handling
         $this->withExceptionHandling();
         // can't go to page
@@ -23,7 +23,7 @@ class CreateThreadTest extends TestCase
         ->assertRedirect('/login');  
     }
 
-    function test_auth_user_can_create_thread()
+    public function test_auth_user_can_create_thread()
     {
         //authenticate user
         $this->signIn();
@@ -37,7 +37,15 @@ class CreateThreadTest extends TestCase
             ->assertSee($thread->body);
     }
 
-    function test_auth_user_can_delete_thread()
+    public function test_guest_cant_delete_thread()
+    {
+        $this->withExceptionHandling();
+        $thread = factoryCreate(\App\Models\Thread::class);
+        $this->delete($thread->path())
+        ->assertRedirect('/login');
+    }
+
+    public function test_auth_user_can_delete_thread()
     {
         $this->signIn();
         $thread = factoryCreate(\App\Models\Thread::class);
@@ -52,18 +60,18 @@ class CreateThreadTest extends TestCase
         $this->assertDatabaseMissing('replies', ['id' => $reply->id]);
     }
 
-    function test_a_thread_requires_a_title()
+    public function test_a_thread_requires_a_title()
     {
         $this->publishThread(['title' => null])->assertSessionHasErrors('title');
     }
 
-    function test_a_thread_requires_a_body()
+    public function test_a_thread_requires_a_body()
     {
 
         $this->publishThread(['body' => null])->assertSessionHasErrors('body');
     }
 
-    function test_a_thread_requires_a_valid_channel()
+    public function test_a_thread_requires_a_valid_channel()
     {
         $cannels = \App\Models\Channel::factory(2)->create();
         $this->publishThread(['channel_id' => null])->assertSessionHasErrors('channel_id');

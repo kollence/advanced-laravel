@@ -1,5 +1,5 @@
 <x-guest-layout> 
-@include('threads.filters')
+<!-- @include('threads.filters') -->
 <div class="max-w-7xl mx-auto grid grid-cols-1 gap-4">
 
     <div class="px-5 py-12 col-span-2">

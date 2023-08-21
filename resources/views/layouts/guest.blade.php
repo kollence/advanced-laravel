@@ -14,28 +14,23 @@
         <!-- Scripts -->
         @vite(['resources/css/app.css', 'resources/js/app.js'])
     </head>
-    <body class="font-sans text-gray-900 antialiased">
+    <body class="font-sans antialiased">
         <div class="min-h-screen bg-gray-100 dark:bg-gray-900">
-        <div class="hidden space-x-8 sm:-my-px sm:ml-10 sm:flex">
-                </div>
-            @if (Route::has('login'))
-                <div class="hidden fixed top-0 right-0 px-6 py-4 sm:block">
-                        <a href="{{ url('/threads') }}" class="text-sm text-gray-700 dark:text-gray-500 underline">Threads</a>
-                    @auth
-                        <a href="{{ url('/dashboard') }}" class="text-sm text-gray-700 dark:text-gray-500 underline">Dashboard</a>
-                    @else
-                        <a href="{{ route('login') }}" class="text-sm text-gray-700 dark:text-gray-500 underline">Log in</a>
+            @include('layouts.navigation')
 
-                        @if (Route::has('register'))
-                            <a href="{{ route('register') }}" class="ml-4 text-sm text-gray-700 dark:text-gray-500 underline">Register</a>
-                        @endif
-                    @endauth
-                </div>
+            <!-- Page Heading -->
+            @if (isset($header))
+                <header class="bg-white dark:bg-gray-800 shadow">
+                    <div class="max-w-7xl mx-auto py-6 px-4 sm:px-6 lg:px-8">
+                        {{ $header }}
+                    </div>
+                </header>
             @endif
 
-            <div class=" mx-auto sm:px-6 lg:px-8  mt-6 px-6 py-4 bg-white dark:bg-gray-800 shadow-md sm:rounded-lg ">
+            <!-- Page Content -->
+            <main>
                 {{ $slot }}
-            </div>
+            </main>
         </div>
     </body>
 </html>

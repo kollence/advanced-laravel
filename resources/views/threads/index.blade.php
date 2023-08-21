@@ -24,7 +24,7 @@
                         </div>
                         <div class="body bg-gray-500 rounded-md p-3" >{{ $thread->body }}</div>
                         <div>
-                            <small>Created by: {{$thread->user->name}}</small> <br>        
+                            <small>Created by: <a class="text-orange-400" href="{{route('profile.show', $thread->user->name)}}">{{ $thread->user->name }}</a></small> <br>        
                         </div>
                         <br>
 

@@ -15,7 +15,7 @@
                     <h1 style="font-size: 20px;">{{ $thread->title }} </h1>
                     <div class="body">{{ $thread->body }}</div>
                     <div>
-                        <small>Created by: <a class="text-orange-400" href="{{route('profile.show', $thread->user->id)}}">{{ $thread->user->name }}</a></small>
+                        <small>Created by: <a class="text-orange-400" href="{{route('profile.show', $thread->user->name)}}">{{ $thread->user->name }}</a></small>
                     </div>
                     <br>
                 </div>

@@ -22,6 +22,12 @@ class User extends Authenticatable
         'email',
         'password',
     ];
+    
+    // set name as route model binding
+    public function getRouteKeyName()
+    {
+        return 'name';
+    }
 
     /**
      * The attributes that should be hidden for serialization.

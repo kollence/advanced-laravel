@@ -27,11 +27,7 @@ class Thread extends Model
         static::deleting(function ($thread) {
             $thread->replies->each->delete();
         });
-        if(auth()->check()){
-            static::created(function ($thread) {
-                $thread->createActivityWhenThreadIsCreated('created');
-            });
-        }
+
     }
     // // cistom getter to return count of replies
     // public function getRepliesCountAttribute()

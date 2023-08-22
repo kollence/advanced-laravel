@@ -4,12 +4,13 @@ namespace App\Models;
 
 use App\Models\Scopes\CountScope;
 use App\Models\Scopes\UserScope;
+use App\Traits\CreateActivity;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
 class Thread extends Model
 {
-    use HasFactory;
+    use HasFactory, CreateActivity;
 
     protected $guarded = ['id'];
     protected $fillable = ['user_id', 'channel_id', 'title', 'body'];
@@ -35,20 +36,6 @@ class Thread extends Model
     // {
     //     return $this->replies()->count();
     // }
-    protected function createActivityWhenThreadIsCreated($event)
-    {
-        Activity::create([
-            'user_id' => auth()->id(),
-            'type' => $event . '.' . $this->getClassNameToLowercase(),
-            'subject_id' => $this->id,
-            'subject_type' => get_class($this)
-        ]);
-    }
-
-    protected function getClassNameToLowercase()
-    {
-        return strtolower(class_basename($this));
-    }
  
     public function replies()
     {

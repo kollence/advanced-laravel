@@ -26,12 +26,29 @@ class Thread extends Model
         static::deleting(function ($thread) {
             $thread->replies->each->delete();
         });
+        static::created(function ($thread) {
+            $thread->createActivityWhenThreadIsCreated('created');
+        });
     }
     // // cistom getter to return count of replies
     // public function getRepliesCountAttribute()
     // {
     //     return $this->replies()->count();
     // }
+    protected function createActivityWhenThreadIsCreated($event)
+    {
+        Activity::create([
+            'user_id' => auth()->id(),
+            'type' => $event . '.' . $this->getClassNameToLowercase(),
+            'subject_id' => $this->id,
+            'subject_type' => get_class($this)
+        ]);
+    }
+
+    protected function getClassNameToLowercase()
+    {
+        return strtolower(class_basename($this));
+    }
  
     public function replies()
     {

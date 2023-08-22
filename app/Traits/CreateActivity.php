@@ -19,16 +19,25 @@ trait CreateActivity
 
     protected function createActivityWhenThreadIsCreated($event)
     {
-        Activity::create([
+        // Activity::create([
+        //     'user_id' => auth()->id(),
+        //     'type' => $this->getActivityType($event),
+        //     'subject_id' => $this->id,
+        //     'subject_type' => get_class($this)
+        // ]);
+        $this->activity()->create([
             'user_id' => auth()->id(),
-            'type' => $this->getClassNameToLowercase($event),
-            'subject_id' => $this->id,
-            'subject_type' => get_class($this)
+            'type' => $this->getActivityType($event),
         ]);
     }
 
-    protected function getClassNameToLowercase($event)
+    protected function getActivityType($event)
     {   $type = strtolower(class_basename($this));
         return "{$event}.{$type}";
+    }
+
+    public function activity()
+    {
+        return $this->morphMany(Activity::class, 'subject');
     }
 }

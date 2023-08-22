@@ -4,7 +4,7 @@ namespace App\Traits;
 
 use App\Models\Favorite;
 
-Trait Favoritable
+trait Favoritable
 {
     public function favorites()
     {

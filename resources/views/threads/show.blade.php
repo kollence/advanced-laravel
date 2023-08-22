@@ -7,7 +7,7 @@
             <div class="bg-white dark:bg-gray-800 overflow-hidden shadow-sm sm:rounded-lg">
                 <div class="p-6 text-gray-900 dark:text-gray-300 flex justify-between">
                     <a href="{{url('threads/create')}}" class="bg-transparent hover:bg-blue-600 border border-blue-700 border-2 font-bold py-2 px-4 rounded-full shadow-md">+ Thread</a>
-                    @auth
+                    @can('update', $thread)
                     <form method="POST" action="{{ url($thread->path()) }}">
                         @csrf
                         @method('DELETE')
@@ -19,7 +19,7 @@
                             {{ __('Delete') }}
                         </button>
                     </form>
-                    @endauth
+                    @endcan
                 </div>
                 <div class="bg-white dark:bg-gray-800 overflow-hidden shadow-sm sm:rounded-lg">
                 <div class="p-6 text-gray-900 dark:text-gray-100">

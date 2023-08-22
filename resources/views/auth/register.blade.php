@@ -1,4 +1,5 @@
 <x-guest-layout>
+<div class="max-w-2xl mx-auto grid grid-cols-1 gap-4 mt-7">
     <form method="POST" action="{{ route('register') }}">
         @csrf
 
@@ -49,4 +50,5 @@
             </x-primary-button>
         </div>
     </form>
+</div>
 </x-guest-layout>

@@ -1,7 +1,7 @@
 <x-guest-layout>
     <!-- Session Status -->
     <x-auth-session-status class="mb-4" :status="session('status')" />
-
+    <div class="max-w-2xl mx-auto grid grid-cols-1 gap-4 mt-7">
     <form method="POST" action="{{ route('login') }}">
         @csrf
 
@@ -44,4 +44,5 @@
             </x-primary-button>
         </div>
     </form>
+    </div>
 </x-guest-layout>

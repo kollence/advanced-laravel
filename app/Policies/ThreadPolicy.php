@@ -15,6 +15,7 @@ class ThreadPolicy
         if ($user->isAdmin()) {
             return true;
         }
+        return null;
     }
     /**
      * Determine whether the user can view any models.

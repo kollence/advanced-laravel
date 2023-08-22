@@ -37,18 +37,20 @@ class CreateThreadTest extends TestCase
             ->assertSee($thread->body);
     }
 
-    public function test_guest_cant_delete_thread()
+    public function test_unauth_cant_delete_thread()
     {
         $this->withExceptionHandling();
         $thread = factoryCreate(\App\Models\Thread::class);
         $this->delete($thread->path())
         ->assertRedirect('/login');
+
+        $this->signIn()->delete($thread->path())->assertStatus(403);
     }
 
     public function test_auth_user_can_delete_thread()
     {
         $this->signIn();
-        $thread = factoryCreate(\App\Models\Thread::class);
+        $thread = factoryCreate(\App\Models\Thread::class, ['user_id' => auth()->id()]);
         $reply = factoryCreate(\App\Models\Reply::class, ['thread_id' => $thread->id]);
         // Attempt to delete the thread with json so it could be handled by controller easy
         $response = $this->json('DELETE', $thread->path());

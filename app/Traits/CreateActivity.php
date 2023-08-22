@@ -9,22 +9,24 @@ trait CreateActivity
 
     // trait listen when modal is created and it will generate a new activity
     protected static function bootCreateActivity()
-    {
-        if(auth()->check()){
-            static::created(function ($thread) {
-                $thread->createActivityWhenThreadIsCreated('created');
-            });
-        }
+    {       // if not auth user return (TESTING WILL WORK FOR GUEST USERS)
+            if(!auth()->check()) return;
+
+            foreach(static::getAvailableEvents() as $event) {
+                static::created(function ($thread) use($event) {
+                    $thread->createActivityWhenThreadIsCreated($event);
+                });
+            }
     }
+
+    protected static function getAvailableEvents()
+    {
+        return ['created'];
+    }
+
 
     protected function createActivityWhenThreadIsCreated($event)
     {
-        // Activity::create([
-        //     'user_id' => auth()->id(),
-        //     'type' => $this->getActivityType($event),
-        //     'subject_id' => $this->id,
-        //     'subject_type' => get_class($this)
-        // ]);
         $this->activity()->create([
             'user_id' => auth()->id(),
             'type' => $this->getActivityType($event),

@@ -15,4 +15,9 @@ class Activity extends Model
         'subject_id' ,
         'subject_type' ,
     ];
+
+    public function subject()
+    {
+        return $this->morphTo();
+    }
 }

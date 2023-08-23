@@ -56,4 +56,9 @@ class User extends Authenticatable
     {
         return $this->email === 'misterija@gmail.com';
     }
+
+    public function activity()
+    {
+        return $this->hasMany(Activity::class);
+    }
 }

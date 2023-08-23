@@ -20,9 +20,11 @@ class ProfileController extends Controller
      */
     public function show(User $user): View
     {
+        $activities = $user->activity()->latest()->with('subject')->get()->groupBy(fn ($activity) => $activity->created_at->format('Y-m-d'));
+        // dd($activities->toArray());
         return view('profile.show', [
             'profileUser' => $user,
-            'threads' => $user->threads()->latest()->paginate(10),
+            'activities' => $activities,
         ]);
     }
 

@@ -23,11 +23,11 @@ class ProfileTest extends TestCase
 
     public function test_profile_information_can_be_viewed(): void
     {
-        $user = User::factory()->create();
-        $threads = factoryCreate(Thread::class, ['user_id'=> $user->id]);
-        $this->signIn($user);
+        $this->signIn();
+        $threads = factoryCreate(Thread::class, ['user_id'=> auth()->id()]);
+
         $response = $this
-            ->get(route('profile.show', $user->name));
+            ->get(route('profile.show', auth()->user()->name));
 
         $response->assertOk();
         $response->assertSee($threads->title);

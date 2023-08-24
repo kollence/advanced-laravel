@@ -10,7 +10,12 @@
         <!-- Fonts -->
         <link rel="preconnect" href="https://fonts.bunny.net">
         <link href="https://fonts.bunny.net/css?family=figtree:400,500,600&display=swap" rel="stylesheet" />
-
+        <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+        <style>
+            .swal2-backdrop-show{
+                background: rgba(0, 0, 0, 0) !important; 
+            }
+        </style>
         <!-- Scripts -->
         @vite(['resources/css/app.css', 'resources/js/app.js'])
     </head>
@@ -33,4 +38,15 @@
             </main>
         </div>
     </body>
+    @if(Session::has('flash'))
+    <script>  
+        Swal.fire({ 
+            position: 'top-end',
+            icon: 'success',
+            title: '{!! Session::get("flash") !!}',
+            showConfirmButton: false,
+            timer: 2000
+        })
+    </script>
+    @endif
 </html>

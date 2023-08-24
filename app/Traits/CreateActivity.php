@@ -13,10 +13,14 @@ trait CreateActivity
             if(!auth()->check()) return;
 
             foreach(static::getAvailableEvents() as $event) {
-                static::created(function ($thread) use($event) {
-                    $thread->createActivityWhenThreadIsCreated($event);
+                static::created(function ($model) use($event) {
+                    $model->createActivityWhenThreadIsCreated($event);
                 });
             }
+
+            static::deleting( function ($model) {
+                 $model->activity()->delete(); 
+            });
     }
 
     protected static function getAvailableEvents()

@@ -17,8 +17,11 @@
                     @foreach($activities as $date => $activity)
                         <h4>{{$date}}</h4>
                         @foreach($activity as $record)
+                                <!-- check if blade view exists -->
+                            @if(view()->exists("profile.activities.{$record->type}"))
                                 <!-- polimorph in blade || event.type -->
-                            @include("profile.activities.{$record->type}", ['activity'=> $record])
+                                @include("profile.activities.{$record->type}", ['activity'=> $record])
+                            @endif
                         @endforeach
                     @endforeach
 

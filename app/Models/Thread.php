@@ -25,6 +25,8 @@ class Thread extends Model
         // static::addGlobalScope(new UserScope('user'));
         // model events DELETING on delete thread delete his replies
         static::deleting(function ($thread) {
+            // delete replies will trigger CreateActivity Trait too
+            // so it will delete it activities too
             $thread->replies->each->delete();
         });
 

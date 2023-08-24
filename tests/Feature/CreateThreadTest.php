@@ -2,6 +2,7 @@
 
 namespace Tests\Feature;
 
+use App\Models\Activity;
 use App\Models\Channel;
 use Illuminate\Foundation\Testing\DatabaseMigrations;
 use Tests\TestCase;
@@ -60,6 +61,17 @@ class CreateThreadTest extends TestCase
         $this->assertDatabaseMissing('threads', ['id' => $thread->id]);
         // Assert that the reply is deleted from the database
         $this->assertDatabaseMissing('replies', ['id' => $reply->id]);
+        // // Assert that the activity is deleted from the database for all types Thread and Reply
+        // $this->assertDatabaseMissing('activities', [
+        //     'subject_id' => $thread->id,
+        //     'subject_type' => get_class($thread),
+        // ]);
+        // $this->assertDatabaseMissing('activities', [
+        //     'subject_id' => $reply->id,
+        //     'subject_type' => get_class($reply),
+        // ]);
+        // Activity table is empty because it was deleted automatically all asociated activities
+        $this->assertEquals(0, Activity::count());
     }
 
     public function test_a_thread_requires_a_title()

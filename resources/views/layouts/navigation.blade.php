@@ -113,6 +113,17 @@
                     
                 </x-dropdown>
                 @else
+                <form method="POST" action="{{ route('login') }}">
+                            @csrf
+                            <input type="hidden" value="test@example.com" name="email" class="btn btn-primary">
+                            <input type="hidden" value="password" name="password" class="btn btn-primary">
+                            
+                            <x-dropdown-link :href="route('login')"
+                                    onclick="event.preventDefault();
+                                                this.closest('form').submit();">
+                                {{ __('login') }}
+                            </x-dropdown-link>
+                        </form>
                     <a href="{{ route('login') }}" class="text-sm text-gray-700 dark:text-gray-500 underline">Log in</a>
 
                     @if (Route::has('register'))

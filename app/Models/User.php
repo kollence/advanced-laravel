@@ -54,7 +54,7 @@ class User extends Authenticatable
 
     public function isAdmin()
     {
-        return $this->email === 'misterija@gmail.com';
+        return $this->name === 'Admin';
     }
 
     public function activity()

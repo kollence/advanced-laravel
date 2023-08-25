@@ -34,12 +34,17 @@ class ParticipateInThreadsTest extends TestCase
 
     public function test_a_reply_requiers_a_body()
     {
-        // WONT WORK ERROR ON assertSessionHasErrors
         $this->signIn();
         $thread = factoryCreate(Thread::class);
         $reply = factoryMake(Reply::class, ['body' => null]);
         $this->post($thread->path().'/replies', $reply->toArray())
         ->assertSessionHasErrors('body');
-        
+    }
+
+    public function test_unauthorized_user_cant_delete_reply()
+    {
+        $this->withExceptionHandling();
+        $reply = factoryCreate(Reply::class);
+        $this->delete("/replies/{$reply->id}")->assertRedirect('/login');
     }
 }

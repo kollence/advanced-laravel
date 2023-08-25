@@ -4,8 +4,19 @@
         said...
     </h5>
     <div class="body">{{ $reply->body }}</div>
-    <div class="border rounded-md flex justify-between p-1">
-        <div class="mt-1 pl-2">{{ $reply->created_at->diffForHumans() }} </div> 
+    <div class="border rounded-md flex justify-between p-1 align-middle">
+        <div class="mt-1 px-3"> {{ $reply->created_at->diffForHumans() }} </div>
+        <div class="mt-1 pl-1">
+        @can('delete', $reply)
+        <form action="{{route('replies.delete', $reply->id)}}" method="post">
+                @csrf
+                @method('DELETE')
+                <button type="submit" class="flex bg-transparent hover:bg-red-600 font-bold text-red-300 p-1 rounded-full shadow-md">
+                <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-trash-x" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"> <path stroke="none" d="M0 0h24v24H0z" fill="none"/> <path d="M4 7h16" /> <path d="M5 7l1 12a2 2 0 0 0 2 2h8a2 2 0 0 0 2 -2l1 -12" /> <path d="M9 7v-3a1 1 0 0 1 1 -1h4a1 1 0 0 1 1 1v3" /> <path d="M10 12l4 4m0 -4l-4 4" /> </svg>
+                </button>
+        </form>
+        @endcan
+        </div> 
 
         <div class="flex">
             <form action="{{route('favorites.store', $reply->id)}}" method="post">

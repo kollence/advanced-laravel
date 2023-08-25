@@ -48,10 +48,17 @@ class ParticipateInThreadsTest extends TestCase
         $this->delete("/replies/{$reply->id}")->assertRedirect('/login');
     }
 
-    public function test_authorized_user_can_delete_reply()
+    public function test_authorized_user_cant_delete_reply_that_its_not_its_own()
     {
         $this->signIn();
         $reply = factoryCreate(Reply::class);
+        $this->delete("/replies/{$reply->id}")->assertStatus(403); // 403 Forbidden
+    }
+
+    public function test_authorized_user_can_delete_only_its_own_reply()
+    {
+        $this->signIn();
+        $reply = factoryCreate(Reply::class, ['user_id' => auth()->id()]);
         $this->delete("/replies/{$reply->id}")->assertStatus(302);
         $this->assertDatabaseMissing('replies', ['id' => $reply->id]);
     }

@@ -32,7 +32,10 @@ Route::delete('threads/{channel}/{thread}', [ThreadController::class, 'destroy']
 
 
 Route::post('/threads/{channel}/{thread}/replies', [ReplyController::class, 'store'])->name('threads-reply.store');
+
 Route::delete('replies/{reply}', [ReplyController::class, 'destroy'])->name('replies.delete');
+// make update route for replies/{reply} 
+Route::patch('replies/{reply}', [ReplyController::class, 'update'])->name('replies.update');
 
 Route::get('/profile/{user}', [ProfileController::class, 'show'])->name('profile.show');
 

@@ -62,4 +62,26 @@ class ParticipateInThreadsTest extends TestCase
         $this->delete("/replies/{$reply->id}")->assertStatus(302);
         $this->assertDatabaseMissing('replies', ['id' => $reply->id]);
     }
+
+    public function test_unauthorized_user_cant_update_reply()
+    {
+        $this->withExceptionHandling();
+        $reply = factoryCreate(Reply::class);
+        $this->patch("/replies/{$reply->id}")->assertRedirect('/login');
+    }
+
+    public function test_authorized_user_cant_update_reply_that_its_not_its_own()
+    {
+        $this->signIn();
+        $reply = factoryCreate(Reply::class);
+        $this->patch("/replies/{$reply->id}")->assertStatus(403); // 403 Forbidden
+    }
+
+    public function test_authorized_user_can_update_only_its_own_reply()
+    {
+        $this->signIn();
+        $reply = factoryCreate(Reply::class, ['user_id' => auth()->id()]);
+        $this->patch("/replies/{$reply->id}", ['body' => 'foobar'])->assertStatus(302);
+        $this->assertDatabaseHas('replies', ['id' => $reply->id, 'body' => 'foobar']); // 302 Found
+    }
 }

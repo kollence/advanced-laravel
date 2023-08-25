@@ -1,11 +1,11 @@
 @auth
-<div class="border p-6 text-gray-900 dark:text-gray-100">
+<div class="py-4 px-8 text-gray-900 dark:text-gray-100">
     <form action="{{ route('threads-reply.store', [$thread->channel, $thread]) }}" method="POST">
         @csrf
         <div class="form-group">
-            <textarea name="body" id="body" class="form-control w-full" style="color: black;" placeholder="Have something to say?" rows="2"></textarea>
+            <textarea name="body" id="body" class="rounded-md form-control w-full" style="color: black;" placeholder="Have something to say?" rows="2"></textarea>
         </div>
-        <button type="submit" class="btn btn-primary border p-2">Post</button>
+        <button type="submit" class="bg-slate-700 text-sm border rounded-md p-1">Reply</button>
     </form>
 @if ($errors->has('body'))
     <span class="error">{{ $errors->first('body') }}</span>

@@ -1,17 +1,27 @@
-<div id="reply-{{$reply->id}}" class="p-6 text-gray-900 dark:text-gray-100 ">
-    <h5 style="font-size: 20px;">
+<div id="reply-{{$reply->id}}" class="p-5 text-gray-900 dark:text-gray-100 ">
+    <h5 style="font-size: 20px;" class="flex justify-between">
         <a style=" color: orange;" href="{{route('profile.show', $reply->user->id)}}">{{ $reply->user->name }}</a>
-        said...
+        <div class="mt-1">said  {{ $reply->created_at->diffForHumans() }} </div>
     </h5>
-    <div class="body">{{ $reply->body }}</div>
-    <div class="border rounded-md flex justify-between p-1 align-middle">
-        <div class="mt-1 px-3"> {{ $reply->created_at->diffForHumans() }} </div>
-        <div class="mt-1 pl-1">
+    <div class="body">
+        <div id="content-{{$reply->id}}">
+        {{ $reply->body }}
+        </div>
+    </div>
+    <div class="mt-2 flex justify-between align-middle" style="border-top: thin solid gray; border-bottom: thin solid gray;">
+        
+        
+        <div class="flex">
+        <div class="mt-1 mr-5">
+            @can('update', $reply)
+            <button id="edit-reply-{{$reply->id}}" data-id="{{$reply->id}}" onclick="openEdit(this)" >Edit</button>
+            @endcan
+        </div>
         @can('delete', $reply)
         <form action="{{route('replies.delete', $reply->id)}}" method="post">
                 @csrf
                 @method('DELETE')
-                <button type="submit" class="flex bg-transparent hover:bg-red-600 font-bold text-red-300 p-1 rounded-full shadow-md">
+                <button type="submit" onclick="return confirm('Are you sure you want to delete this comment?');" class="flex bg-transparent hover:bg-red-600 font-bold text-red-300 p-1 rounded-full shadow-md">
                 <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-trash-x" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"> <path stroke="none" d="M0 0h24v24H0z" fill="none"/> <path d="M4 7h16" /> <path d="M5 7l1 12a2 2 0 0 0 2 2h8a2 2 0 0 0 2 -2l1 -12" /> <path d="M9 7v-3a1 1 0 0 1 1 -1h4a1 1 0 0 1 1 1v3" /> <path d="M10 12l4 4m0 -4l-4 4" /> </svg>
                 </button>
         </form>
@@ -27,4 +37,73 @@
             </form>
         </div>  
     </div>
-</div>
+</div> 
+
+<script>
+    function openEdit(button) {
+        const replyId = button.getAttribute('data-id');
+        const contentDiv = document.getElementById(`content-${replyId}`);
+        
+        const contentText = contentDiv.textContent.trim();
+        
+        const formHTML = `
+        <form action="{{ route('replies.update',  $reply->id) }}" method="POST">
+            @csrf
+            @method('PATCH')
+            <div id="editForm-${replyId}">
+                <textarea  name="body" id="body" class="rounded-md form-control w-full" style="color: black;" placeholder="Have something to say?" rows="2">${contentText}</textarea>
+                <button type="button" onclick="cancelEdit(${replyId}, '${contentText}')" class="bg-slate-700 text-sm border rounded-md p-1">Cancel</button>
+                <button type="submit" class="bg-slate-700 text-sm border rounded-md p-1">Save</button>
+            </div>
+        <form>
+        `;
+        
+        contentDiv.innerHTML = formHTML;
+    }
+    
+    // function saveEdit(replyId) {
+    //     const editForm = document.getElementById(`editForm-${replyId}`);
+    //     const editedContent = editForm.querySelector('textarea').value;
+    //     const updatedContentHTML = `<p>${editedContent}</p>`;
+            
+    //     const contentDiv = document.getElementById(`content-${replyId}`);
+    //     contentDiv.innerHTML = updatedContentHTML;
+    // }
+    
+    function cancelEdit(replyId, originalContent) {
+        const updatedContentHTML = `<p>${originalContent}</p>`;
+        
+        const contentDiv = document.getElementById(`content-${replyId}`);
+        contentDiv.innerHTML = updatedContentHTML;
+    }
+</script>
+<!-- <script>
+    function openEdit(button) {
+        const replyId = button.getAttribute('data-id');
+        const contentDiv = document.getElementById(`content-${replyId}`);
+        
+        const contentText = contentDiv.textContent.trim();
+        
+        const formHTML = `
+            <form id="editForm-${replyId}">
+                <textarea  name="body" id="body" class="rounded-md form-control w-full" style="color: black;" placeholder="Have something to say?" rows="2">${contentText}</textarea>
+                <div>
+                    <button type="button" onclick="cancelEdit(${replyId}, '${contentText}')" class="bg-slate-700 text-sm border rounded-md p-1">Cancel</button>
+                    <button type="submit"  class="bg-slate-700 text-sm border rounded-md p-1">Save</button>
+                </div>
+            </form>
+        `;
+        
+        contentDiv.innerHTML = formHTML;
+        
+        const editForm = document.getElementById(`editForm-${replyId}`);
+        
+        function cancelEdit(replyId, originalContent) {
+            const updatedContentHTML = `<p>${originalContent}</p>
+                <button id="edit-reply-${replyId}" data-id="${replyId}" onclick="openEdit(this)">Edit</button>`;
+            
+            const contentDiv = document.getElementById(`content-${replyId}`);
+            contentDiv.innerHTML = updatedContentHTML;
+        }
+    }
+</script>  -->

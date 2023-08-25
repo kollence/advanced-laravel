@@ -92,6 +92,10 @@ class ReplyController extends Controller
      */
     public function destroy(Reply $reply)
     {
+        if(auth()->user()->id !== $reply->user_id)
+        {
+            abort(403);
+        }
         $reply->delete();
         return redirect()->back();
     }

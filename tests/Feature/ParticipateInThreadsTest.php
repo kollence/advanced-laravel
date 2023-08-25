@@ -47,4 +47,12 @@ class ParticipateInThreadsTest extends TestCase
         $reply = factoryCreate(Reply::class);
         $this->delete("/replies/{$reply->id}")->assertRedirect('/login');
     }
+
+    public function test_authorized_user_can_delete_reply()
+    {
+        $this->signIn();
+        $reply = factoryCreate(Reply::class);
+        $this->delete("/replies/{$reply->id}")->assertStatus(302);
+        $this->assertDatabaseMissing('replies', ['id' => $reply->id]);
+    }
 }

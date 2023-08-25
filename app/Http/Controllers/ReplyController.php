@@ -92,6 +92,7 @@ class ReplyController extends Controller
      */
     public function destroy(Reply $reply)
     {
-        //
+        $reply->delete();
+        return redirect()->back();
     }
 }

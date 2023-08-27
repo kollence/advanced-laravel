@@ -28,7 +28,8 @@ Route::post('threads', [ThreadController::class, 'store'])->name('threads.store'
 Route::get('threads/{channel?}', [ThreadController::class, 'index'])->name('threads.index');
 Route::delete('threads/{channel}/{thread}', [ThreadController::class, 'destroy'])->name('threads.delete');
 
-
+Route::post('/replies/{reply}/favorites', [FavoritesController::class, 'store'])->name('favorites.store');
+Route::delete('/replies/{reply}/favorites', [FavoritesController::class, 'destroy'])->name('favorites.delete');
 
 
 Route::post('/threads/{channel}/{thread}/replies', [ReplyController::class, 'store'])->name('threads-reply.store');
@@ -49,7 +50,7 @@ Route::middleware('auth')->group(function () {
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 
-    Route::post('/replies/{reply}/favorites', [FavoritesController::class, 'store'])->name('favorites.store');
+
 
     
 });

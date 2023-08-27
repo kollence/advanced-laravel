@@ -83,6 +83,11 @@ class ReplyController extends Controller
     {
         $this->authorize('update', $reply);
         $reply->update($request->only('body'));
+ // Refresh the model to get the latest data
+        if(request()->expectsJson()){
+            return response()->json(['success' => true, 'reply' => $reply]);
+        }
+        
 
         return redirect()->back()->with('flash', 'Your reply has been updated!');
     }
@@ -97,6 +102,10 @@ class ReplyController extends Controller
     {
         $this->authorize('delete', $reply);
         $reply->delete();
+        
+        if(request()->expectsJson()){
+            return response()->json(['success' => true], 204);
+        }
         return redirect()->back()->with('flash', 'Your reply has been deleted!');
     }
 }

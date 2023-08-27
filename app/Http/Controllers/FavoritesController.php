@@ -11,6 +11,10 @@ use Illuminate\Support\Facades\DB;
 
 class FavoritesController extends Controller
 {
+    public function __construct()
+    {
+        $this->middleware('auth')->except(['index', 'show']);
+    }
     /**
      * Display a listing of the resource.
      *
@@ -40,6 +44,9 @@ class FavoritesController extends Controller
     public function store(Reply $reply, Request $request)
     { 
         $reply->addFavorite();
+        if(request()->expectsJson()){
+            return response()->json(['success' => true, 'isFavorited' => 1], 201);
+        }
         return redirect()->back();
     }
 
@@ -84,8 +91,12 @@ class FavoritesController extends Controller
      * @param  \App\Models\Favorite  $favorite
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Favorite $favorite)
+    public function destroy(Reply $reply)
     {
-        //
+        $reply->removeFavorite();
+        if(request()->expectsJson()){
+            return response()->json(['success' => true, 'isFavorited' => 0], 200);
+        }
+        return redirect()->back();
     }
 }

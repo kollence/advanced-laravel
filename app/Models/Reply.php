@@ -13,6 +13,7 @@ class Reply extends Model
 
     protected $guarded = ['id'];
     protected $fillable = ['thread_id', 'user_id', 'body'];
+    protected $appends = ['favorites_count', 'is_favorited'];
 
     // always load user with model results
     protected $with = ['user', 'favorites'];
@@ -31,5 +32,10 @@ class Reply extends Model
     public function path()
     {
         return $this->thread->path() . '#reply-' .$this->id; 
+    }
+
+    public function favorite()
+    {
+        return $this->hasOne(Favorite::class);
     }
 }

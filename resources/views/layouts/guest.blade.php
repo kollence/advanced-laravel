@@ -42,7 +42,7 @@
     <script>  
         Swal.fire({ 
             position: 'top-end',
-            icon: 'success',
+            // icon: 'success',
             title: '{!! Session::get("flash") !!}',
             showConfirmButton: false,
             timer: 2000

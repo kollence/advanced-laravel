@@ -14,7 +14,7 @@
             </div>
             <div class="p-4 sm:p-8 bg-white dark:bg-gray-800 shadow sm:rounded-lg">
                 <div class="w-full text-white">
-                    @foreach($activities as $date => $activity)
+                    @forelse($activities as $date => $activity)
                         <h4>{{$date}}</h4>
                         @foreach($activity as $record)
                                 <!-- check if blade view exists -->
@@ -23,7 +23,9 @@
                                 @include("profile.activities.{$record->type}", ['activity'=> $record])
                             @endif
                         @endforeach
-                    @endforeach
+                    @empty
+                     <p>There is no activity yet</p>
+                    @endforelse
 
                 </div>
             </div>

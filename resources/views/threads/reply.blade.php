@@ -52,6 +52,7 @@
     function removeReply(button) {
         const replyId = button;
         const replyDiv = document.getElementById(`reply-${replyId}`);
+        const contHtml = document.getElementById('comments_number');
         const formData = new FormData();
         formData.append('_method', 'DELETE');
         formData.append('_token', '{{ csrf_token() }}');
@@ -73,6 +74,11 @@
                     if (xhr.readyState === XMLHttpRequest.DONE) {
                         if (xhr.status === 204) {
                             replyDiv.remove();
+                            const count = document.querySelectorAll('#reply-holder > div').length;
+                            
+                            contHtml.textContent = 'Comments: ' + count;
+                            console.log(count);
+
                         } else {
                             console.error('Error deleting reply:', xhr.status, xhr.statusText);
                         }

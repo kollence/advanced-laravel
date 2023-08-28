@@ -35,10 +35,10 @@
                 <div class="text-gray-900 dark:text-gray-100">
                     @include('threads.reply-form')
                 </div>
-                <div class="p-6 text-orange-500 dark:text-gray-100 bg-slate-600">
+                <div id="reply-holder" class="p-6 text-orange-500 dark:text-gray-100 bg-slate-600">
                     <h4 style="font-size: 20px;">Replies</h4>
                     @forelse($replies as $reply)
-                    @include('threads.reply')
+                        @include('threads.reply')
                     @empty
                     <p>No comments</p>
                     @endforelse
@@ -51,7 +51,7 @@
     <div class="col-span-1 rounded-lg" style="border: thin solid gray;">
         <div class="flex flex-col p-4 text-gray-400">
             <div class="basis-1/1">Created: {{$thread->created_at->diffForHumans() }}</div>
-            <div class="basis-1/1">Comments: {{$thread->replies_count}}</div>
+            <div class="basis-1/1" id="comments_number">Comments: {{$thread->replies_count}}</div>
             <div class="basis-1/1">Created by: {{$thread->user->name}}</div>
         </div>  
     </div>

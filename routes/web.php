@@ -31,12 +31,10 @@ Route::delete('threads/{channel}/{thread}', [ThreadController::class, 'destroy']
 Route::post('/replies/{reply}/favorites', [FavoritesController::class, 'store'])->name('favorites.store');
 Route::delete('/replies/{reply}/favorites', [FavoritesController::class, 'destroy'])->name('favorites.delete');
 
-
+Route::get('/threads/{channel}/{thread}/replies', [ReplyController::class, 'index'])->name('replies.index');
 Route::post('/threads/{channel}/{thread}/replies', [ReplyController::class, 'store'])->name('threads-reply.store');
-
-Route::delete('replies/{reply}', [ReplyController::class, 'destroy'])->name('replies.delete');
-// make update route for replies/{reply} 
 Route::patch('replies/{reply}', [ReplyController::class, 'update'])->name('replies.update');
+Route::delete('replies/{reply}', [ReplyController::class, 'destroy'])->name('replies.delete');
 
 Route::get('/profile/{user}', [ProfileController::class, 'show'])->name('profile.show');
 

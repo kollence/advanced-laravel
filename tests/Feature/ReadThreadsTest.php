@@ -91,4 +91,13 @@ class ReadThreadsTest extends TestCase
 
     }
 
+    public function test_guest_can_filter_threads_that_dont_have_replies_yet()
+    {
+
+        $response = $this->getJson(route('threads.index', ['unanswered' => 1]))->json();
+
+        // dd($response);
+        $this->assertEquals([0], array_column($response['data'], 'replies_count'));
+    }
+
 }

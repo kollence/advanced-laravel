@@ -17,6 +17,7 @@ return new class extends Migration
             $table->id();
             $table->integer('user_id')->unsigned()->index();
             $table->integer('channel_id')->unsigned()->index();
+            $table->integer('replies_count')->unsigned()->default(0);
             $table->string('title');
             $table->text('body');
             $table->timestamps();

@@ -17,10 +17,9 @@ class Thread extends Model
                         // 1. here you CAN'T call withoutGlobalScopes() and detached
     protected $with = ['user','channel'];
     protected static function booted()
-    {                               
-        // global scope for counting replies that happens before model is booted
+    {   // global scope for counting replies that happens before model is booted
                                 // using my custom scope class that accepts a relationship to count
-        static::addGlobalScope(new CountScope('replies'));
+        // static::addGlobalScope(new CountScope('replies'));
         // // 2. here you CAN call withoutGlobalScopes() and detached
         // static::addGlobalScope(new UserScope('user'));
         // model events DELETING on delete thread delete his replies

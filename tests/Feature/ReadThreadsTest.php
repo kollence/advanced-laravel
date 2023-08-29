@@ -80,4 +80,15 @@ class ReadThreadsTest extends TestCase
         $this->assertEquals([5,3,0], array_column($response['data'], 'replies_count'));
     }
 
+    public function test_guest_can_request_all_replies_for_a_given_thread()
+    {
+        $reply = factoryCreate(\App\Models\Reply::class, ['thread_id' => $this->thread->id]);
+
+        $response = $this->getJson($this->thread->path().'/replies')->json();
+        // dd($response);
+        $this->assertCount(1, $response['data']);
+        $this->assertEquals($reply->id, $response['data'][0]['id']);
+
+    }
+
 }

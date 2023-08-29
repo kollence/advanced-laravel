@@ -69,6 +69,9 @@
                             <x-dropdown-link :href="route('threads.index', ['popular' => 1])">
                                 Popular
                             </x-dropdown-link>
+                            <x-dropdown-link :href="route('threads.index', ['unanswered' => 1])">
+                                Unanswered
+                            </x-dropdown-link>
                         </x-slot>
                     </x-dropdown>
                     </div>

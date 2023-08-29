@@ -93,11 +93,14 @@ class ReadThreadsTest extends TestCase
 
     public function test_guest_can_filter_threads_that_dont_have_replies_yet()
     {
-
+        // data with no replies will show up on page
         $response = $this->getJson(route('threads.index', ['unanswered' => 1]))->json();
+        $this->assertCount(1, $response['data']);
 
-        // dd($response);
-        $this->assertEquals([0], array_column($response['data'], 'replies_count'));
+        // data with replies will not show up on page
+        $reply = factoryCreate(\App\Models\Reply::class, ['thread_id' => $this->thread->id]);
+        $response2 = $this->getJson(route('threads.index', ['unanswered' => 1]))->json();
+        $this->assertCount(0, $response2['data']);
     }
 
 }

@@ -15,21 +15,32 @@
             <div class="mt-1 mr-5">
                 @can('update', $reply)
                 <button id="edit-reply-{{$reply->id}}" data-id="{{$reply->id}}" onclick="openEdit(this)" class="hover:text-blue-300">
-                <svg fill="#e0e0e0" version="1.1" id="Capa_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="22px" height="22px" viewBox="0 0 494.936 494.936" xml:space="preserve" stroke="#e0e0e0"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"> <g> <g> <path d="M389.844,182.85c-6.743,0-12.21,5.467-12.21,12.21v222.968c0,23.562-19.174,42.735-42.736,42.735H67.157 c-23.562,0-42.736-19.174-42.736-42.735V150.285c0-23.562,19.174-42.735,42.736-42.735h267.741c6.743,0,12.21-5.467,12.21-12.21 s-5.467-12.21-12.21-12.21H67.157C30.126,83.13,0,113.255,0,150.285v267.743c0,37.029,30.126,67.155,67.157,67.155h267.741 c37.03,0,67.156-30.126,67.156-67.155V195.061C402.054,188.318,396.587,182.85,389.844,182.85z"></path> <path d="M483.876,20.791c-14.72-14.72-38.669-14.714-53.377,0L221.352,229.944c-0.28,0.28-3.434,3.559-4.251,5.396l-28.963,65.069 c-2.057,4.619-1.056,10.027,2.521,13.6c2.337,2.336,5.461,3.576,8.639,3.576c1.675,0,3.362-0.346,4.96-1.057l65.07-28.963 c1.83-0.815,5.114-3.97,5.396-4.25L483.876,74.169c7.131-7.131,11.06-16.61,11.06-26.692 C494.936,37.396,491.007,27.915,483.876,20.791z M466.61,56.897L257.457,266.05c-0.035,0.036-0.055,0.078-0.089,0.107 l-33.989,15.131L238.51,247.3c0.03-0.036,0.071-0.055,0.107-0.09L447.765,38.058c5.038-5.039,13.819-5.033,18.846,0.005 c2.518,2.51,3.905,5.855,3.905,9.414C470.516,51.036,469.127,54.38,466.61,56.897z"></path> </g> </g> </g></svg>
-            </button>
+                    <svg fill="#e0e0e0" version="1.1" id="Capa_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="22px" height="22px" viewBox="0 0 494.936 494.936" xml:space="preserve" stroke="#e0e0e0">
+                        <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
+                        <g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g>
+                        <g id="SVGRepo_iconCarrier">
+                            <g>
+                                <g>
+                                    <path d="M389.844,182.85c-6.743,0-12.21,5.467-12.21,12.21v222.968c0,23.562-19.174,42.735-42.736,42.735H67.157 c-23.562,0-42.736-19.174-42.736-42.735V150.285c0-23.562,19.174-42.735,42.736-42.735h267.741c6.743,0,12.21-5.467,12.21-12.21 s-5.467-12.21-12.21-12.21H67.157C30.126,83.13,0,113.255,0,150.285v267.743c0,37.029,30.126,67.155,67.157,67.155h267.741 c37.03,0,67.156-30.126,67.156-67.155V195.061C402.054,188.318,396.587,182.85,389.844,182.85z"></path>
+                                    <path d="M483.876,20.791c-14.72-14.72-38.669-14.714-53.377,0L221.352,229.944c-0.28,0.28-3.434,3.559-4.251,5.396l-28.963,65.069 c-2.057,4.619-1.056,10.027,2.521,13.6c2.337,2.336,5.461,3.576,8.639,3.576c1.675,0,3.362-0.346,4.96-1.057l65.07-28.963 c1.83-0.815,5.114-3.97,5.396-4.25L483.876,74.169c7.131-7.131,11.06-16.61,11.06-26.692 C494.936,37.396,491.007,27.915,483.876,20.791z M466.61,56.897L257.457,266.05c-0.035,0.036-0.055,0.078-0.089,0.107 l-33.989,15.131L238.51,247.3c0.03-0.036,0.071-0.055,0.107-0.09L447.765,38.058c5.038-5.039,13.819-5.033,18.846,0.005 c2.518,2.51,3.905,5.855,3.905,9.414C470.516,51.036,469.127,54.38,466.61,56.897z"></path>
+                                </g>
+                            </g>
+                        </g>
+                    </svg>
+                </button>
                 @endcan
             </div>
             <div class="mr-5">
                 @can('delete', $reply)
-                    <button type="button" onclick='removeReply("{{$reply->id}}")' class="flex bg-transparent hover:bg-red-600 font-bold text-red-300 p-1 rounded-full shadow-md">
-                        <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-trash-x" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
-                            <path stroke="none" d="M0 0h24v24H0z" fill="none" />
-                            <path d="M4 7h16" />
-                            <path d="M5 7l1 12a2 2 0 0 0 2 2h8a2 2 0 0 0 2 -2l1 -12" />
-                            <path d="M9 7v-3a1 1 0 0 1 1 -1h4a1 1 0 0 1 1 1v3" />
-                            <path d="M10 12l4 4m0 -4l-4 4" />
-                        </svg>
-                    </button>
+                <button type="button" onclick='removeReply("{{$reply->id}}")' class="flex bg-transparent hover:bg-red-600 font-bold text-red-300 p-1 rounded-full shadow-md">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-trash-x" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                        <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+                        <path d="M4 7h16" />
+                        <path d="M5 7l1 12a2 2 0 0 0 2 2h8a2 2 0 0 0 2 -2l1 -12" />
+                        <path d="M9 7v-3a1 1 0 0 1 1 -1h4a1 1 0 0 1 1 1v3" />
+                        <path d="M10 12l4 4m0 -4l-4 4" />
+                    </svg>
+                </button>
                 @endcan
             </div>
         </div>
@@ -43,12 +54,12 @@
             </button>
             @else
             You need to <a href="{{ route('login') }}" class="text-sm px-2 text-gray-700 dark:text-blue-300">Log in</a> so you could take actions
-            @endauth 
+            @endauth
         </div>
     </div>
 </div>
 
-<script >
+<script>
     function removeReply(button) {
         const replyId = button;
         const replyDiv = document.getElementById(`reply-${replyId}`);
@@ -67,24 +78,29 @@
             confirmButtonText: 'Yes, delete it!'
         }).then((result) => {
             if (result.isConfirmed) {
-                const xhr = new XMLHttpRequest();
-                xhr.open('POST', `/replies/${replyId}`, true);
-                xhr.setRequestHeader('X-Requested-With', 'XMLHttpRequest');
-                xhr.onreadystatechange = function() {
-                    if (xhr.readyState === XMLHttpRequest.DONE) {
-                        if (xhr.status === 204) {
+                fetch(`/replies/${replyId}`, {
+                        method: 'POST',
+                        headers: {
+                            'X-Requested-With': 'XMLHttpRequest',
+                        },
+                        body: formData,
+                    })
+                    .then(response => {
+                        if (response.status === 204) {
                             replyDiv.remove();
-                            const count = document.querySelectorAll('#reply-holder > div').length;
-                            
-                            contHtml.textContent = 'Comments: ' + count;
-                            console.log(count);
-
+                            return response.text();
                         } else {
-                            console.error('Error deleting reply:', xhr.status, xhr.statusText);
+                            throw new Error('Error deleting reply');
                         }
-                    }
-                };
-                xhr.send(formData);
+                    })
+                    .then(data => {
+                        const count = document.querySelectorAll('#reply-holder > div').length;
+                        contHtml.textContent = 'Comments: ' + count;
+                        console.log(count);
+                    })
+                    .catch(error => {
+                        console.error('Error deleting reply:', error);
+                    });
                 Swal.fire(
                     'Deleted!',
                     'Your file has been deleted.',
@@ -126,25 +142,30 @@
         formData.append('_token', '{{ csrf_token() }}');
         formData.append('body', editedContent);
 
-        const xhr = new XMLHttpRequest();
-        xhr.open('POST', `/replies/${replyId}`, true);
-        xhr.setRequestHeader('X-Requested-With', 'XMLHttpRequest');
-        xhr.onreadystatechange = function() {
-            if (xhr.readyState === XMLHttpRequest.DONE) {
-                if (xhr.status === 200) {
-                    const response = JSON.parse(xhr.responseText);
-
-                    if (response.success) {
-                        contentDiv.textContent = response.reply.body; // Update the content with edited value
-                    } else {
-                        console.error('Update failed:', response);
-                    }
+        fetch(`/replies/${replyId}`, {
+                method: 'POST',
+                headers: {
+                    'X-Requested-With': 'XMLHttpRequest',
+                },
+                body: formData,
+            })
+            .then(response => {
+                if (response.status === 200) {
+                    return response.json();
                 } else {
-                    console.error('Error updating reply:', xhr.status, xhr.statusText);
+                    throw new Error('Error updating reply');
                 }
-            }
-        };
-        xhr.send(formData);
+            })
+            .then(response => {
+                if (response.success) {
+                    contentDiv.textContent = response.reply.body; // Update the content with edited value
+                } else {
+                    console.error('Update failed:', response);
+                }
+            })
+            .catch(error => {
+                console.error('Error updating reply:', error);
+            });
     }
 
     function cancelEdit(replyId, originalContent) {
@@ -158,30 +179,61 @@
         const replyDiv = document.getElementById(`reply-${replyId}`);
         const countFavorited = document.getElementById(`favorited-${replyId}`);
 
-        const xhr = new XMLHttpRequest();
         const formData = new FormData();
         formData.append('_token', '{{ csrf_token() }}');
         if (button.getAttribute('data-count') == 1) {
             formData.append('_method', 'DELETE');
         }
-        xhr.open('POST', `/replies/${replyId}/favorites`, true);
-        xhr.setRequestHeader('X-Requested-With', 'XMLHttpRequest');
-        // xhr.setRequestHeader('Content-Type', 'application/json');
-        xhr.onreadystatechange = function() {
-            if (xhr.readyState === XMLHttpRequest.DONE) {
-                
-                const response = JSON.parse(xhr.responseText);
-                if (xhr.status === 201) {
-                    countFavorited.innerHTML = response.isFavorited
-                    button.setAttribute('data-count',  response.isFavorited);
-                } else if (xhr.status === 200) {
-                    countFavorited.innerHTML = response.isFavorited
-                    button.setAttribute('data-count',  response.isFavorited);
-                }else {
-                    console.error('Error marking reply as favorite:', xhr.status, xhr.statusText);
+
+        fetch(`/replies/${replyId}/favorites`, {
+                method: 'POST',
+                headers: {
+                    'X-Requested-With': 'XMLHttpRequest',
+                },
+                body: formData,
+            })
+            .then(response => response.json())
+            .then(response => {
+                if (response.isFavorited !== undefined) {
+                    countFavorited.innerHTML = response.isFavorited;
+                    button.setAttribute('data-count', response.isFavorited);
+                } else {
+                    console.error('Error marking reply as favorite:', response);
                 }
-            }
-        };
-        xhr.send(formData);
+            })
+            .catch(error => {
+                console.error('Error marking reply as favorite:', error);
+            });
     }
+
+    // function markAsFavorite(replyId, button) {
+    //     const replyDiv = document.getElementById(`reply-${replyId}`);
+    //     const countFavorited = document.getElementById(`favorited-${replyId}`);
+
+    //     const xhr = new XMLHttpRequest();
+    //     const formData = new FormData();
+    //     formData.append('_token', '{{ csrf_token() }}');
+    //     if (button.getAttribute('data-count') == 1) {
+    //         formData.append('_method', 'DELETE');
+    //     }
+    //     xhr.open('POST', `/replies/${replyId}/favorites`, true);
+    //     xhr.setRequestHeader('X-Requested-With', 'XMLHttpRequest');
+    //     // xhr.setRequestHeader('Content-Type', 'application/json');
+    //     xhr.onreadystatechange = function() {
+    //         if (xhr.readyState === XMLHttpRequest.DONE) {
+
+    //             const response = JSON.parse(xhr.responseText);
+    //             if (xhr.status === 201) {
+    //                 countFavorited.innerHTML = response.isFavorited
+    //                 button.setAttribute('data-count', response.isFavorited);
+    //             } else if (xhr.status === 200) {
+    //                 countFavorited.innerHTML = response.isFavorited
+    //                 button.setAttribute('data-count', response.isFavorited);
+    //             } else {
+    //                 console.error('Error marking reply as favorite:', xhr.status, xhr.statusText);
+    //             }
+    //         }
+    //     };
+    //     xhr.send(formData);
+    // }
 </script>

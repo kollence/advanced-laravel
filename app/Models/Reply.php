@@ -17,7 +17,17 @@ class Reply extends Model
 
     // always load user with model results
     protected $with = ['user', 'favorites'];
+    
+    protected static function booted()
+    {
+        static::created(function ($reply) {
+            $reply->thread->increment('replies_count');
+        });
 
+        static::deleted(function ($reply) {
+            $reply->thread->decrement('replies_count');
+        });
+    }
 
     public function user()
     {

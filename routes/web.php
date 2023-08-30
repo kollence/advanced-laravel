@@ -4,6 +4,7 @@ use App\Http\Controllers\FavoritesController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\ReplyController;
 use App\Http\Controllers\ThreadController;
+use App\Http\Controllers\ThreadSubscriptionController;
 use App\Models\Reply;
 use Illuminate\Support\Facades\Route;
 
@@ -36,7 +37,8 @@ Route::post('/threads/{channel}/{thread}/replies', [ReplyController::class, 'sto
 Route::patch('replies/{reply}', [ReplyController::class, 'update'])->name('replies.update');
 Route::delete('replies/{reply}', [ReplyController::class, 'destroy'])->name('replies.delete');
 
-Route::get('/profile/{user}', [ProfileController::class, 'show'])->name('profile.show');
+Route::post('/threads/{channel}/{thread}/subscriptions', [ThreadSubscriptionController::class, 'store'])->name('threads-subsriptions.store')->middleware('auth');
+
 
 Route::get('/dashboard', function () {
     return view('dashboard');

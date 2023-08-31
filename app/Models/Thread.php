@@ -14,6 +14,7 @@ class Thread extends Model
 
     protected $guarded = ['id'];
     protected $fillable = ['user_id', 'channel_id', 'title', 'body'];
+    protected $appends = ['is_subscribed_to'];
                         // 1. here you CAN'T call withoutGlobalScopes() and detached
     protected $with = ['user','channel'];
     protected static function booted()
@@ -75,6 +76,11 @@ class Thread extends Model
     public function unsubscribe($userId = null)
     {
         $this->subscriptions()->where('user_id', $userId ?: auth()->id())->delete();
+    }
+
+    public function getIsSubscribedToAttribute($userId = null)
+    {
+        return $this->subscriptions()->where('user_id', $userId ?: auth()->id())->exists();
     }
 
     public function subscriptions()

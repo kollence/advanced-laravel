@@ -39,6 +39,26 @@ class NotificationTest extends TestCase
         $this->assertCount(1, auth()->user()->fresh()->notifications);
     }
 
+    public function test_auth_can_fetch_their_unread_notifications()
+    {
+        $this->signIn();
+
+        $user = auth()->user();
+
+        $thread = factoryCreate(\App\Models\Thread::class)->subscribe();
+
+        $thread->addReply([
+            'user_id' => factoryCreate(\App\Models\User::class)->id,
+            'body' => 'Others users reply will notify me'
+        ]);
+
+        $response = 
+            $this->getJson(route('profile.notifications.index', $user->name))
+                ->assertOk();
+        dd($response->json()['data']);
+        $this->assertCount(1, $response->json()['data']);
+    }
+
     public function test_an_auth_can_mark_a_notification_as_read()
     {
         $this->signIn();

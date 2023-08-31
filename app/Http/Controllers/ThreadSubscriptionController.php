@@ -36,6 +36,9 @@ class ThreadSubscriptionController extends Controller
     public function store($channelId, Thread $thread)
     {
         $thread->subscribe();
+        if(request()->expectsJson()){
+            return response()->json(['success' => true, 'isSubscribed' => 1], 200);
+        }
 
         return back();
     }
@@ -80,8 +83,13 @@ class ThreadSubscriptionController extends Controller
      * @param  \App\Models\Thread  $thread
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Thread $thread)
+    public function destroy($channelId,Thread $thread)
     {
-        //
+        $thread->unsubscribe();
+        if(request()->expectsJson()){
+            return response()->json(['success' => true, 'isSubscribed' => 0], 200);
+        }
+
+        return back();
     }
 }

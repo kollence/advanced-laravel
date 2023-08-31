@@ -9,7 +9,7 @@ class UserNotificationsController extends Controller
 {
     public function destroy(User $user, $notificationId)
     {                                                // mark as read update column read_at in notification table
-        $user->notifications()->find($notificationId)->markAsRead();
+        auth()->user()->notifications()->findOrFail($notificationId)->markAsRead();
         return back();
     }
 }

@@ -58,9 +58,7 @@ class Thread extends Model
         $this->subscriptions->filter(function($subscription) use ($reply) {
             return $subscription->user_id !== $reply->user_id;
         })
-        ->each(function($subscription) use ($reply) {
-            $subscription->user->notify(new ThreadWasReplied($this, $reply));
-        });
+        ->each->notify($reply);
         // // create notification for all subscribers.
         // foreach($this->subscriptions as $subscription){
         //     if($subscription->user_id !== $reply->user_id){

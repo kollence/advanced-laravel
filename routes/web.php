@@ -38,6 +38,7 @@ Route::patch('replies/{reply}', [ReplyController::class, 'update'])->name('repli
 Route::delete('replies/{reply}', [ReplyController::class, 'destroy'])->name('replies.delete');
 
 Route::post('/threads/{channel}/{thread}/subscriptions', [ThreadSubscriptionController::class, 'store'])->name('threads-subsriptions.store')->middleware('auth');
+Route::delete('/threads/{channel}/{thread}/subscriptions', [ThreadSubscriptionController::class, 'destroy'])->name('threads-subsriptions.delete')->middleware('auth');
 
 
 Route::get('/dashboard', function () {

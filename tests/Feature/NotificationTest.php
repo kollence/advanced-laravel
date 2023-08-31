@@ -39,7 +39,7 @@ class NotificationTest extends TestCase
         $this->assertCount(1, auth()->user()->fresh()->notifications);
     }
 
-    public function test_an_auth_can_clear_a_notification()
+    public function test_an_auth_can_mark_a_notification_as_read()
     {
         $this->signIn();
         $user = auth()->user();

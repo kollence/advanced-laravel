@@ -4,6 +4,7 @@ namespace App\Models;
 
 use App\Models\Scopes\CountScope;
 use App\Models\Scopes\UserScope;
+use App\Notifications\ThreadWasReplied;
 use App\Traits\CreateActivity;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -52,7 +53,16 @@ class Thread extends Model
     // addReply method to be called on thread instance to create reply
     public function addReply(array $reply)
     {   // reply will be created for this relationship
-        $this->replies()->create($reply);
+        $reply = $this->replies()->create($reply);
+
+        // create notification for all subscribers.
+        foreach($this->subscriptions as $subscription){
+            if($subscription->user_id !== $reply->user_id){
+                $subscription->user->notify(new ThreadWasReplied($this, $reply));
+            }
+        }
+        
+        return $reply;
     }
     // make url for specific model
     public function path()
@@ -71,6 +81,8 @@ class Thread extends Model
         $this->subscriptions()->create([
             'user_id' => $userId ?: auth()->id()
         ]);
+
+        return $this;
     }
 
     public function unsubscribe($userId = null)

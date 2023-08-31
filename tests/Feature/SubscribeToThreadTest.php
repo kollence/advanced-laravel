@@ -16,15 +16,13 @@ class SubscribeToThreadTest extends TestCase
      */
     public function test_auth_can_subscribe_to_a_thread()
     {
+        //sign in
         $this->signIn();
+        //create thread
         $thread = factoryCreate(\App\Models\Thread::class);
-
+        // subscribe to thread
         $this->post($thread->path() . '/subscriptions');
-
-        // $thread->addReply([
-        //     'user_id' => auth()->id(),
-        //     'body' => 'Foobar'
-        // ]);
+        // check if user is subsribed 
         $this->assertCount(1, $thread->subscriptions);
     }
 }

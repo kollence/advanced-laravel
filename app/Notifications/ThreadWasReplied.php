@@ -56,7 +56,8 @@ class ThreadWasReplied extends Notification
     public function toArray($notifiable)
     {
         return [
-            'message' => 'You have a new message!'
+            'message' => 'new reply was added to '.$this->thread->title.' from '.$this->reply->user->name,
+            'link' => $this->reply->path()
         ];
     }
 }

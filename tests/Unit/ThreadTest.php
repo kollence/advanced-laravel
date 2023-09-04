@@ -4,7 +4,9 @@ namespace Tests\Unit;
 
 // use PHPUnit\Framework\TestCase;
 
+use App\Notifications\ThreadWasReplied;
 use Illuminate\Foundation\Testing\DatabaseMigrations;
+use Illuminate\Support\Facades\Notification;
 use Tests\TestCase;
 
 class ThreadTest extends TestCase
@@ -50,6 +52,18 @@ class ThreadTest extends TestCase
         ]);
         // check if thread have 1 reply created
         $this->assertCount(1, $this->thread->replies);
+    }
+
+    public function test_a_thread_notify_all_registered_subscribers_when_reply_is_added()
+    {
+        Notification::fake();
+        $this->signIn();
+        $this->thread->subscribe();
+        $this->thread->addReply([
+            'body' => 'Foobar',
+            'user_id' => 1
+        ]);
+        Notification::assertSentTo(auth()->user(), ThreadWasReplied::class);
     }
 
     function test_thread_belongs_to_channel()

@@ -11,8 +11,11 @@ class UserNotificationsController extends Controller
     public function index(User $user)
     {
         $notifications = auth()->user()->unreadNotifications()->paginate(10);
-        return $notifications;
-        // return view('user.notifications.index', compact('notifications'));
+ 
+        if(request()->expectsJson()){
+            return response($notifications, 200);
+        }
+        return view('profile.notifications.index', compact('notifications'));
     }
 
 

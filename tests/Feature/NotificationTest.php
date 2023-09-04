@@ -21,6 +21,11 @@ class NotificationTest extends TestCase
      *
      * @return void
      */
+    public function test_auth_can_visit_notification_page()
+    {
+        $this->get(route('profile.notifications.index', auth()->user()->name))->assertStatus(200);
+    }
+
     public function test_notification_is_prepared_when_subscribed_thread_got_a_new_reply_that_is_not_created_by_current_subscribed_user()
     {
         //create thread

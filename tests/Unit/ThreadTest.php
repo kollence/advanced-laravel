@@ -55,7 +55,7 @@ class ThreadTest extends TestCase
     }
 
     public function test_a_thread_notify_all_registered_subscribers_when_reply_is_added()
-    {
+    {   // FAKE() NOTIFICATION use it from memory, not from database
         Notification::fake();
         $this->signIn();
         $this->thread->subscribe();
@@ -63,6 +63,7 @@ class ThreadTest extends TestCase
             'body' => 'Foobar',
             'user_id' => 999
         ]);
+        //assertSenTo also reserved method to check if notification is sent to user
         Notification::assertSentTo(auth()->user(), ThreadWasReplied::class);
     }
 

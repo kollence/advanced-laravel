@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Events\ThreadHasNewReply;
 use App\Models\Scopes\CountScope;
 use App\Models\Scopes\UserScope;
 use App\Notifications\ThreadWasReplied;
@@ -55,9 +56,7 @@ class Thread extends Model
     {   // reply will be created for this relationship
         $reply = $this->replies()->create($reply);
 
-        $this->subscriptions
-            ->where('user_id', '!=', $reply->user_id)
-            ->each->notify($reply);
+        event(new ThreadHasNewReply($this, $reply));
         
         return $reply;
     }

@@ -55,16 +55,9 @@ class Thread extends Model
     {   // reply will be created for this relationship
         $reply = $this->replies()->create($reply);
 
-        $this->subscriptions->filter(function($subscription) use ($reply) {
-            return $subscription->user_id !== $reply->user_id;
-        })
-        ->each->notify($reply);
-        // // create notification for all subscribers.
-        // foreach($this->subscriptions as $subscription){
-        //     if($subscription->user_id !== $reply->user_id){
-        //         $subscription->user->notify(new ThreadWasReplied($this, $reply));
-        //     }
-        // }
+        $this->subscriptions
+            ->where('user_id', '!=', $reply->user_id)
+            ->each->notify($reply);
         
         return $reply;
     }

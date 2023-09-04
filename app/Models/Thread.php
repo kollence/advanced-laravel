@@ -54,10 +54,10 @@ class Thread extends Model
     // addReply method to be called on thread instance to create reply
     public function addReply(array $reply)
     {   // reply will be created for this relationship
-        $reply = $this->replies()->create($reply);
+        $reply = $this->replies()->create($reply);  
+        // event(new ThreadHasNewReply($this, $reply));
+        $this->notifySubscribers($reply);
 
-        event(new ThreadHasNewReply($this, $reply));
-        
         return $reply;
     }
     // 

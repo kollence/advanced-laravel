@@ -87,4 +87,16 @@ class ParticipateInThreadsTest extends TestCase
         $this->patch("/replies/{$reply->id}", ['body' => 'foobar'])->assertStatus(302);
         $this->assertDatabaseHas('replies', ['id' => $reply->id, 'body' => 'foobar']); // 302 Found
     }
+
+    public function test_reply_that_contain_spam_can_not_be_created()
+    {   
+        $this->signIn();
+        $thread = factoryCreate(Thread::class);
+        $reply = factoryMake(Reply::class, ['body' => 'Spam text']);
+
+        $this->withoutExceptionHandling();
+        $this->expectException(\Exception::class);
+
+        $this->post($thread->path().'/replies', $reply->toArray());
+    }
 }

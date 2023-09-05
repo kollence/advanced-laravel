@@ -7,6 +7,7 @@ use App\Models\Thread;
 use App\Models\Channel;
 use Illuminate\Http\Request;
 use App\Filters\ThreadFilters;
+use Carbon\Carbon;
 
 class ThreadController extends Controller
 {
@@ -76,6 +77,10 @@ class ThreadController extends Controller
      */
     public function show($channel, Thread $thread)
     {
+        if(auth()->check()){
+            auth()->user()->read($thread);
+        }
+
         return view('threads.show', [
             'thread' => $thread,
             'replies' => $thread->replies()->paginate(10)

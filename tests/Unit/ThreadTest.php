@@ -4,7 +4,9 @@ namespace Tests\Unit;
 
 // use PHPUnit\Framework\TestCase;
 
+use App\Models\Reply;
 use App\Notifications\ThreadWasReplied;
+use Carbon\Carbon;
 use Illuminate\Foundation\Testing\DatabaseMigrations;
 use Illuminate\Support\Facades\Notification;
 use Tests\TestCase;
@@ -87,5 +89,20 @@ class ThreadTest extends TestCase
         $this->thread->unsubscribe($userId);
 
         $this->assertEquals(0, $this->thread->subscriptions()->where('user_id', $userId)->count());
+    }
+
+    public function test_a_thread_can_check_if_auth_is_read_all_replies()
+    {
+        $this->signIn();
+
+        $user = auth()->user();
+        $reply1 = factoryCreate(Reply::class, ['thread_id' => $this->thread->id]);
+        $reply2 = factoryCreate(Reply::class, ['thread_id' => $this->thread->id]);
+
+        $this->assertTrue($this->thread->hasUpdatesFor($user));
+
+        $user->read($this->thread);
+        
+        $this->assertFalse($this->thread->hasUpdatesFor($user));
     }
 }

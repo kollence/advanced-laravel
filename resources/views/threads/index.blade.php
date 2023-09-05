@@ -13,12 +13,22 @@
                         <hr>
                         <hr>
                         <div class="flex  justify-between">
-                        <h3 style="font-size: 20px; color: orange;" class="self-start">
-                            <a href="{{$thread->path()}}">{{ $thread->title }}</a>
+                        <h3 class="self-start">
+                            <a href="{{$thread->path()}}">
+                                @if(auth()->check() && $thread->hasUpdatesFor(auth()->user()))
+                                    <strong  style="font-size: 20px; color: #ed7400;">
+                                        {{ $thread->title }}
+                                    </strong>
+                                @else
+                                    <span  style="font-size: 20px; color: orange;">
+                                        {{ $thread->title }} 
+                                    </span>
+                                @endif
+                            </a>
                         </h3>
                         <strong class="self-end">
                             <a href="{{$thread->path()}}" class="ml-2 first-of-type:ml-6 text-orange-400">
-                                replies: {{$thread->replies_count}} {{Str::plural('time', $thread->replies_count)}}
+                                {{$thread->replies_count}} {{Str::plural('reply', $thread->replies_count)}}
                             </a>
                         </strong>
                         </div>

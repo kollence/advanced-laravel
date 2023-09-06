@@ -40,11 +40,9 @@ class ReplyController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Channel $channel, Thread $thread, Spam $spam)
+    public function store(Channel $channel, Thread $thread)
     {
-        $this->validate(request(), ['body' => 'required']);
-
-        $spam->detect(request('body'));
+        $this->validateReply();
 
         $thread->addReply([
             'body' => request('body'),
@@ -86,6 +84,7 @@ class ReplyController extends Controller
     public function update(Request $request, Reply $reply)
     {
         $this->authorize('update', $reply);
+        $this->validateReply();
         $reply->update($request->only('body'));
  // Refresh the model to get the latest data
         if(request()->expectsJson()){
@@ -111,5 +110,12 @@ class ReplyController extends Controller
             return response()->json(['success' => true], 204);
         }
         return redirect()->back()->with('flash', 'Your reply has been deleted!');
+    }
+
+    protected function validateReply()
+    {
+        $this->validate(request(), ['body' => 'required']);
+
+        resolve(Spam::class)->detect(request('body'));
     }
 }

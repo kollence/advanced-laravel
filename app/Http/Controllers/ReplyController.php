@@ -42,14 +42,19 @@ class ReplyController extends Controller
      */
     public function store(Channel $channel, Thread $thread)
     {
-        $this->validateReply();
+        try{
+            $this->validateReply();
 
-        $thread->addReply([
-            'body' => request('body'),
-            'user_id' => auth()->id(),
-        ]);
+            $thread->addReply([
+                'body' => request('body'),
+                'user_id' => auth()->id(),
+            ]);
+        }catch(\Exception $e)
+        {
+            return redirect()->back()->with('flash', $e->getMessage() );
+        }
 
-        return redirect($thread->path());
+        return redirect($thread->path())->with('flash', 'succesfuly added reply' );
     }
 
     /**
@@ -84,14 +89,21 @@ class ReplyController extends Controller
     public function update(Request $request, Reply $reply)
     {
         $this->authorize('update', $reply);
+        try
+        {   
         $this->validateReply();
         $reply->update($request->only('body'));
- // Refresh the model to get the latest data
+        }catch(\Exception $e)
+        {
+            if(request()->expectsJson()){
+                return response()->json(['success' => false, 'error' => $e->getMessage()]);
+            }
+            return redirect()->back()->with('flash', 'Your reply has been updated!');
+        }
+        // Refresh the model to get the latest data
         if(request()->expectsJson()){
             return response()->json(['success' => true, 'reply' => $reply]);
         }
-        
-
         return redirect()->back()->with('flash', 'Your reply has been updated!');
     }
 

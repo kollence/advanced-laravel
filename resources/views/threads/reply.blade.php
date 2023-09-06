@@ -154,9 +154,20 @@
             })
             .then(response => {
                 if (response.success) {
+                    Swal.fire({ 
+                        icon: 'success',
+                        title: 'Reply has been updated',
+                        showConfirmButton: false,
+                        timer: 2000
+                    })
                     contentDiv.textContent = response.reply.body; // Update the content with edited value
                 } else {
-                    console.error('Update failed:', response);
+                    Swal.fire({ 
+                        icon: 'error',
+                        title: response.error,
+                        showConfirmButton: false,
+                        timer: 2000
+                    })
                 }
             })
             .catch(error => {

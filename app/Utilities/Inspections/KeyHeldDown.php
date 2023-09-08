@@ -11,7 +11,7 @@ class KeyHeldDown
         // Define a regular expression pattern to match the same letter appearing more than 4 times in a row
         $pattern = '/(.)\1{4,}/';
         if (preg_match($pattern, $text)) {
-            throw new Exception("Spam detected!");
+            throw new Exception("Key held down detected!");
         }
     }
 }

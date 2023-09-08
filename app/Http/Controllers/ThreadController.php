@@ -7,6 +7,7 @@ use App\Models\Thread;
 use App\Models\Channel;
 use Illuminate\Http\Request;
 use App\Filters\ThreadFilters;
+use App\Rules\SpamFree;
 use Carbon\Carbon;
 
 class ThreadController extends Controller
@@ -53,10 +54,10 @@ class ThreadController extends Controller
     {
         // dd(request()->all());
         $this->validate($request,[
-            'channel_id' => 'required',
-            'title' => 'required',
-            'body' => 'required',
-            'channel_id' => 'required|exists:channels,id'
+            'channel_id' => ['required'],
+            'title' => ['required', new SpamFree],
+            'body' => ['required', new SpamFree],
+            'channel_id' => ['required','exists:channels,id'],
         ]);
 
         $thread = Thread::create([

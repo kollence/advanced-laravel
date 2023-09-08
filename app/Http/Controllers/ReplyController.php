@@ -5,7 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Channel;
 use App\Models\Reply;
 use App\Models\Thread;
-use App\Utilities\Inspections\Spam;
+use App\Rules\SpamFree;
 use Illuminate\Http\Request;
 use Illuminate\Validation\ValidationException;
 
@@ -44,7 +44,7 @@ class ReplyController extends Controller
     public function store(Channel $channel, Thread $thread)
     {
         try{
-            $this->validateReply();
+            request()->validate(['body' => ['required', new SpamFree]]);
 
             $thread->addReply([
                 'body' => request('body'),
@@ -56,10 +56,7 @@ class ReplyController extends Controller
             // }
             return redirect($thread->path())->withErrors($e->validator->getMessageBag());
         }
-        // if(request()->expectsJson()){
-        //     return response()->json(['success' => true]);
-        // }
-        return redirect($thread->path())->with('flash', 'Your reply has been updated!');
+        return redirect($thread->path())->with('flash', 'Your reply has been added!');
     }
 
     /**
@@ -96,14 +93,15 @@ class ReplyController extends Controller
         $this->authorize('update', $reply);
         try
         {   
-        $this->validateReply();
-        $reply->update($request->only('body'));
+            request()->validate(['body' => ['required', new SpamFree]]);
+
+            $reply->update($request->only('body'));
         }catch(\Exception $e)
         {
             if(request()->expectsJson()){
                 return response()->json(['success' => false, 'error' => $e->getMessage()]);
             }
-            return redirect()->back()->with('flash', 'Your reply has been updated!');
+            return redirect()->back()->with('flash', $e->getMessage());
         }
         // Refresh the model to get the latest data
         if(request()->expectsJson()){
@@ -129,10 +127,4 @@ class ReplyController extends Controller
         return redirect()->back()->with('flash', 'Your reply has been deleted!');
     }
 
-    protected function validateReply()
-    {
-        $this->validate(request(), ['body' => 'required']);
-
-        resolve(Spam::class)->detect(request('body'));
-    }
 }

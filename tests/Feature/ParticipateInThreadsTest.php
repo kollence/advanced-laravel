@@ -97,4 +97,13 @@ class ParticipateInThreadsTest extends TestCase
         $this->post($thread->path().'/replies', $reply->toArray())
         ->assertSessionHasErrors('body');
     }
+
+    public function test_user_may_only_reply_once_per_minute()
+    {
+        $this->signIn();
+        $thread = factoryCreate(Thread::class);
+        $reply = factoryMake(Reply::class);
+        $this->post($thread->path().'/replies', $reply->toArray())->assertStatus(302);
+        $this->post($thread->path().'/replies', $reply->toArray())->assertStatus(429);
+    } 
 }

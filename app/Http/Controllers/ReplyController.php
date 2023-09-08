@@ -50,12 +50,12 @@ class ReplyController extends Controller
                 'body' => request('body'),
                 'user_id' => auth()->id(),
             ]);
+
         }catch(ValidationException $e){
-            // if(request()->expectsJson()){
-            //     return response()->json(['success' => false, 'error' => $e->getMessage()]);
-            // }
+            
             return redirect($thread->path())->withErrors($e->validator->getMessageBag());
         }
+
         return redirect($thread->path())->with('flash', 'Your reply has been added!');
     }
 
@@ -103,7 +103,7 @@ class ReplyController extends Controller
             }
             return redirect()->back()->with('flash', $e->getMessage());
         }
-        // Refresh the model to get the latest data
+       
         if(request()->expectsJson()){
             return response()->json(['success' => true, 'reply' => $reply]);
         }

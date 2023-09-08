@@ -94,9 +94,7 @@ class ParticipateInThreadsTest extends TestCase
         $thread = factoryCreate(Thread::class);
         $reply = factoryMake(Reply::class, ['body' => 'Spam text']);
 
-        $this->withoutExceptionHandling();
-        $this->expectException(\Exception::class);
-
-        $this->post($thread->path().'/replies', $reply->toArray());
+        $this->post($thread->path().'/replies', $reply->toArray())
+        ->assertSessionHasErrors('body');
     }
 }

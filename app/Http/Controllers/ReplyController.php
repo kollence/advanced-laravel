@@ -7,6 +7,7 @@ use App\Models\Reply;
 use App\Models\Thread;
 use App\Utilities\Inspections\Spam;
 use Illuminate\Http\Request;
+use Illuminate\Validation\ValidationException;
 
 class ReplyController extends Controller
 {
@@ -49,12 +50,16 @@ class ReplyController extends Controller
                 'body' => request('body'),
                 'user_id' => auth()->id(),
             ]);
-        }catch(\Exception $e)
-        {
-            return redirect()->back()->with('flash', $e->getMessage() );
+        }catch(ValidationException $e){
+            // if(request()->expectsJson()){
+            //     return response()->json(['success' => false, 'error' => $e->getMessage()]);
+            // }
+            return redirect($thread->path())->withErrors($e->validator->getMessageBag());
         }
-
-        return redirect($thread->path())->with('flash', 'succesfuly added reply' );
+        // if(request()->expectsJson()){
+        //     return response()->json(['success' => true]);
+        // }
+        return redirect($thread->path())->with('flash', 'Your reply has been updated!');
     }
 
     /**

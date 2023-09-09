@@ -102,8 +102,11 @@ class ParticipateInThreadsTest extends TestCase
     {
         $this->signIn();
         $thread = factoryCreate(Thread::class);
+
         $reply = factoryMake(Reply::class);
+
         $this->post($thread->path().'/replies', $reply->toArray())->assertStatus(302);
-        $this->post($thread->path().'/replies', $reply->toArray())->assertStatus(429);
+        // the user isn't authorized to make the request 403
+        $this->post($thread->path().'/replies', $reply->toArray())->assertStatus(403);
     } 
 }

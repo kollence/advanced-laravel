@@ -4,6 +4,7 @@ namespace App\Models;
 
 use App\Traits\CreateActivity;
 use App\Traits\Favoritable;
+use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
@@ -47,5 +48,11 @@ class Reply extends Model
     public function favorite()
     {
         return $this->hasOne(Favorite::class);
+    }
+
+    public function ifJustPublishedReply()
+    {
+        //Sub one minute to the instance (using date interval).
+        return $this->created_at->gt(Carbon::now()->subMinute());
     }
 }

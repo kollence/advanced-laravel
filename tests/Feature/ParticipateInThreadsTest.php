@@ -106,7 +106,11 @@ class ParticipateInThreadsTest extends TestCase
         $reply = factoryMake(Reply::class);
 
         $this->post($thread->path().'/replies', $reply->toArray())->assertStatus(302);
-        // the user isn't authorized to make the request 403
-        $this->post($thread->path().'/replies', $reply->toArray())->assertStatus(403);
+        // Second request will hit Gate::denies and response will bee different
+        // Assert that the response status code is 302 (redirect) because of the ->back() method.
+        $this->post($thread->path().'/replies', $reply->toArray())->assertStatus(302);
+        // Assert that the session flash message matches the expected error message.
+        $this->assertEquals('You can add reply every one minute.', session('flash'));
+         
     } 
 }

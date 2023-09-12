@@ -51,19 +51,6 @@ class ReplyController extends Controller
             'user_id' => auth()->id(),
         ]);
 
-        // Regular expression pattern to match "@someName" and second parameter to match only name with out @
-        $pattern = '/@([A-Za-z0-9_]+)/';
-        // Perform the regular expression match
-        preg_match_all($pattern, $reply->body, $matches);
-        $names = $matches[1];// dd($matches);
-        foreach($names as $name){
-            $user = User::where('name', $name)->first();
-            if($user){
-                $user->notify(new YouAreMentionedInRepy($reply));
-            }
-            
-        }
-
         return redirect($thread->path())->with('flash', 'Your reply has been added!');
     }
 

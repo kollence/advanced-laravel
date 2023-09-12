@@ -55,4 +55,13 @@ class Reply extends Model
         //Sub one minute to the instance (using date interval).
         return $this->created_at->gt(Carbon::now()->subMinute());
     }
+
+    public function mentionedUsersInReply()
+    {
+        // Regular expression pattern to match "@someName" and second parameter to match only name with out @
+        $pattern = '/@([A-Za-z0-9_]+)/';
+        // Perform the regular expression match
+        preg_match_all($pattern, $this->body, $matches);
+        return $matches[1];// dd($matches);
+    }
 }

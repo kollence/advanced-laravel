@@ -6,6 +6,8 @@ use App\Http\Requests\CreateReplyRequest;
 use App\Models\Channel;
 use App\Models\Reply;
 use App\Models\Thread;
+use App\Models\User;
+use App\Notifications\YouAreMentionedInRepy;
 use App\Rules\SpamFree;
 use Illuminate\Http\Request;
 use Illuminate\Validation\ValidationException;
@@ -44,10 +46,23 @@ class ReplyController extends Controller
      */
     public function store($channelId, Thread $thread, CreateReplyRequest $request)
     {
-        $thread->addReply([
+        $reply = $thread->addReply([
             'body' => $request['body'],
             'user_id' => auth()->id(),
         ]);
+
+        // Regular expression pattern to match "@someName" and second parameter to match only name with out @
+        $pattern = '/@([A-Za-z0-9_]+)/';
+        // Perform the regular expression match
+        preg_match_all($pattern, $reply->body, $matches);
+        $names = $matches[1];// dd($matches);
+        foreach($names as $name){
+            $user = User::where('name', $name)->first();
+            if($user){
+                $user->notify(new YouAreMentionedInRepy($reply));
+            }
+            
+        }
 
         return redirect($thread->path())->with('flash', 'Your reply has been added!');
     }

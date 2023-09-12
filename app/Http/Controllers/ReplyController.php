@@ -2,11 +2,11 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\CreateReplyRequest;
 use App\Models\Channel;
 use App\Models\Reply;
 use App\Models\Thread;
 use App\Rules\SpamFree;
-use Illuminate\Support\Facades\Gate;
 use Illuminate\Http\Request;
 use Illuminate\Validation\ValidationException;
 
@@ -42,27 +42,12 @@ class ReplyController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Channel $channel, Thread $thread)
+    public function store($channelId, Thread $thread, CreateReplyRequest $request)
     {
-        if(Gate::denies('create', new Reply)){
-            // Store the error message in the session.
-            session()->flash('flash', 'You can add reply every one minute.');          
-            // Redirect back to the previous page or any other appropriate action.
-            return redirect()->back();
-        }
-        try{
-            $this->authorize('create', new Reply);
-            request()->validate(['body' => ['required', new SpamFree]]);
-
-            $thread->addReply([
-                'body' => request('body'),
-                'user_id' => auth()->id(),
-            ]);
-
-        }catch(ValidationException $e){
-            
-            return redirect($thread->path())->withErrors($e->validator->getMessageBag());
-        }
+        $thread->addReply([
+            'body' => $request['body'],
+            'user_id' => auth()->id(),
+        ]);
 
         return redirect($thread->path())->with('flash', 'Your reply has been added!');
     }

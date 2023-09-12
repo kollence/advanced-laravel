@@ -55,18 +55,18 @@ class Thread extends Model
     public function addReply(array $reply)
     {   // reply will be created for this relationship
         $reply = $this->replies()->create($reply);  
-        // event(new ThreadHasNewReply($this, $reply));
-        $this->notifySubscribers($reply);
+        event(new ThreadHasNewReply($this, $reply));
+        // $this->notifySubscribers($reply);
 
         return $reply;
     }
     // 
-    public function notifySubscribers($reply)
-    {
-        $this->subscriptions
-            ->where('user_id', '!=', $reply->user_id)
-            ->each->notify($reply);
-    }
+    // public function notifySubscribers($reply)
+    // {
+    //     $this->subscriptions
+    //         ->where('user_id', '!=', $reply->user_id)
+    //         ->each->notify($reply);
+    // }
     // make url for specific model
     public function path()
     {

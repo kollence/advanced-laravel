@@ -100,17 +100,16 @@ class ParticipateInThreadsTest extends TestCase
 
     public function test_user_may_only_reply_once_per_minute()
     {
+        $this->withExceptionHandling();
         $this->signIn();
         $thread = factoryCreate(Thread::class);
 
         $reply = factoryMake(Reply::class);
 
         $this->post($thread->path().'/replies', $reply->toArray())->assertStatus(302);
-        // Second request will hit Gate::denies and response will bee different
-        // Assert that the response status code is 302 (redirect) because of the ->back() method.
-        $this->post($thread->path().'/replies', $reply->toArray())->assertStatus(302);
-        // Assert that the session flash message matches the expected error message.
-        $this->assertEquals('You can add reply every one minute.', session('flash'));
+        // Second request will hit Gate::allows in CreateReplyResponse 
+        // Assert that the response status code is 429 and it will throw ThrottleRequestsException from my custom CreateRequest failedAuthorization(MSG)
+        $this->post($thread->path().'/replies', $reply->toArray())->assertStatus(429);
          
     } 
 }

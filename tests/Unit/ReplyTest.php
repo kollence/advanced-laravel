@@ -31,4 +31,12 @@ class ReplyTest extends TestCase
         $reply->created_at = $reply->created_at->subHour();
         $this->assertFalse($reply->ifJustPublishedReply());
     }
+
+    public function test_it_can_detect_all_mentioned_users_in_the_reply()
+    {
+        $reply = factoryCreate(\App\Models\Reply::class, ['body' => '@JaneDoe and @JohnDoe']);
+        // reply has mentioned users
+        $this->assertEquals(['JaneDoe', 'JohnDoe'], $reply->mentionedUsersInReply());
+
+    }
 }

@@ -27,12 +27,8 @@ class NotifyMentionedUserInReply
     public function handle(ThreadHasNewReply $event)
     {
         $names = $event->reply->mentionedUsersInReply();
-        foreach($names as $name){
-            $user = User::where('name', $name)->first();
-            if($user){
-                $user->notify(new YouAreMentionedInRepy($event->reply));
-            }
-            
-        }
+        User::whereIn('name', $names)->get()->each(function ($user) use ($event) {
+            $user->notify(new YouAreMentionedInRepy($event->reply));
+        });
     }
 }

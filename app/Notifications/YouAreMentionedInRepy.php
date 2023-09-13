@@ -58,7 +58,7 @@ class YouAreMentionedInRepy extends Notification
     public function toArray($notifiable)
     {
         return [
-            'message' => $this->reply->user->name.' mentioned you '.$this->reply->thread->title,
+            'message' => $this->reply->user->name.' mentioned you in '.$this->reply->thread->title,
             'link' => $this->reply->path()
         ];
     }

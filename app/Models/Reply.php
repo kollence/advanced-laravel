@@ -7,6 +7,7 @@ use App\Traits\Favoritable;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Casts\Attribute;
 
 class Reply extends Model
 {
@@ -62,6 +63,19 @@ class Reply extends Model
         $pattern = '/@([A-Za-z0-9_]+)/';
         // Perform the regular expression match
         preg_match_all($pattern, $this->body, $matches);
-        return $matches[1];// dd($matches);
+        // dd($matches);
+        return $matches[1];
+    }
+
+    protected function body(): Attribute
+    {
+        // Regular expression pattern to match "@username"
+        $pattern = '/@([A-Za-z0-9_]+)/';
+
+        // Replace matches with the desired HTML anchor tag format
+        $replacement = '<a href="/profile/$1" class="link">@$1</a>';
+        return Attribute::make(
+            set: fn (?string $value) => preg_replace($pattern, $replacement, $value),
+        );
     }
 }

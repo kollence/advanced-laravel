@@ -20,6 +20,14 @@ class DatabaseSeeder extends Seeder
             'name' => 'Admin',
             'email' => 'test@example.com',
         ]);
+        \App\Models\User::factory()->create([
+            'name' => 'User1',
+            'email' => 'user1@example.com',
+        ]);
+        \App\Models\User::factory()->create([
+            'name' => 'User2',
+            'email' => 'user2@example.com',
+        ]);
         \App\Models\Thread::factory(50)->create();
         $threads = \App\Models\Thread::all();
         $threads->each(function ($thread, $key) {

@@ -166,7 +166,7 @@
                         </form>
                         <form method="POST" action="{{ route('login') }}">
                             @csrf
-                            <input type="hidden" value="pagac.otha@example.net" name="email" class="btn btn-primary">
+                            <input type="hidden" value="user1@example.org" name="email" class="btn btn-primary">
                             <input type="hidden" value="password" name="password" class="btn btn-primary">
 
                             <x-dropdown-link :href="route('login')" onclick="event.preventDefault();
@@ -176,7 +176,7 @@
                         </form>
                         <form method="POST" action="{{ route('login') }}">
                             @csrf
-                            <input type="hidden" value="sigurd64@example.com" name="email" class="btn btn-primary">
+                            <input type="hidden" value="user2@example.org" name="email" class="btn btn-primary">
                             <input type="hidden" value="password" name="password" class="btn btn-primary">
 
                             <x-dropdown-link :href="route('login')" onclick="event.preventDefault();

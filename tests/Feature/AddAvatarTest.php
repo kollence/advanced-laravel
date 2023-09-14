@@ -15,14 +15,14 @@ class AddAvatarTest extends TestCase
      */
     public function testGusetCantAddAvatarImage()
     {
-        $this->json('post', 'api/users/1/avatar')->assertStatus(401);
+        $this->json('POST', 'api/users/1/avatar')->assertStatus(401);
     }
 
     public function testAuthCantAddInvalidAvatarImage()
     {
         $this->signIn();
-        
-        $this->json('post', 'api/users/'.auth()->id().'/avatar', [
+
+        $this->json('POST', 'api/users/'.auth()->id().'/avatar', [
             'avatar_img' => 'invalid-image'
         ])->assertStatus(422);
     }
@@ -32,13 +32,13 @@ class AddAvatarTest extends TestCase
         $this->signIn();
 
         Storage::fake('public');
-
+        //UploadFile class to fake one
         $file = UploadedFile::fake()->image('avatar.jpg', 30,30);
 
         $this->json('POST', 'api/users/'.auth()->id().'/avatar', [
             'avatar_img' => $file
         ]);
-        // Assert that path is saved to users table
+        // Assert that path is saved to users table column avatar_img
         $this->assertEquals('avatars/'.$file->hashName(), auth()->user()->avatar_img);
         // Assert the file was stored...
         Storage::disk('public')->assertExists('avatars/'. $file->hashName());

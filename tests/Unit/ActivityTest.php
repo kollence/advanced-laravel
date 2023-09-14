@@ -9,12 +9,10 @@ use App\Models\Reply;
 use App\Models\Thread;
 use App\Models\User;
 use Carbon\Carbon;
-use Illuminate\Foundation\Testing\DatabaseMigrations;
 use Tests\TestCase;
 
 class ActivityTest extends TestCase
 {
-    use DatabaseMigrations;
     /**
      * A basic unit test example.
      *

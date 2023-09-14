@@ -3,12 +3,10 @@
 namespace Tests\Feature;
 
 use Database\Factories\DatabaseNotificationFactory;
-use Illuminate\Foundation\Testing\DatabaseMigrations;
 use Tests\TestCase;
 
 class NotificationTest extends TestCase
 {
-    use DatabaseMigrations;
 
     public function setUp(): void
     {

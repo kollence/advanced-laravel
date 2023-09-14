@@ -5,13 +5,10 @@ namespace Tests\Feature;
 use App\Models\Reply;
 use App\Models\Thread;
 use App\Models\User;
-use Illuminate\Foundation\Testing\DatabaseMigrations;
-use Illuminate\Foundation\Testing\WithFaker;
 use Tests\TestCase;
 
 class MentionUserTest extends TestCase
 {
-    use DatabaseMigrations;
     /**
      * A basic feature test example.
      *

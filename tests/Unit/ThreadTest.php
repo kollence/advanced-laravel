@@ -7,13 +7,11 @@ namespace Tests\Unit;
 use App\Models\Reply;
 use App\Notifications\ThreadWasReplied;
 use Carbon\Carbon;
-use Illuminate\Foundation\Testing\DatabaseMigrations;
 use Illuminate\Support\Facades\Notification;
 use Tests\TestCase;
 
 class ThreadTest extends TestCase
 {   // fresh migrations automaticaly migrate:fresh
-    use DatabaseMigrations;
     /**
      * A basic unit test example.
      *

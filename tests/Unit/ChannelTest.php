@@ -6,12 +6,10 @@ namespace Tests\Unit;
 
 use App\Models\Channel;
 use App\Models\Thread;
-use Illuminate\Foundation\Testing\DatabaseMigrations;
 use Tests\TestCase;
 
 class ChannelTest extends TestCase
 {
-    use DatabaseMigrations;
     /**
      * A basic unit test example.
      *

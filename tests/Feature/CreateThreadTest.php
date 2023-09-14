@@ -4,12 +4,10 @@ namespace Tests\Feature;
 
 use App\Models\Activity;
 use App\Models\Channel;
-use Illuminate\Foundation\Testing\DatabaseMigrations;
 use Tests\TestCase;
 
 class CreateThreadTest extends TestCase
 {
-    use DatabaseMigrations;
 
     public function test_guest_cant_create_thread()
     {   // with Exception Handling

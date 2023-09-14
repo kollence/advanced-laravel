@@ -2,14 +2,12 @@
 
 namespace Tests\Unit;
 
-use Illuminate\Foundation\Testing\DatabaseMigrations;
 // use PHPUnit\Framework\TestCase;
 use Tests\TestCase;
 
 
 class ReplyTest extends TestCase
 {
-    use DatabaseMigrations;
     /**
      * A basic unit test example.
      *

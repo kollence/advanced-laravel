@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Api\UserAvatarController;
 use App\Http\Controllers\FavoritesController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\ReplyController;
@@ -54,6 +55,8 @@ Route::middleware('auth')->group(function () {
 
     Route::get('/profile/{user}/notifications', [UserNotificationsController::class, 'index'])->name('profile.notifications.index');
     Route::delete('/profile/{user}/notifications/{notification}', [UserNotificationsController::class, 'destroy'])->name('profile.notifications.delete');
+
+    Route::post('/api/users/{user}/avatar', [UserAvatarController::class, 'store'])->name('users.avatar.store');
 });
 
 require __DIR__.'/auth.php';

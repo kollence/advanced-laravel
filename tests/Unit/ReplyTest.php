@@ -37,6 +37,12 @@ class ReplyTest extends TestCase
         $reply = factoryCreate(\App\Models\Reply::class, ['body' => '@JaneDoe and @JohnDoe']);
         // reply has mentioned users
         $this->assertEquals(['JaneDoe', 'JohnDoe'], $reply->mentionedUsersInReply());
+    }
 
+    public function test_it_wraps_mentioned_users_in_the_reply_with_anchor_tags()
+    {
+        $reply = factoryCreate(\App\Models\Reply::class, ['body' => 'Hello @JaneDoe']);
+        // reply has mentioned users
+        $this->assertEquals('Hello <a href="/profile/JaneDoe" class="link">@JaneDoe</a>', $reply->body);
     }
 }

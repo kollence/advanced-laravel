@@ -21,6 +21,7 @@ class AddAvatarTest extends TestCase
     public function testAuthCantAddInvalidAvatarImage()
     {
         $this->signIn();
+        
         $this->json('post', 'api/users/'.auth()->id().'/avatar', [
             'avatar_img' => 'invalid-image'
         ])->assertStatus(422);
@@ -29,8 +30,11 @@ class AddAvatarTest extends TestCase
     public function testAuthCanAddValidAvatarImage()
     {
         $this->signIn();
+
         Storage::fake('public');
+
         $file = UploadedFile::fake()->image('avatar.jpg', 30,30);
+
         $this->json('POST', 'api/users/'.auth()->id().'/avatar', [
             'avatar_img' => $file
         ]);

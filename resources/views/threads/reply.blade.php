@@ -5,7 +5,7 @@
     </h5>
     <div class="body">
         <div id="content-{{$reply->id}}">
-            {{ $reply->body }}
+            {!! $reply->body !!}
         </div>
     </div>
     <div class="mt-2 flex justify-between align-middle" style="border-top: thin solid gray; border-bottom: thin solid gray;">
@@ -160,7 +160,7 @@
                         showConfirmButton: false,
                         timer: 2000
                     })
-                    contentDiv.textContent = response.reply.body; // Update the content with edited value
+                    contentDiv.innerHTML = response.reply.body; // Update the content with edited value
                 } else {
                     Swal.fire({ 
                         icon: 'error',

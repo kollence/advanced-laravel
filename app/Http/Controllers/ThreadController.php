@@ -9,6 +9,7 @@ use Illuminate\Http\Request;
 use App\Filters\ThreadFilters;
 use App\Rules\SpamFree;
 use Carbon\Carbon;
+use Illuminate\Support\Facades\Redis;
 
 class ThreadController extends Controller
 {
@@ -29,8 +30,9 @@ class ThreadController extends Controller
         if(request()->wantsJson()){
             return $threads;
         }
-
-        return view('threads.index', compact('threads'));
+        $trendingThreads = array_map('json_decode', Redis::ZREVRANGE('trending_treads', 0, 4));
+        // dd($trendingThreads);
+        return view('threads.index', compact('threads', 'trendingThreads'));
     }
 
     /**
@@ -81,6 +83,12 @@ class ThreadController extends Controller
         if(auth()->check()){
             auth()->user()->read($thread);
         }
+
+        Redis::zincrby('trending_treads', 1, json_encode([
+            'title' => $thread->title,
+            'path' => $thread->path(),
+        ]));
+        // dd(Redis::zrevrange('trending_treads', 0, -1));
 
         return view('threads.show', [
             'thread' => $thread,

@@ -43,4 +43,17 @@ class AddAvatarTest extends TestCase
         // Assert the file was stored...
         Storage::disk('public')->assertExists('avatars/'. $file->hashName());
     }
+
+    public function testAuthCanUseDefaultImageIfTheyDontHaveOne()
+    {
+        $this->signIn();
+        $user = auth()->user();
+
+        $this->assertEquals('storage/avatars/default.png', $user->avatar());
+
+        $user->avatar_img = 'avatars/myAddedPhoto.jpg';
+
+        $this->assertEquals('storage/avatars/myAddedPhoto.jpg', $user->avatar());
+
+    }
 }

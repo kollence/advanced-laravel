@@ -7,6 +7,7 @@ namespace App\Providers;
 use App\Models\Thread;
 use App\Models\User;
 use App\Policies\ThreadPolicy;
+use App\Policies\UserPolicy;
 use Illuminate\Foundation\Support\Providers\AuthServiceProvider as ServiceProvider;
 
 class AuthServiceProvider extends ServiceProvider
@@ -20,6 +21,7 @@ class AuthServiceProvider extends ServiceProvider
         // 'App\Models\Model' => 'App\Policies\ModelPolicy',
         Thread::class => ThreadPolicy::class,
         Reply::class => ReplyPolicy::class,
+        User::class => UserPolicy::class,
     ];
 
     /**

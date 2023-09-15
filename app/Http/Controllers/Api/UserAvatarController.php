@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Api;
 use App\Http\Controllers\Controller;
 use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Redirect;
 
 class UserAvatarController extends Controller
 {
@@ -22,6 +23,7 @@ class UserAvatarController extends Controller
             'avatar_img' => $imagePath
         ]);
 
+        return Redirect::route('profile.edit')->with('status', 'avatar-updated');
         // return response()->json([
         //     'message' => 'Avatar updated successfully',
         //     'user' => $user

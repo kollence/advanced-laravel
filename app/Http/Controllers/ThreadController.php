@@ -88,6 +88,8 @@ class ThreadController extends Controller
 
         $trendingThreads->put($thread);
 
+        $thread->recordVisit();
+
         return view('threads.show', [
             'thread' => $thread,
             'replies' => $thread->replies()->paginate(10)

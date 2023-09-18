@@ -11,8 +11,6 @@
                             </div>
                             <div class="p-6 text-gray-900 dark:text-gray-100">
                                 @forelse($threads as $thread)
-                                <hr>
-                                <hr>
                                 <div class="flex  justify-between">
                                     <h3 class="self-start">
                                         <a href="{{$thread->path()}}">
@@ -34,9 +32,11 @@
                                     </strong>
                                 </div>
                                 <div class="body bg-gray-500 rounded-md p-3">{{ $thread->body }}</div>
-                                <div>
-                                    <small>Created by: <a class="text-orange-400" href="{{route('profile.show', $thread->user->name)}}">{{ $thread->user->name }}</a></small> <br>
+                                <div class="mt-1 flex justify-between">
+                                    <small>Created by: <a class="text-orange-400" href="{{route('profile.show', $thread->user->name)}}">{{ $thread->user->name }}</a></small>
+                                    <small>Visited: <b class="text-orange-400">{{ $thread->visits() }}</b></small> 
                                 </div>
+                                <hr>
                                 <br>
                                 @empty
                                 <h1 class="text-center">No threads found</h1>

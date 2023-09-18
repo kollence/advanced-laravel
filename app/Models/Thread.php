@@ -7,13 +7,13 @@ use App\Models\Scopes\CountScope;
 use App\Models\Scopes\UserScope;
 use App\Notifications\ThreadWasReplied;
 use App\Traits\CreateActivity;
+use App\Traits\RecordThreadVisits;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Support\Facades\Redis;
 
 class Thread extends Model
 {
-    use HasFactory, CreateActivity;
+    use HasFactory, CreateActivity, RecordThreadVisits;
 
     protected $guarded = ['id'];
     protected $fillable = ['user_id', 'channel_id', 'title', 'body'];
@@ -109,29 +109,4 @@ class Thread extends Model
         $key = $user->visitedThreadCacheKey($this->id);
         return $this->updated_at > cache($key);
     }
-
-    protected function visitsCacheKey()
-    { 
-        return "thread.{$this->id}.visits";
-    }
-
-    public function visits()
-    {
-        return Redis::get($this->visitsCacheKey());
-    }
-
-    public function recordVisit()
-    {
-        Redis::incr($this->visitsCacheKey());
-
-        return $this;
-    }
-
-    public function clearVisits()
-    {
-        Redis::del($this->visitsCacheKey());
-
-        return $this;
-    }
-
 }

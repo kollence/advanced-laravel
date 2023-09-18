@@ -5,6 +5,7 @@ namespace Tests\Unit;
 // use PHPUnit\Framework\TestCase;
 
 use App\Models\Reply;
+use App\Models\Thread;
 use App\Notifications\ThreadWasReplied;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Notification;
@@ -102,5 +103,22 @@ class ThreadTest extends TestCase
         $user->read($this->thread);
         
         $this->assertFalse($this->thread->hasUpdatesFor($user));
+    }
+
+    function test_a_thread_record_each_visit()
+    {
+        $thread = factoryMake(Thread::class, ['id' => 1]);
+        // trigger record one time
+        $thread->recordVisit();
+        // assert 1
+        $this->assertEquals(1, $thread->visits());
+        // trigger record second time
+        $thread->recordVisit();
+        // assert 2
+        $this->assertEquals(2, $thread->visits());
+        // Delete the test key from Redis
+        $thread->clearVisits();
+        // Assert that the key no longer exists in Redis
+        $this->assertEquals(0, $thread->visits());
     }
 }

@@ -109,16 +109,16 @@ class ThreadTest extends TestCase
     {
         $thread = factoryMake(Thread::class, ['id' => 1]);
         // trigger record one time
-        $thread->recordVisit();
-        // assert 1
-        $this->assertEquals(1, $thread->visits());
-        // trigger record second time
-        $thread->recordVisit();
-        // assert 2
-        $this->assertEquals(2, $thread->visits());
+        $thread->visits()->record();
+        // // assert 1
+        $this->assertEquals(1, $thread->visits()->count());
+        // // trigger record second time
+        $thread->visits()->record();
+        // // assert 2
+        $this->assertEquals(2, $thread->visits()->count());
         // Delete the test key from Redis
-        $thread->clearVisits();
+        $thread->visits()->flush();
         // Assert that the key no longer exists in Redis
-        $this->assertEquals(0, $thread->visits());
+        $this->assertEquals(0, $thread->visits()->count());
     }
 }

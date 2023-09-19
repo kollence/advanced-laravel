@@ -7,7 +7,7 @@ use App\Http\Controllers\ReplyController;
 use App\Http\Controllers\ThreadController;
 use App\Http\Controllers\ThreadSubscriptionController;
 use App\Http\Controllers\UserNotificationsController;
-use App\Models\Reply;
+use Illuminate\Support\Facades\Redis;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -58,5 +58,7 @@ Route::middleware('auth')->group(function () {
 
     Route::post('/api/users/{user}/avatar', [UserAvatarController::class, 'store'])->name('users.avatar.store');
 });
-
+Route::get('clear_cache', function() {
+    Redis::flushall();
+});
 require __DIR__.'/auth.php';

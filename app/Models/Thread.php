@@ -3,17 +3,14 @@
 namespace App\Models;
 
 use App\Events\ThreadHasNewReply;
-use App\Models\Scopes\CountScope;
-use App\Models\Scopes\UserScope;
-use App\Notifications\ThreadWasReplied;
+use App\Redis\CountVisits;
 use App\Traits\CreateActivity;
-use App\Traits\RecordThreadVisits;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
 class Thread extends Model
 {
-    use HasFactory, CreateActivity, RecordThreadVisits;
+    use HasFactory, CreateActivity;
 
     protected $guarded = ['id'];
     protected $fillable = ['user_id', 'channel_id', 'title', 'body'];
@@ -108,5 +105,10 @@ class Thread extends Model
     {
         $key = $user->visitedThreadCacheKey($this->id);
         return $this->updated_at > cache($key);
+    }
+
+    public function visits()
+    {
+        return new CountVisits($this);
     }
 }

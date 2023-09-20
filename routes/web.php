@@ -7,6 +7,7 @@ use App\Http\Controllers\ReplyController;
 use App\Http\Controllers\ThreadController;
 use App\Http\Controllers\ThreadSubscriptionController;
 use App\Http\Controllers\UserNotificationsController;
+use App\Http\Middleware\ConfirmedEmailCanCreate;
 use Illuminate\Support\Facades\Redis;
 use Illuminate\Support\Facades\Route;
 
@@ -27,7 +28,7 @@ Route::get('/', function () {
 //write route for threads with optional channel param
 Route::get('threads/create', [ThreadController::class, 'create'])->name('threads.create');
 Route::get('threads/{channel}/{thread}', [ThreadController::class, 'show'])->name('threads.show');
-Route::post('threads', [ThreadController::class, 'store'])->name('threads.store');
+Route::post('threads', [ThreadController::class, 'store'])->name('threads.store')->middleware(ConfirmedEmailCanCreate::class);
 Route::get('threads/{channel?}', [ThreadController::class, 'index'])->name('threads.index');
 Route::delete('threads/{channel}/{thread}', [ThreadController::class, 'destroy'])->name('threads.delete');
 

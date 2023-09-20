@@ -107,7 +107,10 @@ class ThreadTest extends TestCase
 
     function test_a_thread_record_each_visit()
     {
+        
         $thread = factoryMake(Thread::class, ['id' => 1]);
+        // Delete the test key from Redis
+        $thread->visits()->flush();
         // trigger record one time
         $thread->visits()->record();
         // // assert 1

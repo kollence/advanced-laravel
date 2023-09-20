@@ -36,6 +36,11 @@ class CreateThreadTest extends TestCase
             ->assertSee($thread->body);
     }
 
+    public function test_auth_need_to_confirm_their_email_to_create_thread()
+    {
+        $this->publishThread()->assertRedirect('/threads')->assertSessionHas('flash');
+    }
+
     public function test_unauth_cant_delete_thread()
     {
         $this->withExceptionHandling();

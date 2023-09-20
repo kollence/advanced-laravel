@@ -56,11 +56,6 @@ class ThreadController extends Controller
      */
     public function store(Request $request)
     {
-        if(! auth()->user()->confirmed_email)
-        {
-            return redirect('/threads')->with('flash','You need to confirm your email!');
-        }
-
         $this->validate($request,[
             'channel_id' => ['required'],
             'title' => ['required', new SpamFree],

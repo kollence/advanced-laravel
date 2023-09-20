@@ -19,14 +19,17 @@ class DatabaseSeeder extends Seeder
         \App\Models\User::factory()->create([
             'name' => 'Admin',
             'email' => 'test@example.com',
+            'confirmed_email' => true,
         ]);
         \App\Models\User::factory()->create([
             'name' => 'User1',
             'email' => 'user1@example.com',
+            'confirmed_email' => false,
         ]);
         \App\Models\User::factory()->create([
             'name' => 'User2',
             'email' => 'user2@example.com',
+            'confirmed_email' => false,
         ]);
         \App\Models\Thread::factory(50)->create();
         $threads = \App\Models\Thread::all();

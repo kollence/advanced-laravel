@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Api\UserAvatarController;
+use App\Http\Controllers\Auth\RegisteredUserController;
 use App\Http\Controllers\FavoritesController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\ReplyController;
@@ -25,6 +26,9 @@ use Illuminate\Support\Facades\Route;
 Route::get('/', function () {
     return view('welcome');
 });
+
+Route::get('/register/confirm', [RegisteredUserController::class, 'confirm'])
+->name('register.confirm');
 //write route for threads with optional channel param
 Route::get('threads/create', [ThreadController::class, 'create'])->name('threads.create');
 Route::get('threads/{channel}/{thread}', [ThreadController::class, 'show'])->name('threads.show');

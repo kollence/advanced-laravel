@@ -24,6 +24,8 @@ class User extends Authenticatable
         'email',
         'password',
         'avatar_img',
+        'confirmed_email',
+        'confirmation_token',
     ];
     
     // set name as route model binding
@@ -49,6 +51,7 @@ class User extends Authenticatable
      */
     protected $casts = [
         'email_verified_at' => 'datetime',
+        'confirmed_email' => 'boolean',
     ];
 
     public function threads(){

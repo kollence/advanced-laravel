@@ -8,6 +8,7 @@ use Illuminate\Foundation\Support\Providers\EventServiceProvider as ServiceProvi
 use Illuminate\Support\Facades\Event;
 use App\Events\ThreadHasNewReply;
 use App\Listeners\NotifyMentionedUserInReply;
+use App\Listeners\SendEmailConfirmation;
 use App\Listeners\SendNotificationsToThreadSubscribers;
 
 class EventServiceProvider extends ServiceProvider
@@ -20,6 +21,7 @@ class EventServiceProvider extends ServiceProvider
     protected $listen = [
         Registered::class => [
             SendEmailVerificationNotification::class,
+            SendEmailConfirmation::class
         ],
         ThreadHasNewReply::class => [
             SendNotificationsToThreadSubscribers::class,

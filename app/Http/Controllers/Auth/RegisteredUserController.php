@@ -50,4 +50,11 @@ class RegisteredUserController extends Controller
         return redirect(RouteServiceProvider::HOME);
     }
 
+    public function confirm()
+    {
+        $user = User::where('confirmation_token', request()->query('token'))
+                ->firstOrFail()
+                ->update(['confirmed_email' => true, 'confirmation_token' => null]);
+        return redirect(route('threads.create'));
+    }
 }

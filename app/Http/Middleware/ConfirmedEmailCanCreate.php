@@ -16,7 +16,7 @@ class ConfirmedEmailCanCreate
      */
     public function handle(Request $request, Closure $next)
     {
-        if ($request->user()->confirmed_email == 0) {
+        if (! $request->user()->confirmed_email) {
            return redirect('/threads')->with('flash','You need to confirm your email!');
         }
         return $next($request);

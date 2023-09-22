@@ -72,4 +72,11 @@ class RegistrationTest extends TestCase
 
         $response->assertRedirect(route('threads.create'));
     }
+
+    public function test_detect_invalid_token(): void
+    {
+        $this->get(route('register.confirm', ['token'=> 'invalid_evil']))
+        ->assertRedirect(route('threads.index'))
+        ->assertSessionHas('flash', 'The confirmation link is invalid.');
+    }
 }

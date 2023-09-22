@@ -2,8 +2,12 @@
 
 namespace Tests\Feature\Auth;
 
+use App\Mail\ConfirmYourEmail;
+use App\Models\User;
 use App\Providers\RouteServiceProvider;
+use Illuminate\Auth\Events\Registered;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Support\Facades\Mail;
 use Tests\TestCase;
 
 class RegistrationTest extends TestCase
@@ -28,5 +32,39 @@ class RegistrationTest extends TestCase
 
         $this->assertAuthenticated();
         $response->assertRedirect(RouteServiceProvider::HOME);
+    }
+
+    public function test_send_email_confirmation_when_user_registers(): void
+    {
+        Mail::fake();
+
+        event(new Registered(factoryCreate(User::class)));
+
+        Mail::assertSent(ConfirmYourEmail::class);
+    }
+
+    public function test_autch_can_get_email_with_valid_link_for_confirmation(): void
+    {
+
+        $this->post('/register', [
+            'name' => 'JohnDoe',
+            'email' => 'jogn@email.com',
+            'password' => 'password',
+            'password_confirmation' => 'password',
+        ]);
+        // first user that is registerd
+        $registerdUser = User::whereName('JohnDoe')->first();
+        // dd($registerdUser);
+        $this->assertFalse($registerdUser->confirmed_email);
+
+        $this->assertNotNull($registerdUser->confirmation_token);
+        
+        $response = $this->get('/register/confirm?token='. $registerdUser->confirmation_token);
+
+        $this->assertTrue($registerdUser->fresh()->confirmed_email);
+
+        $this->assertNull($registerdUser->fresh()->confirmation_token);
+
+        $response->assertRedirect(route('threads.create'));
     }
 }

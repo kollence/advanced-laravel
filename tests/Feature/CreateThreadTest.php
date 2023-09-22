@@ -8,6 +8,14 @@ use Tests\TestCase;
 
 class CreateThreadTest extends TestCase
 {
+    protected $userWithConfirmedEmail;
+
+    protected function setUp() : void
+    {
+        parent::setUp();
+        //delete if its exist
+        $this->userWithConfirmedEmail  = $this->userWithConfirmedEmail();
+    }
 
     public function test_guest_cant_create_thread()
     {   // with Exception Handling
@@ -25,7 +33,7 @@ class CreateThreadTest extends TestCase
     public function test_auth_user_can_create_thread()
     {
         //authenticate user
-        $this->signIn();
+        $this->signIn($this->userWithConfirmedEmail);
         //create thread
         $thread = factoryMake(\App\Models\Thread::class);
         $response = $this->post('/threads', $thread->toArray());
@@ -79,29 +87,35 @@ class CreateThreadTest extends TestCase
 
     public function test_a_thread_requires_a_title()
     {
-        $this->publishThread(['title' => null])->assertSessionHasErrors('title');
+        $this->publishThread(['title' => null], $this->userWithConfirmedEmail)->assertSessionHasErrors('title');
     }
 
     public function test_a_thread_requires_a_body()
     {
-
-        $this->publishThread(['body' => null])->assertSessionHasErrors('body');
+        $this->publishThread(['body' => null], $this->userWithConfirmedEmail)->assertSessionHasErrors('body');
     }
 
     public function test_a_thread_requires_a_valid_channel()
     {
         $cannels = \App\Models\Channel::factory(2)->create();
-        $this->publishThread(['channel_id' => null])->assertSessionHasErrors('channel_id');
-        $this->publishThread(['channel_id' => 99999])->assertSessionHasErrors('channel_id');
+
+        $this->publishThread(['channel_id' => null], $this->userWithConfirmedEmail)->assertSessionHasErrors('channel_id');
+        $this->publishThread(['channel_id' => 99999], $this->userWithConfirmedEmail)->assertSessionHasErrors('channel_id');
     }
 
-    public function publishThread($overrides = [])
+    public function publishThread($overrides = [], $user = null)
     {
-        $this->signIn();
+        $this->signIn($user);
 
         $thread = factoryMake(\App\Models\Thread::class, $overrides);
 
         return $this->post('/threads', $thread->toArray());
             
+    }
+
+    private function userWithConfirmedEmail()
+    {
+        $user = factoryCreate(\App\Models\User::class, ['confirmed_email' => true]);
+        return $user;
     }
 }

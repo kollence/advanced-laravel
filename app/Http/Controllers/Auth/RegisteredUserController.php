@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
+use App\Mail\ConfirmYourEmail;
 use App\Models\User;
 use App\Providers\RouteServiceProvider;
 use Illuminate\Auth\Events\Registered;
@@ -10,6 +11,7 @@ use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Mail;
 use Illuminate\Validation\Rules;
 use Illuminate\View\View;
 
@@ -43,7 +45,8 @@ class RegisteredUserController extends Controller
             'confirmation_token' => bin2hex(random_bytes(25)),
         ]);
 
-        event(new Registered($user));
+        // event(new Registered($user));
+        $this->registered($user);
 
         Auth::login($user);
 
@@ -56,5 +59,10 @@ class RegisteredUserController extends Controller
                 ->firstOrFail()
                 ->update(['confirmed_email' => true, 'confirmation_token' => null]);
         return redirect(route('threads.create'));
+    }
+
+    protected function registered($user)
+    {
+        Mail::to($user->email)->send(new ConfirmYourEmail($user));
     }
 }

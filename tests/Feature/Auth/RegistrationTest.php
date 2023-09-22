@@ -38,7 +38,12 @@ class RegistrationTest extends TestCase
     {
         Mail::fake();
 
-        event(new Registered(factoryCreate(User::class)));
+        $this->post('/register', [
+            'name' => 'JohnDoe',
+            'email' => 'jogn@email.com',
+            'password' => 'password',
+            'password_confirmation' => 'password',
+        ]);
 
         Mail::assertSent(ConfirmYourEmail::class);
     }

@@ -54,10 +54,15 @@ class RegisteredUserController extends Controller
     }
 
     public function confirm()
-    {
-        $user = User::where('confirmation_token', request()->query('token'))
-                ->firstOrFail()
-                ->update(['confirmed_email' => true, 'confirmation_token' => null]);
+    {   
+        $user = User::where('confirmation_token', request()->query('token'))->first();
+        // if user is not found by token
+        if(! $user){
+            return redirect(route('threads.index'))->with('flash', 'The confirmation link is invalid.');
+        }
+        
+        $user->update(['confirmed_email' => true, 'confirmation_token' => null]);
+
         return redirect(route('threads.create'));
     }
 

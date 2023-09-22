@@ -77,9 +77,20 @@
                     </div>
                 </div>
             </div>
+            @auth
+            <div class="flex">
+                <div class="shrink-0 flex items-center">
+                    @if(isset(auth()->user()->confirmed_email) && auth()->user()->confirmed_email)
+                    <a href="{{url('threads/create')}}" class="block h-9 w-auto fill-current text-gray-800 hover:text-gray-200 bg-gray-100 hover:bg-blue-600 border border-blue-700 border-2 font-bold pt-1 px-4 rounded-full shadow-md">+ Thread</a>
+                    @else
+                    <a href="#" class="block h-9 w-auto fill-current text-gray-800 hover:text-gray-200 bg-gray-100 hover:bg-blue-600 border border-blue-700 border-2 font-bold pt-1 px-4 rounded-full shadow-md">
+                        You need to verify your email address to create a thread.
+                    </a>   
+                    @endif
+                </div>
+            </div>
 
             <div class="flex">
-                @auth
                 <x-nav-link title="notifications" :href="route('profile.notifications.index', auth()->user()->name)" :active="request()->routeIs('profile.notifications.index')">      
                     <svg fill="#ff0000" height="13px" width="13px" version="1.1" id="Capa_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 611.999 611.999" xml:space="preserve">
                         <g>
@@ -101,9 +112,8 @@
                     </svg>
                     <span class="ml-1">{{auth()->user()->unreadNotifications->count()}}</span>
                 </x-nav-link>
-                @endauth
             </div>
-
+            @endauth
             <!-- Settings Dropdown -->
             <div class="hidden sm:flex sm:items-center sm:ml-6">
                 @auth

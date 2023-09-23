@@ -7,18 +7,34 @@ use App\Redis\CountVisits;
 use App\Traits\CreateActivity;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Str;
 
 class Thread extends Model
 {
     use HasFactory, CreateActivity;
 
     protected $guarded = ['id'];
-    protected $fillable = ['user_id', 'channel_id', 'title', 'body'];
+    protected $fillable = ['user_id', 'channel_id', 'title', 'body', 'slug'];
     protected $appends = ['is_subscribed_to'];
                         // 1. here you CAN'T call withoutGlobalScopes() and detached
     protected $with = ['user','channel'];
     protected static function booted()
-    {   // global scope for counting replies that happens before model is booted
+    {   
+        static::creating(function ($product) {
+            // Generate a unique slug from the title
+            $baseSlug = Str::slug($product->title);
+            $slug = $baseSlug;
+            $counter = 1;
+
+            while (static::where('slug', $slug)->exists()) {
+                $slug = $baseSlug . '-' . $counter;
+                $counter++;
+            }
+
+            $product->slug = $slug;
+        });
+        
+        // global scope for counting replies that happens before model is booted
                                 // using my custom scope class that accepts a relationship to count
         // static::addGlobalScope(new CountScope('replies'));
         // // 2. here you CAN call withoutGlobalScopes() and detached
@@ -29,7 +45,11 @@ class Thread extends Model
             // so it will delete it activities too
             $thread->replies->each->delete();
         });
+    }
 
+    public function getRouteKeyName()
+    {
+        return 'slug';
     }
     // // cistom getter to return count of replies
     // public function getRepliesCountAttribute()
@@ -68,7 +88,7 @@ class Thread extends Model
     // make url for specific model
     public function path()
     {
-        return "/threads/{$this->channel->slug}/{$this->id}";
+        return "/threads/{$this->channel->slug}/{$this->slug}";
     }
 
     public function scopeFilter($query, $filters)

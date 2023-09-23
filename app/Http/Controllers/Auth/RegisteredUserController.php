@@ -37,12 +37,16 @@ class RegisteredUserController extends Controller
             'email' => ['required', 'string', 'email', 'max:255', 'unique:'.User::class],
             'password' => ['required', 'confirmed', Rules\Password::defaults()],
         ]);
+        // Hash the email using SHA-256
+        $hash = hash('sha256', $request->email);
+        // Truncate the hash to 25 characters
+        $uniqueToken = substr($hash, 0, 25);
 
         $user = User::create([
             'name' => $request->name,
             'email' => $request->email,
             'password' => Hash::make($request->password),
-            'confirmation_token' => bin2hex(random_bytes(25)),
+            'confirmation_token' => $uniqueToken,
         ]);
 
         // event(new Registered($user));

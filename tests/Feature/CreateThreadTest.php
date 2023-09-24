@@ -44,6 +44,19 @@ class CreateThreadTest extends TestCase
             ->assertSee($thread->body);
     }
 
+    public function test_created_thread_has_unique_slug_based_on_id()
+    {
+        //authenticate user
+        $this->signIn($this->userWithConfirmedEmail);
+        //create thread
+        $thread = factoryCreate(\App\Models\Thread::class, ['title' => 'Unique Title']);
+        $thread2 = factoryCreate(\App\Models\Thread::class, ['title' => 'Unique Title']);
+        $this->assertEquals($thread->title, $thread2->title);
+        $this->assertNotEquals($thread->slug, $thread2->slug);
+        $this->assertEquals($thread->slug, 'unique-title');
+        $this->assertEquals($thread2->slug, 'unique-title-'.$thread2->id);
+    }
+
     public function test_auth_need_to_confirm_their_email_to_create_thread()
     {
         $this->publishThread()->assertRedirect('/threads')->assertSessionHas('flash');

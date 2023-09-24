@@ -15,6 +15,7 @@ return new class extends Migration
     {
         Schema::create('threads', function (Blueprint $table) {
             $table->id();
+            $table->string('slug')->unique()->nullable();
             $table->integer('user_id')->unsigned()->index();
             $table->integer('channel_id')->unsigned()->index();
             $table->integer('replies_count')->unsigned()->default(0);

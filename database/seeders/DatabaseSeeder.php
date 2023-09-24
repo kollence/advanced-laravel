@@ -31,6 +31,7 @@ class DatabaseSeeder extends Seeder
             'email' => 'user2@example.com',
             'confirmed_email' => false,
         ]);
+        \App\Models\Thread::factory(3)->create(['title'=>'Unique Title']);
         \App\Models\Thread::factory(50)->create();
         $threads = \App\Models\Thread::all();
         $threads->each(function ($thread, $key) {

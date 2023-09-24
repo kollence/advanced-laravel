@@ -5,6 +5,7 @@ namespace App\Models;
 use App\Events\ThreadHasNewReply;
 use App\Redis\CountVisits;
 use App\Traits\CreateActivity;
+use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Str;
@@ -20,18 +21,8 @@ class Thread extends Model
     protected $with = ['user','channel'];
     protected static function booted()
     {   
-        static::creating(function ($product) {
-            // Generate a unique slug from the title
-            $baseSlug = Str::slug($product->title);
-            $slug = $baseSlug;
-            $counter = 1;
-
-            while (static::where('slug', $slug)->exists()) {
-                $slug = $baseSlug . '-' . $counter;
-                $counter++;
-            }
-
-            $product->slug = $slug;
+        static::created(function ($thread) {
+            $thread->update(['slug' => Str::slug($thread->title)]);
         });
         
         // global scope for counting replies that happens before model is booted
@@ -46,16 +37,17 @@ class Thread extends Model
             $thread->replies->each->delete();
         });
     }
+    protected function slug(): Attribute
+    {
+        return Attribute::make(
+            set: fn (?string $value) => (static::where('slug', $value)->exists()) ? $value. '-' . $this->id : $value,
+        );
+    }
 
     public function getRouteKeyName()
     {
         return 'slug';
     }
-    // // cistom getter to return count of replies
-    // public function getRepliesCountAttribute()
-    // {
-    //     return $this->replies()->count();
-    // }
  
     public function replies()
     {

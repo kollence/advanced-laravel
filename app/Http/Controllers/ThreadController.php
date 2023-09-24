@@ -2,15 +2,12 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\User;
 use App\Models\Thread;
 use App\Models\Channel;
 use Illuminate\Http\Request;
 use App\Filters\ThreadFilters;
 use App\Redis\TrendingThreads;
 use App\Rules\SpamFree;
-use Carbon\Carbon;
-use Illuminate\Support\Facades\Redis;
 
 class ThreadController extends Controller
 {

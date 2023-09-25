@@ -18,6 +18,7 @@ return new class extends Migration
             $table->string('slug')->unique()->nullable();
             $table->integer('user_id')->unsigned()->index();
             $table->integer('channel_id')->unsigned()->index();
+            $table->integer('best_reply_id')->unsigned()->nullable();
             $table->integer('replies_count')->unsigned()->default(0);
             $table->string('title');
             $table->text('body');

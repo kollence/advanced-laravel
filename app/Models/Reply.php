@@ -78,4 +78,10 @@ class Reply extends Model
             set: fn (?string $value) => preg_replace($pattern, $replacement, $value),
         );
     }
+    
+    public function isBestReply()
+    {
+        return $this->thread->best_reply_id == $this->id;
+        
+    }
 }

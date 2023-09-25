@@ -1,4 +1,4 @@
-<div id="reply-{{$reply->id}}" class="p-5 text-gray-900 dark:text-gray-100 ">
+<div id="reply-{{$reply->id}}" class="p-5 text-gray-900 dark:text-gray-100 rounded-md {{($reply->isBestReply()) ? 'bg-slate-500' : ''}}">
     <h5 style="font-size: 20px;" class="flex justify-between">
         <a style=" color: orange;" href="{{route('profile.show', $reply->user->name)}}">{{ $reply->user->name }}</a>
         <div class="mt-1">said {{ $reply->created_at->diffForHumans() }} </div>
@@ -44,7 +44,15 @@
                 @endcan
             </div>
         </div>
-
+        @can('update', $reply->thread)
+            <div class="flex" id="mark-best-content-{{$reply->id}}" data-id="{{$reply->id}}">
+                @if(!$reply->isBestReply())      
+                    <button type="button" id="mark-best-btn-{{$reply->id}}" onclick='markAsBestReply("{{$reply->id}}", this)' class="bg-teal-600/40 hover:bg-orange-900 border border-orange-300 border-1 font-bold my-1 px-2 rounded-md shadow-md">mark as best</button>
+                @else
+                    <div class="flex text-green-300 best-reply-text">This is the best reply</div>
+                @endif
+            </div>
+        @endcan
         <div class="flex">
             @auth
             <button type="button" onclick='markAsFavorite("{{$reply->id}}", this)' data-count="{{$reply->favorites_count}}" class="flex bg-transparent {{($reply->isFavorited()) ? '' : 'hover:bg-blue-600'}}  font-bold py-2 px-4 rounded-full shadow-md">
@@ -93,7 +101,7 @@
                         }
                     })
                     .then(data => {
-                        const count = document.querySelectorAll('#reply-holder > div').length;
+                        const count = document.querySelectorAll('#replies-holder > div').length;
                         contHtml.textContent = 'Comments: ' + count;
                         console.log(count);
                     })
@@ -211,5 +219,28 @@
             .catch(error => {
                 console.error('Error marking reply as favorite:', error);
             });
+    }
+    function markAsBestReply(replyId, button) {
+        // console.log(replyId,button);
+        
+        const formData = new FormData();
+        formData.append('_token', '{{ csrf_token() }}');
+        fetch('/replies/'+replyId+'/best', {
+                method: 'POST',
+                body: formData,
+            }).then(response => {
+                if(response.ok){
+                    document.querySelectorAll('[id^="reply-"]').forEach(e => {
+                        e.style.backgroundColor="transparent"
+                    })
+                    document.querySelectorAll('[id^="mark-best-content-"]').forEach(e => {
+                        e.innerHTML = `<button type="button" id="mark-best-btn-{{$reply->id}}" onclick='markAsBestReply("`+e.getAttribute('data-id')+`", this)' class="bg-teal-600/40 hover:bg-orange-900 border border-orange-300 border-1 font-bold my-1 px-2 rounded-md shadow-md">mark as best</button>`
+                    })
+                    document.getElementById(`reply-${replyId}`).style.backgroundColor = '#64748b'
+                    // button.remove()
+                    document.getElementById(`mark-best-content-${replyId}`).innerHTML = `<div class="flex text-green-300">This is the best reply</div>`
+                }
+            }    
+        ).catch(error => console.error(error))
     }
 </script>

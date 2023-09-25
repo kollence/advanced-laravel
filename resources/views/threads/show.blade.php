@@ -32,7 +32,7 @@
                         <div class="text-gray-900 dark:text-gray-100">
                             @include('threads.reply-form')
                         </div>
-                        <div id="reply-holder" class="p-6 text-orange-500 dark:text-gray-100 bg-slate-600">
+                        <div id="replies-holder" class="p-6 text-orange-500 dark:text-gray-100 bg-slate-800">
                             <h4 style="font-size: 20px;">Replies</h4>
                             @forelse($replies as $reply)
                             @include('threads.reply')

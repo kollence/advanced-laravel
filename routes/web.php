@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\Api\UserAvatarController;
 use App\Http\Controllers\Auth\RegisteredUserController;
+use App\Http\Controllers\BestReplyController;
 use App\Http\Controllers\FavoritesController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\ReplyController;
@@ -43,6 +44,8 @@ Route::get('/threads/{channel}/{thread}/replies', [ReplyController::class, 'inde
 Route::post('/threads/{channel}/{thread}/replies', [ReplyController::class, 'store'])->name('threads-reply.store');
 Route::patch('replies/{reply}', [ReplyController::class, 'update'])->name('replies.update');
 Route::delete('replies/{reply}', [ReplyController::class, 'destroy'])->name('replies.delete');
+
+Route::post('/replies/{reply}/best',[BestReplyController::class, 'store'])->name('mark-best-reply.store');
 
 Route::post('/threads/{channel}/{thread}/subscriptions', [ThreadSubscriptionController::class, 'store'])->name('threads-subsriptions.store')->middleware('auth');
 Route::delete('/threads/{channel}/{thread}/subscriptions', [ThreadSubscriptionController::class, 'destroy'])->name('threads-subsriptions.delete')->middleware('auth');

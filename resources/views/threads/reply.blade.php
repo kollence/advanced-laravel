@@ -1,4 +1,4 @@
-<div id="reply-{{$reply->id}}" class="p-5 text-gray-900 dark:text-gray-100 rounded-md {{($reply->isBestReply()) ? 'bg-slate-500' : ''}}">
+<div id="reply-{{$reply->id}}" class="p-5 text-gray-900 dark:text-gray-100 rounded-md {{($reply->is_best) ? 'bg-slate-500' : ''}}">
     <h5 style="font-size: 20px;" class="flex justify-between">
         <a style=" color: orange;" href="{{route('profile.show', $reply->user->name)}}">{{ $reply->user->name }}</a>
         <div class="mt-1">said {{ $reply->created_at->diffForHumans() }} </div>
@@ -46,7 +46,7 @@
         </div>
         @can('update', $reply->thread)
             <div class="flex" id="mark-best-content-{{$reply->id}}" data-id="{{$reply->id}}">
-                @if(!$reply->isBestReply())      
+                @if(!$reply->is_best)      
                     <button type="button" id="mark-best-btn-{{$reply->id}}" onclick='markAsBestReply("{{$reply->id}}", this)' class="bg-teal-600/40 hover:bg-orange-900 border border-orange-300 border-1 font-bold my-1 px-2 rounded-md shadow-md">mark as best</button>
                 @else
                     <div class="flex text-green-300 best-reply-text">This is the best reply</div>

@@ -15,8 +15,8 @@ return new class extends Migration
     {
         Schema::create('replies', function (Blueprint $table) {
             $table->id();
-            $table->integer('thread_id')->unsigned()->index();
-            $table->integer('user_id')->unsigned()->index();
+            $table->unsignedInteger('user_id');
+            $table->unsignedInteger('thread_id');
             $table->text('body');
             $table->timestamps();
 

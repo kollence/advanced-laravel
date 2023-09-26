@@ -15,7 +15,7 @@ class Reply extends Model
 
     protected $guarded = ['id'];
     protected $fillable = ['thread_id', 'user_id', 'body'];
-    protected $appends = ['favorites_count', 'is_favorited'];
+    protected $appends = ['favorites_count', 'is_favorited', 'is_best'];
 
     // always load user with model results
     protected $with = ['user', 'favorites'];
@@ -68,20 +68,24 @@ class Reply extends Model
     }
 
     protected function body(): Attribute
-    {
-        // Regular expression pattern to match "@username"
+    {   // Regular expression pattern to match "@username"
         $pattern = '/@([A-Za-z0-9_]+)/';
-
         // Replace matches with the desired HTML anchor tag format
         $replacement = '<a href="/profile/$1" class="link">@$1</a>';
         return Attribute::make(
             set: fn (?string $value) => preg_replace($pattern, $replacement, $value),
         );
     }
-    
-    public function isBestReply()
+
+    protected function isBest(): Attribute
     {
-        return $this->thread->best_reply_id == $this->id;
-        
+        return Attribute::make(
+            get: fn () => $this->isBestReply(),
+        );
+    }
+    
+    public function isBestReply(): bool
+    {
+        return $this->thread->best_reply_id == $this->id; 
     }
 }

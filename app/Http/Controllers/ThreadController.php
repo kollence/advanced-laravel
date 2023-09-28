@@ -67,7 +67,7 @@ class ThreadController extends Controller
             'body' => $request->body
         ]);
 
-        return redirect('/threads/'.$thread->channel->slug)->with('flash', 'Your thread has been created!');
+        return redirect('/threads')->with('flash', 'Your thread has been created!');
     }
 
     /**

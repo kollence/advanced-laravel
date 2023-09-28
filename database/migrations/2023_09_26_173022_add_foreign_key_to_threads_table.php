@@ -2,6 +2,7 @@
 
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Schema;
 
 return new class extends Migration
@@ -27,7 +28,14 @@ return new class extends Migration
     {
         Schema::table('threads', function (Blueprint $table) {
             // Drop the foreign key constraint
-            $table->dropForeign(['best_reply_id']);
+            if (DB::getDriverName() !== 'sqlite') {
+                Schema::table('threads', function (Blueprint $table) {
+                    $table->dropForeign(['best_reply_id']);
+                });
+            }
+            Schema::table('threads', function (Blueprint $table) {
+                $table->dropColumn('best_reply_id');
+            });
         });
     }
 };

@@ -35,4 +35,13 @@ abstract class TestCase extends BaseTestCase
         return $this;
     }
 
+    protected function signInAsAdmin($user = null)
+    {
+        $user = $user ?: factoryCreate(\App\Models\User::class, ['confirmed_email' => true, 'name' => 'Admin']);
+
+        $this->actingAs($user);
+
+        return $this;
+    }
+
 }

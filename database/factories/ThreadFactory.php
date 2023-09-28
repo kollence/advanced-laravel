@@ -24,6 +24,7 @@ class ThreadFactory extends Factory
             'channel_id' => fn () => Channel::factory()->create()->id,
             'title' => fake()->sentence(),
             'body' => fake()->paragraph(),
+            'locked' => false,
         ];
     }
 }

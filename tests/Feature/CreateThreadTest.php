@@ -13,8 +13,6 @@ class CreateThreadTest extends TestCase
     protected function setUp() : void
     {
         parent::setUp();
-        //delete if its exist
-        $this->userWithConfirmedEmail  = $this->userWithConfirmedEmail();
     }
 
     public function test_guest_cant_create_thread()
@@ -33,7 +31,7 @@ class CreateThreadTest extends TestCase
     public function test_auth_user_can_create_thread()
     {
         //authenticate user
-        $this->signIn($this->userWithConfirmedEmail);
+        $this->signInConfirmedUser();
         //create thread
         $thread = factoryMake(\App\Models\Thread::class);
         $response = $this->post('/threads', $thread->toArray());
@@ -47,7 +45,7 @@ class CreateThreadTest extends TestCase
     public function test_created_thread_has_unique_slug_based_on_id()
     {
         //authenticate user
-        $this->signIn($this->userWithConfirmedEmail);
+        $this->signInConfirmedUser();
         //create thread
         $thread = factoryCreate(\App\Models\Thread::class, ['title' => 'Unique Title']);
         $thread2 = factoryCreate(\App\Models\Thread::class, ['title' => 'Unique Title']);
@@ -59,6 +57,7 @@ class CreateThreadTest extends TestCase
 
     public function test_auth_need_to_confirm_their_email_to_create_thread()
     {
+        $this->signInConfirmedUser();
         $this->publishThread()->assertRedirect('/threads')->assertSessionHas('flash');
     }
 
@@ -100,35 +99,30 @@ class CreateThreadTest extends TestCase
 
     public function test_a_thread_requires_a_title()
     {
-        $this->publishThread(['title' => null], $this->userWithConfirmedEmail)->assertSessionHasErrors('title');
+        $this->signInConfirmedUser();
+        $this->publishThread(['title' => null])->assertSessionHasErrors('title');
     }
 
     public function test_a_thread_requires_a_body()
     {
-        $this->publishThread(['body' => null], $this->userWithConfirmedEmail)->assertSessionHasErrors('body');
+        $this->signInConfirmedUser();
+        $this->publishThread(['body' => null])->assertSessionHasErrors('body');
     }
 
     public function test_a_thread_requires_a_valid_channel()
     {
+        $this->signInConfirmedUser();
         $cannels = \App\Models\Channel::factory(2)->create();
 
-        $this->publishThread(['channel_id' => null], $this->userWithConfirmedEmail)->assertSessionHasErrors('channel_id');
-        $this->publishThread(['channel_id' => 99999], $this->userWithConfirmedEmail)->assertSessionHasErrors('channel_id');
+        $this->publishThread(['channel_id' => null])->assertSessionHasErrors('channel_id');
+        $this->publishThread(['channel_id' => 99999])->assertSessionHasErrors('channel_id');
     }
 
-    public function publishThread($overrides = [], $user = null)
+    public function publishThread($overrides = [])
     {
-        $this->signIn($user);
-
         $thread = factoryMake(\App\Models\Thread::class, $overrides);
 
         return $this->post('/threads', $thread->toArray());
             
-    }
-
-    private function userWithConfirmedEmail()
-    {
-        $user = factoryCreate(\App\Models\User::class, ['confirmed_email' => true]);
-        return $user;
     }
 }

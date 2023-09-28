@@ -143,4 +143,14 @@ class ThreadController extends Controller
 
         return $threads->paginate(10);
     }
+
+    public function lockThread($channel, Thread $thread)
+    {
+        $thread->lock();
+    }
+
+    public function unlockThread($channel, Thread $thread)
+    {
+        $thread->unlock();
+    }
 }

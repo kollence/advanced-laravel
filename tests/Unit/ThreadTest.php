@@ -68,19 +68,19 @@ class ThreadTest extends TestCase
         Notification::assertSentTo(auth()->user(), ThreadWasReplied::class);
     }
 
-    function test_thread_belongs_to_channel()
+    public function test_thread_belongs_to_channel()
     {
         $this->assertInstanceOf('App\Models\Channel', $this->thread->channel);
     }
 
-    function test_thread_can_be_subscribed()
+    public function test_thread_can_be_subscribed()
     {
         $this->thread->subscribe($userId = 1);
 
         $this->assertEquals(1, $this->thread->subscriptions()->where('user_id', $userId)->count());
     }
 
-    function test_thread_can_be_unsubscribed()
+    public function test_thread_can_be_unsubscribed()
     {
 
         $this->thread->subscribe($userId = 1);
@@ -105,7 +105,7 @@ class ThreadTest extends TestCase
         $this->assertFalse($this->thread->hasUpdatesFor($user));
     }
 
-    function test_a_thread_record_each_visit()
+    public function test_a_thread_record_each_visit()
     {
         
         $thread = factoryMake(Thread::class, ['id' => 1]);
@@ -123,5 +123,14 @@ class ThreadTest extends TestCase
         $thread->visits()->flush();
         // Assert that the key no longer exists in Redis
         $this->assertEquals(0, $thread->visits()->count());
+    }
+
+    public function test_a_thread_may_be_locked()
+    {   //check for value on field locked on modal thread
+        $this->assertFalse($this->thread->locked);
+
+        $this->thread->lock();
+
+        $this->assertTrue($this->thread->locked);
     }
 }

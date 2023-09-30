@@ -24,6 +24,8 @@ return new class extends Migration
             $table->string('title');
             $table->text('body');
             $table->timestamps();
+
+            $table->foreignId('best_reply_id')->nullable()->constrained('replies')->onDelete('set null');
         });
          
     }

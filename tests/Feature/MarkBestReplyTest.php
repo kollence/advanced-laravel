@@ -47,23 +47,26 @@ class MarkBestReplyTest extends TestCase
         $this->post(route('mark-best-reply.store', $replies[1]->fresh()->id))->assertStatus(403);
     }
 
-    // // THIS TEST CAN NOT BE USED IN TESTING BECAUSE OF PROBLEM WITH DELETING ON TABLE MIGRATION LVL WITH SQLITE FOREIGN KEY
-    // // WHEN REPLY IS DELETED THEN THE BEST_REPLY_ID IS NOT SET ON NULL FROM THE THREADS TABLE
-    // // BUT IT WORKS IN DEVELOPMENT ENVIRONMENT.
-    // public function test_when_best_reply_is_deleted_then_delete_threads_best_reply_id()
-    // {
-    //     $this->signIn();
+    // //PROBLEM: THIS TEST CAN NOT BE USED IN TESTING BECAUSE OF PROBLEM WITH DELETING ON TABLE MIGRATION LVL WITH SQLITE FOREIGN KEY
+    //      // WHEN REPLY IS DELETED THEN THE BEST_REPLY_ID IS NOT SET ON NULL FROM THE THREADS TABLE
+    //      // BUT IT WORKS IN DEVELOPMENT ENVIRONMENT.
+    // SOLUTION: MOVE `REPLY` TABLE MIGRATION UP SO IT IS CREATED BEFORE THE `THREADS` TABLE
+    //      AND IN `THREAD` TABLE ADDED FOREIGN ID FOR `BEST_REPLY_ID` THAT REFERENCE TO TABLE `REPLY` WILL WORK
+    //      (that is only way. add_foreign_key_migration will not help) BAD FOR PRODUCTION
+    public function test_when_best_reply_is_deleted_then_delete_threads_best_reply_id()
+    {
+        $this->signIn();
 
-    //     $thread = factoryCreate(\App\Models\Thread::class, ['user_id' => auth()->id()]);
+        $thread = factoryCreate(\App\Models\Thread::class, ['user_id' => auth()->id()]);
 
-    //     $replies = factoryCreate(\App\Models\Reply::class, ['thread_id' =>$thread->id], 2);
+        $replies = factoryCreate(\App\Models\Reply::class, ['thread_id' =>$thread->id], 2);
 
-    //     $this->post(route('mark-best-reply.store', $replies[1]->id));
+        $this->post(route('mark-best-reply.store', $replies[1]->id));
 
-    //     $this->assertTrue($replies[1]->fresh()->isBestReply());
+        $this->assertTrue($replies[1]->fresh()->isBestReply());
 
-    //     $replies[1]->delete();
-    //     // dd(\App\Models\Reply::all('id'));
-    //     $this->assertNull($thread->fresh()->best_reply_id);
-    // }
+        $replies[1]->delete();
+        
+        $this->assertNull($thread->fresh()->best_reply_id);
+    }
 }

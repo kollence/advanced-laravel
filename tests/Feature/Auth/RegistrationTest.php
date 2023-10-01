@@ -48,7 +48,7 @@ class RegistrationTest extends TestCase
         Mail::assertSent(ConfirmYourEmail::class);
     }
 
-    public function test_autch_can_get_email_with_valid_link_for_confirmation(): void
+    public function test_auth_can_get_email_with_valid_link_for_confirmation(): void
     {
 
         $this->post('/register', [
@@ -57,18 +57,18 @@ class RegistrationTest extends TestCase
             'password' => 'password',
             'password_confirmation' => 'password',
         ]);
-        // first user that is registerd
-        $registerdUser = User::whereName('JohnDoe')->first();
-        // dd($registerdUser);
-        $this->assertFalse($registerdUser->confirmed_email);
+        // first user that is registered
+        $registeredUser = User::whereName('JohnDoe')->first();
+        // dd($registeredUser);
+        $this->assertFalse($registeredUser->confirmed_email);
 
-        $this->assertNotNull($registerdUser->confirmation_token);
+        $this->assertNotNull($registeredUser->confirmation_token);
         
-        $response = $this->get(route('register.confirm', ['token'=> $registerdUser->confirmation_token]));
+        $response = $this->get(route('register.confirm', ['token'=> $registeredUser->confirmation_token]));
 
-        $this->assertTrue($registerdUser->fresh()->confirmed_email);
+        $this->assertTrue($registeredUser->fresh()->confirmed_email);
 
-        $this->assertNull($registerdUser->fresh()->confirmation_token);
+        $this->assertNull($registeredUser->fresh()->confirmation_token);
 
         $response->assertRedirect(route('threads.create'));
     }

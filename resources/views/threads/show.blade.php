@@ -29,9 +29,17 @@
                             </div>
                             <br>
                         </div>
-                        <div class="text-gray-900 dark:text-gray-100">
-                            @include('threads.reply-form')
+                        
+                        <div class="text-gray-900 dark:text-gray-100 flex justify-center" id="reply-section">
+                            <div id="dynamic-section">
+                            @if(!$thread->locked)
+                                @include('threads.reply-form')
+                            @else
+                                <h1 class="text-red-300">Thread has been locked. No more replies</h1>
+                            @endif
+                            </div>
                         </div>
+                        
                         <div id="replies-holder" class="p-6 text-orange-500 dark:text-gray-100 bg-slate-800">
                             <h4 style="font-size: 20px;">Replies</h4>
                             @forelse($replies as $reply)
@@ -61,8 +69,13 @@
                 <div class="basis-1/1" id="comments_number">Comments: {{$thread->replies_count}}</div>
 
                 <br>
-                <button type="button" id="subscribe-btn" onclick='subscribe("{{$thread->id}}", this)' data-subscribed="{{$thread->is_subscribed_to ? '1' : '0'}}" class="bg-transparent {{$thread->is_subscribed_to ? 'hover:bg-red-600 border-red-700' : 'hover:bg-blue-600 border-blue-700'}} border border-2 font-bold py-2 px-4 rounded-full shadow-md">
+                <button type="button" id="subscribe-btn" onclick='subscribe("{{$thread->id}}")' data-subscribed="{{$thread->is_subscribed_to ? '1' : '0'}}" class="bg-transparent {{$thread->is_subscribed_to ? 'hover:bg-red-600 border-red-700' : 'hover:bg-blue-400 border-blue-700 hover:text-black'}} border border-2 font-bold py-2 px-4 rounded-full shadow-md">
                     {{$thread->is_subscribed_to ? 'Subscribed' : 'Subscribe'}}
+                </button>
+
+                <br>
+                <button type="button" id="lock-btn" onclick='lock("{{$thread->id}}", this)' data-locked="{{$thread->is_locked ? '1' : '0'}}" class="bg-transparent {{$thread->is_locked ? 'hover:bg-red-600 border-red-700' : 'hover:bg-green-600 border-green-700 hover:text-black'}} border border-2 font-bold py-2 px-4 rounded-full shadow-md">
+                    {{$thread->is_locked ? 'Locked' : 'Unlocked'}}
                 </button>
             </div>
         </div>
@@ -106,6 +119,53 @@
                 })
                 .catch(error => {
                     console.error('Error marking thread as subscribed:', error);
+                });
+        }
+
+        function lock(replyId, btn) {
+            let dynamicSection = document.getElementById('dynamic-section');
+            let Route = "";
+            if(btn.getAttribute('data-locked') == '1'){
+                Route = "{{$thread->path()}}" + '/unlock';
+            }else if(btn.getAttribute('data-locked') == '0'){
+                Route = "{{$thread->path()}}" + '/lock';
+            }
+            // console.log(Route);
+            // const replyDiv = document.getElementById(`reply-${replyId}`);
+
+            const formData = new FormData();
+            formData.append('_token', '{{ csrf_token() }}');
+
+            fetch(Route, {
+                    method: 'POST',
+                    headers: {
+                        'X-Requested-With': 'XMLHttpRequest',
+                    },
+                    body: formData,
+                })
+                .then(response => {
+                    if (response.ok) {
+                        if (btn.getAttribute('data-locked') == '0') {
+                            btn.innerHTML = 'Locked';
+                            btn.setAttribute('data-locked', 1);
+                            dynamicSection.innerHTML = `<h1 class="text-red-300">Thread has been locked. No more replies</h1>`
+                            btn.classList.add("hover:bg-red-600", "border-red-700");
+                            btn.classList.remove("hover:bg-green-600", "border-green-700", "hover:text-black");
+                        } else {
+                            btn.innerHTML = 'Unlocked';
+                            btn.setAttribute('data-locked', 0);
+                            dynamicSection.innerHTML = `
+                                @include('threads.reply-form')
+                            `;
+                            btn.classList.add("hover:bg-green-600", "border-green-700", "hover:text-black");
+                            btn.classList.remove("hover:bg-red-600", "border-red-700");
+                        }
+                    } else {
+                        console.error('Error marking thread as locked:', response);
+                    }
+                })
+                .catch(error => {
+                    console.error('Error marking thread as locked:', error);
                 });
         }
     </script>

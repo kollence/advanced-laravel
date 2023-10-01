@@ -148,11 +148,17 @@ class ThreadController extends Controller
     {
         // $thread->lock();
         $thread->update(['locked' => true]);
+        if(request()->expectsJson()){
+            return response(['locked' => $thread->refresh()->locked], 200);
+        }
     }
 
     public function unlock($channel, Thread $thread)
     {
         // $thread->unlock();
         $thread->update(['locked' => false]);
+        if(request()->expectsJson()){
+            return response(['locked' => $thread->refresh()->locked], 200);
+        }
     }
 }

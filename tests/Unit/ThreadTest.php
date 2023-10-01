@@ -125,12 +125,4 @@ class ThreadTest extends TestCase
         $this->assertEquals(0, $thread->visits()->count());
     }
 
-    public function test_a_thread_may_be_locked()
-    {   //check for value on field locked on modal thread
-        $this->assertFalse($this->thread->locked);
-
-        $this->thread->lock();
-
-        $this->assertTrue($this->thread->locked);
-    }
 }

@@ -31,11 +31,11 @@
                         </div>
                         
                         <div class="text-gray-900 dark:text-gray-100 flex justify-center" id="reply-section">
-                            <div id="dynamic-section">
+                            <div id="dynamic-section" class="grow grid justify-items-stretch">
                             @if(!$thread->locked)
                                 @include('threads.reply-form')
                             @else
-                                <h1 class="text-red-300">Thread has been locked. No more replies</h1>
+                                <h1 class="text-red-300 ml-5 text-xl">Thread has been locked. No more replies</h1>
                             @endif
                             </div>
                         </div>
@@ -74,8 +74,8 @@
                 </button>
 
                 <br>
-                <button type="button" id="lock-btn" onclick='lock("{{$thread->id}}", this)' data-locked="{{$thread->is_locked ? '1' : '0'}}" class="bg-transparent {{$thread->is_locked ? 'hover:bg-red-600 border-red-700' : 'hover:bg-green-600 border-green-700 hover:text-black'}} border border-2 font-bold py-2 px-4 rounded-full shadow-md">
-                    {{$thread->is_locked ? 'Locked' : 'Unlocked'}}
+                <button type="button" id="lock-btn" onclick='lock("{{$thread->id}}", this)' data-locked="{{$thread->locked ? '1' : '0'}}" class="bg-transparent {{$thread->locked ? 'hover:bg-red-600 border-red-700' : 'hover:bg-green-600 border-green-700 hover:text-black'}} border border-2 font-bold py-2 px-4 rounded-full shadow-md">
+                    {{$thread->locked ? 'Locked' : 'Unlocked'}}
                 </button>
             </div>
         </div>
@@ -125,9 +125,10 @@
         function lock(replyId, btn) {
             let dynamicSection = document.getElementById('dynamic-section');
             let Route = "";
-            if(btn.getAttribute('data-locked') == '1'){
+            let dataValue = btn.getAttribute('data-locked');
+            if(dataValue == '1'){
                 Route = "{{$thread->path()}}" + '/unlock';
-            }else if(btn.getAttribute('data-locked') == '0'){
+            }else if(dataValue == '0'){
                 Route = "{{$thread->path()}}" + '/lock';
             }
             // console.log(Route);
@@ -143,15 +144,15 @@
                     },
                     body: formData,
                 })
+                .then(response => response.json())
                 .then(response => {
-                    if (response.ok) {
-                        if (btn.getAttribute('data-locked') == '0') {
+                        if (dataValue == "0") {
                             btn.innerHTML = 'Locked';
                             btn.setAttribute('data-locked', 1);
-                            dynamicSection.innerHTML = `<h1 class="text-red-300">Thread has been locked. No more replies</h1>`
+                            dynamicSection.innerHTML = `<h1 class="text-red-300 ml-5 text-xl">Thread has been locked. No more replies</h1>`
                             btn.classList.add("hover:bg-red-600", "border-red-700");
                             btn.classList.remove("hover:bg-green-600", "border-green-700", "hover:text-black");
-                        } else {
+                        }else if(dataValue == "1"){
                             btn.innerHTML = 'Unlocked';
                             btn.setAttribute('data-locked', 0);
                             dynamicSection.innerHTML = `
@@ -159,10 +160,9 @@
                             `;
                             btn.classList.add("hover:bg-green-600", "border-green-700", "hover:text-black");
                             btn.classList.remove("hover:bg-red-600", "border-red-700");
+                        }else{
+                            console.log('error: data value not found!');
                         }
-                    } else {
-                        console.error('Error marking thread as locked:', response);
-                    }
                 })
                 .catch(error => {
                     console.error('Error marking thread as locked:', error);

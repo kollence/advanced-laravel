@@ -38,8 +38,8 @@ Route::post('threads', [ThreadController::class, 'store'])->name('threads.store'
 Route::get('threads/{channel?}', [ThreadController::class, 'index'])->name('threads.index');
 Route::delete('threads/{channel}/{thread}', [ThreadController::class, 'destroy'])->name('threads.delete');
 
-Route::post('threads/{channel}/{thread}/lock', [ThreadController::class, 'lockThread'])->name('threads.lock')->middleware(Admin::class);
-Route::post('threads/{channel}/{thread}/unlock', [ThreadController::class, 'unlockThread'])->name('threads.unlock')->middleware(Admin::class);
+Route::post('threads/{channel}/{thread}/lock', [ThreadController::class, 'lock'])->name('threads.lock')->middleware(Admin::class);
+Route::post('threads/{channel}/{thread}/unlock', [ThreadController::class, 'unlock'])->name('threads.unlock')->middleware(Admin::class);
 
 Route::post('/replies/{reply}/favorites', [FavoritesController::class, 'store'])->name('favorites.store');
 Route::delete('/replies/{reply}/favorites', [FavoritesController::class, 'destroy'])->name('favorites.delete');

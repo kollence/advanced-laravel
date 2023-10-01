@@ -69,14 +69,18 @@
                 <div class="basis-1/1" id="comments_number">Comments: {{$thread->replies_count}}</div>
 
                 <br>
+                @auth
                 <button type="button" id="subscribe-btn" onclick='subscribe("{{$thread->id}}")' data-subscribed="{{$thread->is_subscribed_to ? '1' : '0'}}" class="bg-transparent {{$thread->is_subscribed_to ? 'hover:bg-red-600 border-red-700' : 'hover:bg-blue-400 border-blue-700 hover:text-black'}} border border-2 font-bold py-2 px-4 rounded-full shadow-md">
                     {{$thread->is_subscribed_to ? 'Subscribed' : 'Subscribe'}}
                 </button>
-
+                
                 <br>
-                <button type="button" id="lock-btn" onclick='lock("{{$thread->id}}", this)' data-locked="{{$thread->locked ? '1' : '0'}}" class="bg-transparent {{$thread->locked ? 'hover:bg-red-600 border-red-700' : 'hover:bg-green-600 border-green-700 hover:text-black'}} border border-2 font-bold py-2 px-4 rounded-full shadow-md">
-                    {{$thread->locked ? 'Locked' : 'Unlocked'}}
-                </button>
+                @can('update', $thread)
+                    <button type="button" id="lock-btn" onclick='lock("{{$thread->id}}", this)' data-locked="{{$thread->locked ? '1' : '0'}}" class="bg-transparent {{$thread->locked ? 'hover:bg-red-600 border-red-700' : 'hover:bg-green-600 border-green-700 hover:text-black'}} border border-2 font-bold py-2 px-4 rounded-full shadow-md">
+                        {{$thread->locked ? 'Locked' : 'Unlocked'}}
+                    </button>
+                @endcan
+                @endauth
             </div>
         </div>
     </div>

@@ -17,6 +17,7 @@ class Thread extends Model
     protected $guarded = ['id'];
     protected $fillable = ['user_id', 'channel_id', 'title', 'body', 'slug', 'best_reply_id', 'locked'];
     protected $appends = ['is_subscribed_to'];
+    protected $casts = ['locked' => 'boolean'];
                         // 1. here you CAN'T call withoutGlobalScopes() and detached
     protected $with = ['user','channel'];
     protected static function booted()
@@ -129,13 +130,18 @@ class Thread extends Model
         $this->update(['best_reply_id' => $reply->id]);
     }
 
-    public function lock()
-    {
-        $this->update(['locked' => true]);
-    }
+    // public function lock()
+    // {
+    //     $this->update(['locked' => true]);
+    // }
 
-    public function unlock()
-    {
-        $this->update(['locked' => false]);
-    }
+    // public function unlock()
+    // {
+    //     $this->update(['locked' => false]);
+    // }
+
+    // public function isLocked()
+    // {
+    //     return (bool) $this->locked;
+    // }
 }

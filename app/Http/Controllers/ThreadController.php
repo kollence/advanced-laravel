@@ -8,6 +8,8 @@ use Illuminate\Http\Request;
 use App\Filters\ThreadFilters;
 use App\Redis\TrendingThreads;
 use App\Rules\SpamFree;
+use Closure;
+use Illuminate\Support\Facades\Http;
 
 class ThreadController extends Controller
 {
@@ -58,6 +60,18 @@ class ThreadController extends Controller
             'title' => ['required', new SpamFree],
             'body' => ['required', new SpamFree],
             'channel_id' => ['required','exists:channels,id'],
+            'g-recaptcha-response' => ['required', function($attribute, $value, Closure $fail){
+                $google_response = 'https://www.google.com/recaptcha/api/siteverify';
+                $secret = config('services.recaptcha.secret');
+                $response = Http::asForm()->post($google_response, [
+                    'secret' => $secret,
+                    'response' => $value
+                ]);
+                $response = json_decode($response->body());
+                if(!$response->success){
+                    return $fail('The reCAPTCHA verification has failed. Please try again.');
+                }
+            }]
         ]);
 
         $thread = Thread::create([

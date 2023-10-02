@@ -1,6 +1,6 @@
 <x-guest-layout>
 <div class="max-w-2xl mx-auto grid grid-cols-1 gap-4 mt-7">
-    <form method="POST" action="{{ route('register') }}">
+    <form method="POST" action="{{ route('register') }}" id="registration-form">
         @csrf
 
         <!-- Name -->
@@ -45,10 +45,21 @@
                 {{ __('Already registered?') }}
             </a>
 
-            <x-primary-button class="ml-4">
+            <x-primary-button class="ml-4 g-recaptcha"
+                data-sitekey="{{config('services.recaptcha.sitekey')}}" 
+                data-callback='onSubmit' 
+                data-action='submit'
+            >            
                 {{ __('Register') }}
             </x-primary-button>
         </div>
     </form>
 </div>
+@push('scripts')
+    <script>
+        function onSubmit(token) {
+            document.getElementById("registration-form").submit();
+        }
+    </script>
+@endpush
 </x-guest-layout>

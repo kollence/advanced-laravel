@@ -79,6 +79,10 @@
                     <button type="button" id="lock-btn" onclick='lock("{{$thread->id}}", this)' data-locked="{{$thread->locked ? '1' : '0'}}" class="bg-transparent {{$thread->locked ? 'hover:bg-red-600 border-red-700' : 'hover:bg-green-600 border-green-700 hover:text-black'}} border border-2 font-bold py-2 px-4 rounded-full shadow-md">
                         {{$thread->locked ? 'Locked' : 'Unlocked'}}
                     </button>
+                    <br>
+                    <button type="button" id="un-mark-btn" onclick='unMarkBestReply("{{$thread->best_reply_id}}", this)' {{$thread->best_reply_id == null ? 'disabled' : ''}} data-unmark-reply="{{$thread->best_reply_id}}" class="bg-transparent {{$thread->best_reply_id !== null ? 'hover:bg-orange-400 border-orange-500  hover:text-black' : 'hover:bg-gray-600 border-gray-700 hover:text-black'}} border border-2 font-bold py-2 px-4 rounded-full shadow-md">
+                        {{$thread->best_reply_id ? 'Un mark the best reply' : 'There is not best reply yet'}}
+                    </button>
                 @endcan
                 @endauth
             </div>
@@ -172,5 +176,29 @@
                     console.error('Error marking thread as locked:', error);
                 });
         }
+        function unMarkBestReply(replyId, button) {
+        // console.log(replyId,button);
+        
+        const formData = new FormData();
+        formData.append('_token', '{{ csrf_token() }}');
+        fetch('/replies/'+replyId+'/un-mark-best', {
+                method: 'POST',
+                body: formData,
+            }).then(response => {
+                if(response.ok){
+                    document.querySelectorAll('[id^="reply-"]').forEach(e => {
+                        e.style.backgroundColor="transparent"
+                    })
+                    document.querySelectorAll('[id^="mark-best-content-"]').forEach(e => {
+                        e.innerHTML = `<button type="button" id="mark-best-btn-${replyId}" onclick='markAsBestReply("`+e.getAttribute('data-id')+`", this)' class="bg-teal-600/40 hover:bg-orange-900 border border-orange-300 border-1 font-bold my-1 px-2 rounded-md shadow-md">mark as best</button>`
+                    })
+                    button.classList.add("hover:bg-gray-600", "border-gray-700");
+                    button.classList.remove("hover:bg-orange-400", "border-orange-500", "hover:text-black");
+                    button.innerHTML = 'There is not best reply yet';
+
+                }
+            }    
+        ).catch(error => console.error(error))
+    }
     </script>
 </x-guest-layout>

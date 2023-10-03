@@ -69,4 +69,38 @@ class MarkBestReplyTest extends TestCase
         
         $this->assertNull($thread->fresh()->best_reply_id);
     }
+
+    public function test_un_mark_best_reply()
+    {
+        $this->signIn();
+
+        $thread = factoryCreate(\App\Models\Thread::class, ['user_id' => auth()->id()]);
+        $replies = factoryCreate(\App\Models\Reply::class, ['thread_id' =>$thread->id], 2);
+
+        $this->post(route('mark-best-reply.store', $replies[1]->id));
+
+        $this->assertTrue($replies[1]->fresh()->isBestReply());
+
+        $this->post(route('un-mark-best-reply.destroy', $replies[1]->id));
+
+        $this->assertFalse($replies[1]->fresh()->isBestReply());
+    }
+
+    public function test_only_the_thread_creator_can_un_mark_any_best_reply()
+    {
+        $this->signIn();
+
+        $thread = factoryCreate(\App\Models\Thread::class, ['user_id' => auth()->id()]);
+        $reply1 = factoryCreate(\App\Models\Reply::class, ['thread_id' =>$thread->id]);
+
+        $this->post(route('mark-best-reply.store', $reply1->id));
+        $this->assertTrue($reply1->fresh()->isBestReply());
+
+        $this->signIn();
+
+
+        $this->post(route('un-mark-best-reply.destroy', $reply1->id))->assertStatus(403);
+
+        $this->assertTrue($reply1->fresh()->isBestReply());
+    }
 }

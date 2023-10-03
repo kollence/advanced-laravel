@@ -222,25 +222,29 @@
     }
     function markAsBestReply(replyId, button) {
         // console.log(replyId,button);
-        
+        const unMarkBtn = document.getElementById(`un-mark-btn`);
         const formData = new FormData();
         formData.append('_token', '{{ csrf_token() }}');
-        fetch('/replies/'+replyId+'/best', {
+        fetch('/replies/'+replyId+'/mark-best', {
                 method: 'POST',
                 body: formData,
-            }).then(response => {
-                if(response.ok){
-                    document.querySelectorAll('[id^="reply-"]').forEach(e => {
-                        e.style.backgroundColor="transparent"
-                    })
-                    document.querySelectorAll('[id^="mark-best-content-"]').forEach(e => {
-                        e.innerHTML = `<button type="button" id="mark-best-btn-{{$reply->id}}" onclick='markAsBestReply("`+e.getAttribute('data-id')+`", this)' class="bg-teal-600/40 hover:bg-orange-900 border border-orange-300 border-1 font-bold my-1 px-2 rounded-md shadow-md">mark as best</button>`
-                    })
-                    document.getElementById(`reply-${replyId}`).style.backgroundColor = '#64748b'
-                    // button.remove()
-                    document.getElementById(`mark-best-content-${replyId}`).innerHTML = `<div class="flex text-green-300">This is the best reply</div>`
-                }
+        }).then(response => {
+            if(response.ok){
+                document.querySelectorAll('[id^="reply-"]').forEach(e => {
+                    e.style.backgroundColor="transparent"
+                })
+                document.querySelectorAll('[id^="mark-best-content-"]').forEach(e => {
+                    e.innerHTML = `<button type="button" id="mark-best-btn-{{$reply->id}}" onclick='markAsBestReply("`+e.getAttribute('data-id')+`", this)' class="bg-teal-600/40 hover:bg-orange-900 border border-orange-300 border-1 font-bold my-1 px-2 rounded-md shadow-md">mark as best</button>`
+                })
+                document.getElementById(`reply-${replyId}`).style.backgroundColor = '#64748b'
+
+                document.getElementById(`mark-best-content-${replyId}`).innerHTML = `<div class="flex text-green-300">This is the best reply</div>`
+                // set button to un mark best reply
+                unMarkBtn.classList.add("hover:bg-orange-400", "border-orange-500", "hover:text-black");
+                unMarkBtn.classList.remove("hover:bg-gray-600", "border-gray-700");
+                unMarkBtn.innerHTML = 'Un mark the best reply';
+                    
             }    
-        ).catch(error => console.error(error))
+        }).catch(error => console.error(error))
     }
 </script>

@@ -49,7 +49,8 @@ Route::post('/threads/{channel}/{thread}/replies', [ReplyController::class, 'sto
 Route::patch('replies/{reply}', [ReplyController::class, 'update'])->name('replies.update');
 Route::delete('replies/{reply}', [ReplyController::class, 'destroy'])->name('replies.delete');
 
-Route::post('/replies/{reply}/best',[BestReplyController::class, 'store'])->name('mark-best-reply.store');
+Route::post('/replies/{reply}/mark-best',[BestReplyController::class, 'store'])->name('mark-best-reply.store');
+Route::post('/replies/{reply}/un-mark-best',[BestReplyController::class, 'destroy'])->name('un-mark-best-reply.destroy');
 
 Route::post('/threads/{channel}/{thread}/subscriptions', [ThreadSubscriptionController::class, 'store'])->name('threads-subsriptions.store')->middleware('auth');
 Route::delete('/threads/{channel}/{thread}/subscriptions', [ThreadSubscriptionController::class, 'destroy'])->name('threads-subsriptions.delete')->middleware('auth');

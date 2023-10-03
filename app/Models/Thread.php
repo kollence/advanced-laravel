@@ -128,4 +128,12 @@ class Thread extends Model
     {
         $this->update(['best_reply_id' => $reply->id]);
     }
+
+    public function unMarkBestReply(Reply $reply)
+    {
+        if ($this->best_reply_id == $reply->id) {
+            $this->update(['best_reply_id' => null]);
+        }
+    }
+
 }

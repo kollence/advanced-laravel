@@ -4,11 +4,14 @@ namespace Tests\Feature;
 
 use App\Models\Activity;
 use App\Models\Channel;
+use Illuminate\Foundation\Testing\WithFaker;
+use Illuminate\Support\Facades\Http;
 use Tests\TestCase;
+use Mockery;
 
 class CreateThreadTest extends TestCase
 {
-    protected $userWithConfirmedEmail;
+    use WithFaker;
 
     protected function setUp() : void
     {
@@ -30,10 +33,13 @@ class CreateThreadTest extends TestCase
 
     public function test_auth_user_can_create_thread()
     {
+        Http::fake([
+            'www.google.com/recaptcha/api/siteverify*' => Http::response(['success' => true]),
+        ]);
         //authenticate user
         $this->signInConfirmedUser();
         //create thread
-        $thread = factoryMake(\App\Models\Thread::class);
+        $thread = factoryMake(\App\Models\Thread::class, ['g-recaptcha-response' => 'g-recaptcha-response']);
         $response = $this->post('/threads', $thread->toArray());
         //redirect to thread page taking from ThreadController redirect
         $redirect = $response->headers->get('location');
@@ -58,7 +64,7 @@ class CreateThreadTest extends TestCase
     public function test_auth_need_to_confirm_their_email_to_create_thread()
     {
         $this->signInConfirmedUser();
-        $this->publishThread()->assertRedirect('/threads')->assertSessionHas('flash');
+        $this->publishThread(['g-recaptcha-response' => 'g-recaptcha-response'])->assertRedirect('/threads')->assertSessionHas('flash');
     }
 
     public function test_unauth_cant_delete_thread()
@@ -93,7 +99,7 @@ class CreateThreadTest extends TestCase
         //     'subject_id' => $reply->id,
         //     'subject_type' => get_class($reply),
         // ]);
-        // Activity table is empty because it was deleted automatically all asociated activities
+        // Activity table is empty because it was deleted automatically all associated activities
         $this->assertEquals(0, Activity::count());
     }
 
@@ -109,10 +115,16 @@ class CreateThreadTest extends TestCase
         $this->publishThread(['body' => null])->assertSessionHasErrors('body');
     }
 
+    public function test_thread_requires_recaptcha_verification()
+    {
+        $this->signInConfirmedUser();
+        $this->publishThread(['g-recaptcha-response' => null])->assertSessionHasErrors('g-recaptcha-response');
+    }
+
     public function test_a_thread_requires_a_valid_channel()
     {
         $this->signInConfirmedUser();
-        $cannels = \App\Models\Channel::factory(2)->create();
+        $channels = \App\Models\Channel::factory(2)->create();
 
         $this->publishThread(['channel_id' => null])->assertSessionHasErrors('channel_id');
         $this->publishThread(['channel_id' => 99999])->assertSessionHasErrors('channel_id');
@@ -120,6 +132,10 @@ class CreateThreadTest extends TestCase
 
     public function publishThread($overrides = [])
     {
+        Http::fake([
+            'www.google.com/recaptcha/api/siteverify*' => Http::response(['success' => true]),
+        ]);
+
         $thread = factoryMake(\App\Models\Thread::class, $overrides);
 
         return $this->post('/threads', $thread->toArray());

@@ -41,8 +41,8 @@ class ThreadController extends Controller
      */
     public function create()
     {
-        $channels = Channel::all();
-        return view('threads.create', compact('channels') );
+        
+        return view('threads.create' );
     }
 
     /**
@@ -100,7 +100,7 @@ class ThreadController extends Controller
      */
     public function edit(Thread $thread)
     {
-        //
+        return view('threads.edit', compact('thread'));
     }
 
     /**
@@ -112,7 +112,18 @@ class ThreadController extends Controller
      */
     public function update(Request $request, Thread $thread)
     {
-        //
+        // dd('test');
+        $this->authorize('update', $thread);
+        $data = $request->validate([
+            'channel_id' => ['sometimes'],
+            'title' => ['sometimes', new SpamFree],
+            'body' => ['sometimes', new SpamFree],
+            'channel_id' => ['sometimes','exists:channels,id'],
+        ]);
+
+        $thread->update($data);
+
+        return redirect($thread->path())->with('flash', 'Your thread has been updated!');
     }
 
     /**

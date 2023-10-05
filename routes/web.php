@@ -33,6 +33,8 @@ Route::get('/register/confirm', [RegisteredUserController::class, 'confirm'])
 ->name('register.confirm');
 //write route for threads with optional channel param
 Route::get('threads/create', [ThreadController::class, 'create'])->name('threads.create');
+Route::get('threads/{thread}/edit', [ThreadController::class, 'edit'])->name('threads.edit');
+Route::patch('threads/{thread}/update', [ThreadController::class, 'update'])->name('threads.update');
 Route::get('threads/{channel}/{thread}', [ThreadController::class, 'show'])->name('threads.show');
 Route::post('threads', [ThreadController::class, 'store'])->name('threads.store')->middleware(ConfirmedEmailCanCreate::class);
 Route::get('threads/{channel?}', [ThreadController::class, 'index'])->name('threads.index');

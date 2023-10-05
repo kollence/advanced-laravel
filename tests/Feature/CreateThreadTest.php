@@ -125,4 +125,30 @@ class CreateThreadTest extends TestCase
         return $this->post('/threads', $thread->toArray());
             
     }
+
+    public function test_guest_cant_edit_thread()
+    {   // with Exception Handling
+        $this->withExceptionHandling();
+        // some existing thread
+        $thread = factoryCreate(\App\Models\Thread::class);
+        // can't go to page
+        $this->get(route('threads.edit' , $thread))
+        ->assertRedirect('/login'); 
+    }
+
+    public function test_only_creator_of_the_thread_can_update_it()
+    {
+        //authenticate user
+        $this->signInConfirmedUser();
+        //update thread
+        $thread = factoryCreate(\App\Models\Thread::class, ['user_id' => auth()->id()]);
+        $this->patch(route('threads.update', $thread), ['title' => 'Changed'])
+        ->assertRedirect($thread->fresh()->path());
+        $this->assertEquals('Changed' , $thread->fresh()->title);
+
+        //update thread with different user
+        $this->signIn(factoryCreate(\App\Models\User::class));
+        $this->patch(route('threads.update', $thread->fresh()), ['title' => 'Changed'])
+        ->assertStatus(403); //Forbidden
+    }
 }

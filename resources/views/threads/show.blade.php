@@ -6,12 +6,13 @@
             <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
                 <div class="bg-white dark:bg-gray-800 overflow-hidden shadow-sm sm:rounded-lg">
                     <div class="p-6 text-gray-900 dark:text-gray-300 flex justify-between">
-                        <a href="{{url('threads/create')}}" class="bg-transparent hover:bg-blue-600 border border-blue-700 border-2 font-bold py-2 px-4 rounded-full shadow-md">+ Thread</a>
                         @can('update', $thread)
+                        <a href="{{route('threads.edit', $thread->slug)}}" class="bg-transparent hover:text-gray-900 hover:bg-orange-400 border border-orange-500 border-2 font-bold py-2 px-4 rounded-full shadow-md">+ Edit</a>
+                        
                         <form method="POST" action="{{ url($thread->path()) }}">
                             @csrf
                             @method('DELETE')
-                            <button type="submit" class="flex bg-transparent hover:bg-red-600 border border-red-700 border-2 font-bold py-2 px-4 rounded-full shadow-md" onclick="event.preventDefault();
+                            <button type="submit" class="flex bg-transparent hover:text-gray-900 hover:bg-red-600 border border-red-700 border-2 font-bold py-2 px-4 rounded-full shadow-md" onclick="event.preventDefault();
                                             this.closest('form').submit();">
                                 {{ __('Delete') }}
                             </button>

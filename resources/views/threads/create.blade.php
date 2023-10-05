@@ -6,7 +6,7 @@
 <x-guest-layout>
     <x-slot name="header">
         <h2 class="font-semibold text-xl text-gray-800 dark:text-gray-200 leading-tight">
-            {{ __('Forum Threads') }}
+            {{ __('Create Forum Threads') }}
         </h2>
     </x-slot>
     <div class="max-w-7xl mx-auto">
@@ -45,7 +45,12 @@
                 <x-input-error :messages="$errors->get('password')" class="mt-2" />
             </div>
     
-            <button class="border rounded-md border-2 border-gray-500/100 text-white p-2" type="submit">Submit</button>
+            <div class="mt-4">
+                <button class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-1 px-4 rounded-full" type="submit">Submit</button>
+                <span class="ml-7">
+                    <a href="{{ url('threads') }}" class="bg-gray-500 hover:bg-gray-700 text-white font-bold py-2 px-4 rounded-full">Cancel</a>
+                </span>
+            </div>
     
         </form>
 

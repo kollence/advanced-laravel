@@ -41,7 +41,7 @@ class ThreadController extends Controller
      */
     public function create()
     {
-        
+        // channels are loading globally to views from AppServiceProvider
         return view('threads.create' );
     }
 

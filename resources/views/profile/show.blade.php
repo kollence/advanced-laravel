@@ -28,7 +28,7 @@
                         @foreach($activity as $record)
                                 <!-- check if blade view exists -->
                             @if(view()->exists("profile.activities.{$record->type}"))
-                                <!-- polimorph in blade || event.type -->
+                                <!-- polymorph in blade || event.type -->
                                 @include("profile.activities.{$record->type}", ['activity'=> $record])
                             @endif
                         @endforeach

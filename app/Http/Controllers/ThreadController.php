@@ -22,8 +22,20 @@ class ThreadController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function index(Channel $channel, ThreadFilters $filters, TrendingThreads $trendingThreads)
-    {   // logic moved to method that will be later moved to service
+    {   
+        $search_param = request()->query('q');
+        // dd(request()->query('q'));
+        // logic moved to method that will be later moved to service
         $threads = $this->getThreads($channel, $filters);
+        if($search_param){
+            $threads->where(function ($query) use ($search_param)  {
+                $query->where('title', 'LIKE', "%{$search_param}%")
+                ->orWhere('body', 'LIKE', "%{$search_param}%");
+            })->orWhereHas('user', function ($query) use ($search_param) {
+                $query->where('name', 'LIKE', "%{$search_param}%");
+            });
+        }
+        $threads = $threads->paginate(10);
         // FOR TESTING PURPOSES
         if(request()->wantsJson()){
             return $threads;
@@ -152,7 +164,7 @@ class ThreadController extends Controller
             $threads->where('channel_id', $channel->id);
         }
 
-        return $threads->paginate(10);
+        return $threads;
     }
 
     public function lock($channel, Thread $thread)

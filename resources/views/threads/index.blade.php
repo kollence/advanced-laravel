@@ -2,7 +2,57 @@
     <!-- @include('threads.filters') -->
     <div class="max-w-7x1 mx-auto">
         <div class="flex px-8">
-            <div class="w-2/3">
+            <div class="w-1/6">
+                <div class="px-1 py-12">
+                    <div class="mx-auto sm:px-3 lg:px-4">
+                        <div class="bg-white dark:bg-gray-800 overflow-hidden shadow-sm sm:rounded-lg">
+                            <div class="p-6 text-gray-900 dark:text-gray-100">
+                            <h3 class="font-bold text-2xl text-gray-100">Search</h3>
+
+                            <div class="my-2">
+                                <div class="flex flex-wrap -mx-1 mb-3">
+                                    <form action="" method="get">
+                                    <label for="q" class="w-full checkbox-filters">
+                                        <input class="text-black rounded-l-lg w-40" type="search" id="q" name="q" value="{{request()->has('q') ? request()->query('q') : ''}}" >
+                                    </label>
+                                        <button type="submit" class="bg-green-300 rounded-r-lg p-2">&#x1F50E;</button>
+                                    </form>
+                                </div>
+                            </div> 
+                                <h3 class="font-bold text-2xl text-gray-100">Filters</h3>
+
+                                <div class="mt-2">
+                                    <div class="flex flex-wrap -mx-1">
+                                        <label for="popular" class="w-full checkbox-filters">
+                                            <input type="checkbox" id="popular" name="popular" value="{{request()->has('popular') ? 1 : 0}}" {{ request()->has('popular') ? 'checked' : '' }}>
+                                            popular
+                                        </label>
+                                    </div>
+                                </div> 
+                                <div class="mt-2">
+                                    <div class="flex flex-wrap -mx-1">
+                                        <label for="unanswered" class="w-full checkbox-filters">
+                                            <input type="checkbox" id="unanswered" name="unanswered" value="{{request()->has('unanswered') ? 1 : 0}}" {{ request()->has('unanswered') ? 'checked' : '' }}>
+                                            unanswered
+                                        </label>
+                                    </div>
+                                </div>
+                                @auth
+                                <div class="mt-2">
+                                    <div class="flex flex-wrap -mx-1">
+                                        <label for="by" class="w-full checkbox-filters">
+                                            <input type="checkbox" id="by" name="by" value="{{request()->has('by') ? auth()->user()->name : 0}}" {{ request()->has('by') ? 'checked' : '' }}>
+                                            my threads
+                                        </label>
+                                    </div>
+                                </div>
+                                @endauth
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="w-3/6">
                 <div class="px-1 py-12">
                     <div class="mx-auto sm:px-3 lg:px-4">
                         <div class="bg-white dark:bg-gray-800 overflow-hidden shadow-sm sm:rounded-lg">
@@ -32,7 +82,7 @@
                                 <div class="body bg-gray-500 rounded-md p-3">{{ $thread->body }}</div>
                                 <div class="mt-1 flex justify-between">
                                     <small>Created by: <a class="text-orange-400" href="{{route('profile.show', $thread->user->name)}}">{{ $thread->user->name }}</a></small>
-                                    <small>Visited: <b class="text-orange-400">{{ $thread->visits()->count() }}</b></small> 
+                                    <small>Visited: <b class="text-orange-400">{{ $thread->visits()->count() }}</b></small>
                                 </div>
                                 <hr>
                                 <br>
@@ -46,13 +96,12 @@
                     </div>
                 </div>
             </div>
-            <div class="w-1/3">
+            <div class="w-2/6">
                 <div class="px-1 py-12">
                     <div class="mx-auto sm:px-1 lg:px-2">
                         <div class="px-6 pt-6 bg-white dark:bg-gray-800 shadow-sm sm:rounded-lg">
                             <h3 class="font-bold text-2xl text-gray-100">Top 5 Trending Thread</h3>
-                        </div>
-                        <div class="bg-white dark:bg-gray-800 shadow-sm sm:rounded-lg">
+
                             <div class="p-6">
                                 <div class="flex items-center">
                                     <div class="flex-shrink-0 text-gray-100">
@@ -69,5 +118,33 @@
                     </div>
                 </div>
             </div>
+            
+<script>
+    $(document).ready(function() {
+        const userIfauth = '{{auth()->check() ? auth()->user()->name : 0}}';
+        // Handle checkbox click events
+        $('input[type="checkbox"]').on('click', function() {
+            let paramName = $(this).attr('name');
+            let paramValue;
+            if(paramName == 'by'){
+                paramValue = $(this).is(':checked') ? userIfauth : 0;
+            }else{
+                paramValue = $(this).is(':checked') ? 1 : 0;
+            }
+            // Update the URL with the new query string parameters
+            let currentUrl = window.location.href;
+            let url = new URL(currentUrl);
+            
+            if (paramValue === 1 || paramValue == userIfauth) {
+                url.searchParams.set(paramName, paramValue);
+            } else {
+                url.searchParams.delete(paramName);
+            }
+            
+            // Perform a GET request to the updated URL
+            window.location.href = url.toString();
+        });
+    });
+</script>
         </div>
 </x-guest-layout>

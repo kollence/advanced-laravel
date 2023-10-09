@@ -16,6 +16,7 @@
                 background: rgba(0, 0, 0, 0) !important; 
             }
         </style>
+        <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
         <!-- Scripts -->
         @vite(['resources/css/app.css', 'resources/js/app.js'])
     </head>

@@ -17,12 +17,18 @@ class UserFactory extends Factory
      */
     public function definition()
     {
+        $email = fake()->unique()->safeEmail();
+        // Hash the email using SHA-256
+        $hash = hash('sha256', $email);
+        // Truncate the hash to 25 characters
+        $uniqueToken = substr($hash, 0, 25);
         return [
             'name' => fake()->name(),
-            'email' => fake()->unique()->safeEmail(),
+            'email' => $email,
             'email_verified_at' => now(),
             'password' => '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', // password
             'remember_token' => Str::random(10),
+            'confirmation_token' => $uniqueToken,
         ];
     }
 

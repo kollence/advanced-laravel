@@ -24,7 +24,7 @@ class ProfileController extends Controller
         // dd(Activity::feed(auth()->user()));
         return view('profile.show', [
             'profileUser' => $user,
-            'activities' => Activity::feed(auth()->user()),
+            'activities' => Activity::feed($user),
         ]);
     }
 

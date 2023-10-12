@@ -24,9 +24,9 @@ class ThreadController extends Controller
     public function index(Channel $channel, ThreadFilters $filters, TrendingThreads $trendingThreads)
     {   
         $search_param = request()->query('q');
-        // dd(request()->query('q'));
+        $channelIds = request()->input('channel_id', []);
         // logic moved to method that will be later moved to service
-        $threads = $this->getThreads($channel, $filters);
+        $threads = $this->getThreads($filters, $channelIds, $channel);
         if($search_param){
             $threads->where(function ($query) use ($search_param)  {
                 $query->where('title', 'LIKE', "%{$search_param}%")
@@ -155,12 +155,14 @@ class ThreadController extends Controller
 
     }
 
-    protected function getThreads($channel, $filters)
+    protected function getThreads($filters, $channelIds, $channel)
     {
         // filter model with filters that i got
         $threads = Thread::latest()->filter($filters);
         // if channel model exists in optional parameter then return channels threads
-        if ($channel->exists) {
+        if (count($channelIds) > 0){
+            $threads->whereIn('channel_id', $channelIds);
+        }else if($channel->exists) {
             $threads->where('channel_id', $channel->id);
         }
 
@@ -169,7 +171,6 @@ class ThreadController extends Controller
 
     public function lock($channel, Thread $thread)
     {
-        // $thread->lock();
         $thread->update(['locked' => true]);
         if(request()->expectsJson()){
             return response(['locked' => $thread->refresh()->locked], 200);

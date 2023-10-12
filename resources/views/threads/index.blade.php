@@ -96,7 +96,9 @@
                                 </div>
                                 <div class="body bg-gray-500 rounded-md p-3">{{ $thread->body }}</div>
                                 <div class="mt-1 flex justify-between">
-                                    <small>Created by: <a class="text-orange-400" href="{{route('profile.show', $thread->user->name)}}">{{ $thread->user->name }}</a></small>
+                                    <small>Created by: <a class="text-orange-400" href="{{route('profile.show', $thread->user->name)}}">{{ $thread->user->name }}</a>
+                                      <span>&nbsp;channel: </span><span class="text-orange-400">{{$thread->channel->name}}</span>
+                                    </small>
                                     <small>Visited: <b class="text-orange-400">{{ $thread->visits()->count() }}</b></small>
                                 </div>
                                 <hr>

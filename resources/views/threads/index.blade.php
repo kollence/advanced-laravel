@@ -10,13 +10,13 @@
                                 <h3 class="font-bold text-2xl text-gray-100">Search</h3>
 
                                 <div class="my-2">
-                                    <div class="flex flex-wrap -mx-1 mb-3">
-                                        <form action="" method="get">
-                                            <label for="q" class="w-full checkbox-filters">
-                                                <input class="text-black rounded-l-lg w-40" type="search" id="q" name="q" value="{{request()->has('q') ? request()->query('q') : ''}}">
-                                            </label>
-                                            <button type="submit" class="bg-green-300 rounded-r-lg p-2">&#x1F50E;</button>
-                                        </form>
+                                    <div class="flex flex-wrap  mb-3">
+                                            <div class="flex">
+                                                <label for="q" class="checkbox-filters">
+                                                    <input class="text-black rounded-l-lg" type="search" id="q" name="q" value="{{request()->has('q') ? request()->input('q') : old('q')}}">
+                                                </label>
+                                                <button type="button" id="search-btn" class="bg-green-300 rounded-r-lg p-2">&#x1F50E;</button>
+                                            </div>
                                     </div>
                                 </div>
                                 <h3 class="font-bold text-2xl mt-5 text-gray-100">Filters</h3>
@@ -24,7 +24,7 @@
                                 <div class="mt-2">
                                     <div class="flex flex-wrap -mx-1">
                                         <label for="popular" class="w-full">
-                                            <input type="checkbox" id="popular" class="checkbox-filters" name="popular" value="{{request()->has('popular') ? 1 : 0}}" {{ request()->has('popular') ? 'checked' : '' }}>
+                                            <input type="checkbox" id="popular" class="checkbox-filters" name="popular" value="1" {{ request()->has('popular') ? 'checked' : '' }}>
                                             popular
                                         </label>
                                     </div>
@@ -32,7 +32,7 @@
                                 <div class="mt-2">
                                     <div class="flex flex-wrap -mx-1">
                                         <label for="unanswered" class="w-full">
-                                            <input type="checkbox" id="unanswered" class="checkbox-filters" name="unanswered" value="{{request()->has('unanswered') ? 1 : 0}}" {{ request()->has('unanswered') ? 'checked' : '' }}>
+                                            <input type="checkbox" id="unanswered" class="checkbox-filters" name="unanswered" value="1" {{ request()->has('unanswered') ? 'checked' : '' }}>
                                             unanswered
                                         </label>
                                     </div>
@@ -41,7 +41,7 @@
                                 <div class="my-2">
                                     <div class="flex flex-wrap -mx-1">
                                         <label for="by" class="w-full">
-                                            <input type="checkbox" id="by" class="checkbox-filters" name="by" value="{{request()->has('by') ? auth()->user()->name : 0}}" {{ request()->has('by') ? 'checked' : '' }}>
+                                            <input type="checkbox" id="by" class="checkbox-filters" name="by" value="{{auth()->user()->name}}" {{ request()->has('by') ? 'checked' : '' }}>
                                             my threads
                                         </label>
                                     </div>
@@ -138,60 +138,39 @@
 
             <script>
                 $(document).ready(function() {
-                    const currentUrl = window.location.href;
-                    const url = new URL(currentUrl);
-                    const userIfauth = '{{auth()->check() ? auth()->user()->name : 0}}';
-                    // Handle checkbox click events
-                    $('input[type="checkbox"].checkbox-filters').on('click', function() {
-                        let paramName = $(this).attr('name');
-                        let paramValue;
-                        if (paramName == 'by') {
-                            paramValue = $(this).is(':checked') ? userIfauth : 0;
-                        } else {
-                            paramValue = $(this).is(':checked') ? 1 : 0;
-                        }
-                        // // Update the URL with the new query string parameters
-                        // let currentUrl = window.location.href;
-                        // let url = new URL(currentUrl);
-
-                        if (paramValue === 1 || paramValue != 0) {
-                            url.searchParams.set(paramName, paramValue);
-                        } else {
-                            url.searchParams.delete(paramName);
-                        }
-
-                        // Perform a GET request to the updated URL
-                        window.location.href = url.toString();
-                    });
-
-                    const checkboxes = $('input[type="checkbox"].checkbox-categories');
-
+                    const checkboxes = $('input[type="checkbox"]');
+                    const currentUrl = new URL(window.location.href);
+                    const queryString = currentUrl.searchParams;
+                    
                     checkboxes.on('change', function() {
                         const checkedCheckboxes = checkboxes.filter(':checked');
                         const channelIds = checkedCheckboxes.map(function() {
-                            return $(this).val();
+                            return $(this).attr('name') + '=' + $(this).val();
                         }).get();
-
-                        // Update the query string to include only the selected channels
-                        const query = channelIds.length > 0 ? 'channel_id[]=' + channelIds.join('&channel_id[]=') : '';
-
-                        // const currentUrl = window.location.href;
-                        const newUrl = currentUrl.split('?')[0] + (query ? '?' + query : '');
-
-                        window.history.replaceState({}, document.title, newUrl);
-
-                        window.location.href = newUrl.toString();
+                        const query = channelIds.length > 0 ? channelIds.join('&') : '';
+                        let newUrlz = currentUrl.href.split('?')[0] + (query ? '?' + query : '');
+                        // Append the "q" parameter to the existing query string
+                        if ($('#q').val()) {
+                            let sign = (query) ? '&' : '?';
+                            newUrlz += sign +'q='+$('#q').val();
+                        } 
+                        newUrl(newUrlz);
                     });
 
-                    const urlParams = new URLSearchParams(window.location.search);
-                    const channelIDs = urlParams.getAll('channel_id[]');
-
-                    // Check the checkboxes based on the query string
-                    checkboxes.each(function() {
-                        if (channelIDs.includes($(this).val())) {
-                            $(this).prop('checked', true);
+                    $('#search-btn').on('click', function() {
+                        const query = $('#q').val();
+                        if (query) {
+                            queryString.set('q', $('#q').val());
+                        } else {
+                            queryString.delete('q');
                         }
+
+                        newUrl(currentUrl.toString());
                     });
+
+                    function newUrl(url) {
+                        window.location.href = url;
+                    }
                 });
             </script>
         </div>

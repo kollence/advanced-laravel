@@ -13,7 +13,9 @@ class ContestRegistrationTest extends TestCase
         //initialize one $thread as ready & created with factory
         parent::setUp();    
 
-        Event::fake();
+        Event::fake([
+            NewContestEmailReceivedEvent::class
+        ]);
     }
     /**
      * A basic feature test example.

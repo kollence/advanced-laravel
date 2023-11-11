@@ -8,13 +8,13 @@ use Tests\TestCase;
 
 class ContestRegistrationTest extends TestCase
 {
-    // public function setUp() : void
-    // {
-    //     //initialize one $thread as ready & created with factory
-    //     parent::setUp();    
+    public function setUp() : void
+    {
+        //initialize one $thread as ready & created with factory
+        parent::setUp();    
 
-    //     Event::fake();
-    // }
+        Event::fake();
+    }
     /**
      * A basic feature test example.
      *
@@ -51,12 +51,12 @@ class ContestRegistrationTest extends TestCase
         $this->assertDatabaseCount('contest_emails', 1);
     }
 
-    // public function test_email_must_trigger_event()
-    // {
-    //     $this->post('/contest', [
-    //         'email' => 'test@test.com'
-    //     ]);
+    public function test_email_must_trigger_event()
+    {
+        $this->post('/contest', [
+            'email' => 'test@test.com'
+        ]);
 
-    //     Event::assertDispatched(NewContestEmailReceivedEvent::class);
-    // }
+        Event::assertDispatched(NewContestEmailReceivedEvent::class);
+    }
 }

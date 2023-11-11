@@ -78,11 +78,11 @@
                                     <h3 class="self-start">
                                         <a href="{{$thread->path()}}">
                                             @if(auth()->check() && $thread->hasUpdatesFor(auth()->user()))
-                                            <strong style="font-size: 20px; color: #ed7400;">
+                                            <strong class="strong-links">
                                                 {{ $thread->title }}
                                             </strong>
                                             @else
-                                            <span style="font-size: 20px; color: orange;">
+                                            <span class="weak-links">
                                                 {{ $thread->title }}
                                             </span>
                                             @endif

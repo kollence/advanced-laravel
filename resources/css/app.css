@@ -1,3 +1,27 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+.strong-links {
+    font-size: 20px; color: #ed7400;
+}
+.weak-links {
+    font-size: 20px; color: orange
+}
+.strong-links:hover {
+    color: #ed4b00;
+}
+.weak-links:hover {
+    color: #ed4b00;
+}
+/* .strong-links:active {
+    color: #ed7400;
+}
+.weak-links:active {
+    color: orange;
+}
+.strong-links:visited {
+    color: #ed7400;
+}
+.weak-links:visited {
+    color: orange;
+} */

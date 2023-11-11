@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers;
 
-use App\Events\NewContestEmailReceivedEvent;
 use App\Models\ContestEmails;
 use Illuminate\Http\Request;
 

@@ -3,6 +3,7 @@
 use App\Http\Controllers\Api\UserAvatarController;
 use App\Http\Controllers\Auth\RegisteredUserController;
 use App\Http\Controllers\BestReplyController;
+use App\Http\Controllers\ContestEmailsController;
 use App\Http\Controllers\FavoritesController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\ReplyController;
@@ -80,6 +81,11 @@ Route::middleware('auth')->group(function () {
     Route::delete('/profile/{user}/notifications/{notification}', [UserNotificationsController::class, 'destroy'])->name('profile.notifications.delete');
 
     Route::post('/api/users/{user}/avatar', [UserAvatarController::class, 'store'])->name('users.avatar.store');
+});
+
+Route::controller(ContestEmailsController::class)->group(function () {
+    Route::get('/contest', 'index')->name('contest.emails.index');
+    Route::post('/contest', 'store')->name('contest.emails.store');
 });
 
 Route::get('clear_cache', function() {

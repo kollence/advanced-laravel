@@ -21,6 +21,7 @@ class ContestEmailsController extends Controller
 
         ContestEmails::create($data);
 
-        event(NewContestEmailReceivedEvent::class);
+        // event(NewContestEmailReceivedEvent::class);
+        NewContestEmailReceivedEvent::dispatch();
     }
 }

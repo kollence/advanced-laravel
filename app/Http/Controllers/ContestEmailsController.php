@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Events\NewContestEmailReceivedEvent;
 use App\Models\ContestEmails;
 use Illuminate\Http\Request;
 
@@ -19,6 +20,8 @@ class ContestEmailsController extends Controller
         ]);
 
         ContestEmails::create($data);
+        //NewContestEmailReceivedEvent::dispatch(); or you can use ::dispatch() on NewContestEmailReceivedEvent as new syntax
+        event(NewContestEmailReceivedEvent::class);
 
     }
 }

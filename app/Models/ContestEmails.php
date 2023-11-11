@@ -13,11 +13,11 @@ class ContestEmails extends Model
     protected $guarded = [];
 
 
-    protected static function booted()
-    {
-        static::created(function ($contestEmail) {
-            // NewContestEmailReceivedEvent::dispatch(); or you can use ::dispatch() on NewContestEmailReceivedEvent as new syntax
-            event(NewContestEmailReceivedEvent::class);
-        });
-    }
+    // protected static function booted()
+    // {
+    //     static::created(function ($contestEmail) {
+    //         // NewContestEmailReceivedEvent::dispatch(); or you can use ::dispatch() on NewContestEmailReceivedEvent as new syntax
+    //         event(NewContestEmailReceivedEvent::class);
+    //     });
+    // }
 }

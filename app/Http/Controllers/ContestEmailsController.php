@@ -20,8 +20,10 @@ class ContestEmailsController extends Controller
         ]);
 
         ContestEmails::create($data);
-        //NewContestEmailReceivedEvent::dispatch(); or you can use ::dispatch() on NewContestEmailReceivedEvent as new syntax
-        event(NewContestEmailReceivedEvent::class);
+        //  or you can use ::dispatch() on NewContestEmailReceivedEvent as new syntax
+        // when ::dispatch() is used on event class, you will be triggering LISTENERS::Class handler() that can be visible in TEST CASE  ~(you don't need to pass any argument)
+        NewContestEmailReceivedEvent::dispatch();
+        // event(NewContestEmailReceivedEvent::class);
 
     }
 }

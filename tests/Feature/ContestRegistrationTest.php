@@ -13,7 +13,7 @@ class ContestRegistrationTest extends TestCase
     //     //initialize one $thread as ready & created with factory
     //     parent::setUp();   
      
-            // IF ITS HERE GLOBAL EVENTS WILL NOT WORK FOR TRIGGERING LISTENERS
+            // IF ITS IS HERE GLOBAL EVENTS WILL NOT WORK FOR TRIGGERING LISTENERS
     //     Event::fake([
     //         NewContestEmailReceivedEvent::class
     //     ]);
@@ -69,6 +69,7 @@ class ContestRegistrationTest extends TestCase
 
     public function test_storing_contest_email_must_trigger_event_that_send_email_notification()
     {
+        // RUN JUST THIS ONE SO YOU CAN CHECK TRIGGERING OF LISTENER::class
         $this->post('/contest', [
             'email' => 'test@test.com'
         ]);

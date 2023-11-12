@@ -2,11 +2,13 @@
 
 namespace App\Providers;
 
+use App\Events\NewContestEmailReceivedEvent;
 use Illuminate\Auth\Events\Registered;
 use Illuminate\Auth\Listeners\SendEmailVerificationNotification;
 use Illuminate\Foundation\Support\Providers\EventServiceProvider as ServiceProvider;
 use Illuminate\Support\Facades\Event;
 use App\Events\ThreadHasNewReply;
+use App\Listeners\AssignedToContestNotification;
 use App\Listeners\NotifyMentionedUserInReply;
 use App\Listeners\SendEmailConfirmation;
 use App\Listeners\SendNotificationsToThreadSubscribers;
@@ -26,6 +28,9 @@ class EventServiceProvider extends ServiceProvider
         ThreadHasNewReply::class => [
             SendNotificationsToThreadSubscribers::class,
             NotifyMentionedUserInReply::class
+        ],
+        NewContestEmailReceivedEvent::class => [
+            AssignedToContestNotification::class,
         ],
     ];
 

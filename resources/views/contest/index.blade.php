@@ -17,6 +17,7 @@
                     </form>
             </div>
             @else
+            <div class="py-3">
             <div class="p-6 text-gray-900 dark:text-gray-100 text-xl">
                     {{ __("Before we start! You'll need to login!") }}
                 </div>
@@ -28,7 +29,7 @@
                     <div>Or</div>
                     <a class="weak-links" href="{{url('register')}}">Register</a>
                 </div>
-
+                </div>
             @endauth
             </div>
         </div>

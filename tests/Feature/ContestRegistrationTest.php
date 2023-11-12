@@ -8,21 +8,22 @@ use Tests\TestCase;
 
 class ContestRegistrationTest extends TestCase
 {
-    public function setUp() : void
-    {
-        //initialize one $thread as ready & created with factory
-        parent::setUp();    
-
-        Event::fake([
-            NewContestEmailReceivedEvent::class
-        ]);
-    }
+    // public function setUp() : void
+    // {
+    //     //initialize one $thread as ready & created with factory
+    //     parent::setUp();   
+     
+            // IF ITS HERE GLOBAL EVENTS WILL NOT WORK FOR TRIGGERING LISTENERS
+    //     Event::fake([
+    //         NewContestEmailReceivedEvent::class
+    //     ]);
+    // }
     /**
      * A basic feature test example.
      *
      * @return void
      */
-    public function test_email_can_be_entered_into_the_contest()
+    public function test_storing_contest_email_can_be_entered_into_the_contest_email_table()
     {
         $this->post('/contest', [
             'email' => 'test@test.com'
@@ -31,7 +32,7 @@ class ContestRegistrationTest extends TestCase
         $this->assertDatabaseCount('contest_emails', 1);
     }
 
-    public function test_email_must_be_valid()
+    public function test_storing_contest_email_request_must_be_valid()
     {
         //can't be empty
         $this->post('/contest', [
@@ -53,12 +54,23 @@ class ContestRegistrationTest extends TestCase
         $this->assertDatabaseCount('contest_emails', 1);
     }
 
-    public function test_email_must_trigger_event()
+    public function test_storing_contest_email_must_trigger_event()
     {
+        Event::fake([
+            NewContestEmailReceivedEvent::class
+        ]);
+        
         $this->post('/contest', [
             'email' => 'test@test.com'
         ]);
 
         Event::assertDispatched(NewContestEmailReceivedEvent::class);
+    }
+
+    public function test_storing_contest_email_must_trigger_event_that_send_email_notification()
+    {
+        $this->post('/contest', [
+            'email' => 'test@test.com'
+        ]);
     }
 }
